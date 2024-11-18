@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
 import { useForm, SubmitHandler } from "react-hook-form";
-import MemberLayout from "@/components/includes/MemberLayout";
+import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";

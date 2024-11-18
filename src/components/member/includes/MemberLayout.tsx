@@ -4,11 +4,11 @@ import TopNav from "./TopNav";
 
 const MemberLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
-    <>
+    <div className="pt-14 pb-14">
       <TopNav />
       {children}
       <ButtonNavbar />
-    </>
+    </div>
   );
 };
 

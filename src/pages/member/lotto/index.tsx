@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import classNames from "classnames";
-import MemberLayout from "@/components/includes/MemberLayout";
+import MemberLayout from "@/components/member/includes/MemberLayout";
 import CheckboxLotto from "@/components/member/lotto/CheckboxLotto";
 import CheckboxGroup from "@/components/member/lotto/CheckboxGroup";
 import CheckboxList from "@/components/member/lotto/CheckboxList";

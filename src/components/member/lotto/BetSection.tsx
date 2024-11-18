@@ -151,8 +151,7 @@ const BetSection = (props: betSectionProps) => {
     try {
       if (true) {
         Swal.fire({
-          title: "จำนวนเครดิตไม่เพียง",
-          text: "กรุณาเติมเครดิตเพื่อเดิมพันต่อ",
+          text: "คุณมีเครดิตไม่เพียงพอ",
           icon: "warning",
           confirmButtonText: "ตกลง",
           confirmButtonColor: "#059071",

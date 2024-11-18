@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import classNames from "classnames";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 // import LogoutIcon from "../icons/LogoutIcon";
 
 const TopNav = () => {

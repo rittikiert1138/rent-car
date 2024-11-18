@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-const ButtonNavbar = () => {
+const ButtomNavbar = () => {
   return (
     <div className="w-full h-12 bg-primary fixed left-0 bottom-0">
       <div className="grid grid-cols-12 gap-0">
@@ -36,14 +36,16 @@ const ButtonNavbar = () => {
           </div>
         </div>
         <div className="col-span-2">
-          <div className="px-2 pt-1 text-center cursor-pointer">
-            <i className="bi bi-gem text-white"></i>
-            <p className="text-[10px] text-white">วีไอพี</p>
-          </div>
+          <Link href="/member/vip">
+            <div className="px-2 pt-1 text-center cursor-pointer">
+              <i className="bi bi-gem text-white"></i>
+              <p className="text-[10px] text-white">วีไอพี</p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default ButtonNavbar;
+export default ButtomNavbar;
