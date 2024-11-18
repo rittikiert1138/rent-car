@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Home() {
@@ -17,5 +17,21 @@ export default function Home() {
     fetchData();
   }, []);
 
-  return <div>Hello</div>;
+  const [numberCaptcha, setNumberCaptcha] = useState("");
+
+  const handleRandom = () => {
+    let rendomNumber = Math.floor(1000 + Math.random() * 9000);
+    setNumberCaptcha(rendomNumber.toString());
+  };
+
+  return (
+    <div className="flex">
+      <h3>{numberCaptcha}</h3>
+      <br />
+      {numberCaptcha.split("").map((item: any) => (
+        <img src={`/number/${item}.png`} />
+      ))}
+      <button onClick={handleRandom}>Click</button>
+    </div>
+  );
 }
