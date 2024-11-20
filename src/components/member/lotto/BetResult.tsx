@@ -3,12 +3,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 interface betSectionProps {
-  betList: Array<string | number> | any;
   setSection: (_type: number) => void;
 }
 
 const BetResult = (props: betSectionProps) => {
-  const { betList, setSection } = props;
+  const { setSection } = props;
 
   return (
     <div className="container px-2 ">

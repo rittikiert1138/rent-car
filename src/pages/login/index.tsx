@@ -36,8 +36,9 @@ const LoginPage = () => {
       if (status) {
         router.push("/member");
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Error !");
+      console.log("error", error.message);
     }
   };
 

@@ -28,7 +28,7 @@ const VipPage = () => {
             </p>
           </div>
           {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div className="w-full mt-2 flex border-t ">
+            <div className="w-full mt-2 flex border-t " key={`vip_${item}`}>
               <div className="w-[20%] pt-1">
                 <span className="text-primary">VIP {item}</span>
               </div>

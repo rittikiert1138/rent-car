@@ -168,6 +168,7 @@ const BetSection = (props: betSectionProps) => {
       //   };
       //   console.log("payload", payload);
       // }
+      console.log("params", params);
       router.push("/member/stake/1");
     } catch (error: any) {
       console.log("Error submit", error.message);

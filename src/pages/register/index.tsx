@@ -35,7 +35,7 @@ const RegisterPage = () => {
   const [data, setData] = useState({ phoneNumber: "0838427290", captcha: "3623", otp: "123444" });
 
   useEffect(() => {
-    let rendomNumber = Math.floor(1000 + Math.random() * 9000);
+    const rendomNumber = Math.floor(1000 + Math.random() * 9000);
     setNumberCaptcha(rendomNumber.toString());
   }, []);
 
