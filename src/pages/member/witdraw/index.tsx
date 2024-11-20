@@ -33,7 +33,7 @@ const WitdrawPage = () => {
 
   return (
     <MemberLayout>
-      <div className="sm:container px-2">
+      <div className="sm:container px-2 mt-2">
         <div className="w-full bg-white p-2 rounded-sm">
           {section == 1 && (
             <form onSubmit={handleSubmit(onSubmitTotal)}>

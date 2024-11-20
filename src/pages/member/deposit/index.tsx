@@ -61,7 +61,7 @@ const DepositPage = () => {
 
   return (
     <MemberLayout>
-      <div className="sm:container px-2">
+      <div className="sm:container px-2 mt-2">
         <div className="w-full bg-white rounded-sm p-2 pb-3">
           {section == 1 && (
             <form onSubmit={handleSubmit(onSubmitTotal)}>
