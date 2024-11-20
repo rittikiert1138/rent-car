@@ -28,7 +28,7 @@ const LoginPage = () => {
             </Button>
           </div>
           <div className="col-span-2">
-            <Link href="/member/register">
+            <Link href="/register">
               {" "}
               <Button className="w-full mt-4 bg-secondary">สมัครสมาชิก</Button>
             </Link>
