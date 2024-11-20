@@ -31,9 +31,9 @@ const TopNav = () => {
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-2">
             <div className="pt-2">
-              <Link href="/member/home">
+              {/* <Link href="/member/home">
                 <img src="/images/Logo.png" className="w-[100px] block mt-1" />
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div className="col-span-10">

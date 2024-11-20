@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
 import { Button } from "@/components/ui/button";
-import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 import "sweetalert2/src/sweetalert2.scss";
 import { LIST_BET_TYPE } from "@/constants/constants";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,8 @@ interface betSectionProps {
 // };
 
 const BetSection = (props: betSectionProps) => {
+  const router = useRouter();
+
   const { betList, setSection, setBetlist, setTypeactive, setBettype, setCondition } = props;
 
   const {
@@ -149,23 +151,24 @@ const BetSection = (props: betSectionProps) => {
 
   const onSubmit = async (params: any) => {
     try {
-      if (true) {
-        Swal.fire({
-          text: "คุณมีเครดิตไม่เพียงพอ",
-          icon: "warning",
-          confirmButtonText: "ตกลง",
-          confirmButtonColor: "#059071",
-        });
-      } else {
-        const payload = {
-          userId: 1,
-          betType: 1,
-          betList: betList.map((bet: any) => {
-            return { ...bet, bet_price: params[`bet_${bet.betId}`] };
-          }),
-        };
-        console.log("payload", payload);
-      }
+      // if (true) {
+      //   Swal.fire({
+      //     text: "คุณมีเครดิตไม่เพียงพอ",
+      //     icon: "warning",
+      //     confirmButtonText: "ตกลง",
+      //     confirmButtonColor: "#059071",
+      //   });
+      // } else {
+      //   const payload = {
+      //     userId: 1,
+      //     betType: 1,
+      //     betList: betList.map((bet: any) => {
+      //       return { ...bet, bet_price: params[`bet_${bet.betId}`] };
+      //     }),
+      //   };
+      //   console.log("payload", payload);
+      // }
+      router.push("/member/stake/1");
     } catch (error: any) {
       console.log("Error submit", error.message);
     }
@@ -174,8 +177,6 @@ const BetSection = (props: betSectionProps) => {
   useEffect(() => {
     handleBetByValue(1);
   }, []);
-
-  console.log("errors", errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

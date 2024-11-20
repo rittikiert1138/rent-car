@@ -93,7 +93,7 @@ const DepositPage = () => {
                 </div>
                 <div className="grid grid-cols-12 gap-2 mt-2">
                   <div className="col-span-6">
-                    <Link href="/member/home">
+                    <Link href="/member">
                       <Button className="w-full mt-2" type="button" variant="outline">
                         ย้อนกลับ
                       </Button>
@@ -169,14 +169,14 @@ const DepositPage = () => {
               <p>ทำรายการเสร็จเรียบร้อย</p>
               <div className="grid grid-cols-12 gap-2 mt-2">
                 <div className="col-span-6">
-                  <Link href="/member/home">
+                  <Link href="/member">
                     <Button className="w-full mt-2" type="button" variant="outline">
                       ย้อนกลับ
                     </Button>
                   </Link>
                 </div>
                 <div className="col-span-6">
-                  <Link href="/member/home">
+                  <Link href="/member">
                     <Button className="w-full mt-2" type="button">
                       ตรวจสอบรายการฝาก
                     </Button>
