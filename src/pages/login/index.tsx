@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import classNames from "classnames";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -9,6 +9,7 @@ import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/UserContext";
 
 type FormValues = {
   username: string;
@@ -17,6 +18,7 @@ type FormValues = {
 
 const LoginPage = () => {
   const router = useRouter();
+  const { admin } = useUser();
 
   const {
     register,
@@ -50,7 +52,7 @@ const LoginPage = () => {
           <img src="/images/Logo.png" className="w-1/2 block mx-auto" />
           <form onSubmit={handleSubmit(handleLogin)}>
             <div className="mt-4">
-              <Label>ชื่อผู้ใช้งาน</Label>
+              <Label>ชื่อผู้ใช้งาน {admin} </Label>
               <Input
                 {...register("username", {
                   required: {

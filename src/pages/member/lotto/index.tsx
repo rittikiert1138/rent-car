@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import withProtectedUser from "@/hoc/withProtectedUser";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 
 const LottoList = () => {
@@ -76,4 +77,4 @@ const LottoList = () => {
   );
 };
 
-export default LottoList;
+export default withProtectedUser(LottoList);
