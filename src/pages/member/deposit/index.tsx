@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
 import { useForm, SubmitHandler } from "react-hook-form";
+import withProtectedUser from "@/hoc/withProtectedUser";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -191,4 +192,4 @@ const DepositPage = () => {
   );
 };
 
-export default DepositPage;
+export default withProtectedUser(DepositPage);

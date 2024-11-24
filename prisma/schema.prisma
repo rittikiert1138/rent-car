@@ -9,20 +9,73 @@ datasource db {
 }
 
 model User {
-  user_id      Int     @id @default(autoincrement())
-  phone_number String  @unique
-  username     String  @unique
-  credit       Int?
-  email        String?
+  user_id   Int      @id @default(autoincrement())
+  phone     String   @unique
+  username  String   @unique
+  password  String
+  role      String
+  status    Int
+  createdBy Int
+  updatedBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lotto     Lotto[]
+  member    Member[]
 }
 
 model Member {
-  member_id    Int      @id @default(autoincrement())
-  username     String   @unique @db.VarChar(50)
+  member_id    Int           @id @default(autoincrement())
+  username     String        @unique @db.VarChar(50)
   password     String
-  phone_number String   @db.VarChar(10)
-  balance      Float    @default(0)
-  total_bet    Float    @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  phone_number String        @unique @db.VarChar(10)
+  balance      Float         @default(0)
+  total_bet    Float         @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User?         @relation(fields: [user_id], references: [user_id])
+  user_id      Int?
+  transaction  Transaction[]
+  bank         MemberBank[]
+}
+
+model Lotto {
+  lotto_id   Int      @id @default(autoincrement())
+  lotto_type String
+  close_time DateTime
+  period     Int
+  status     Int      @default(0)
+  lotto_list User     @relation(fields: [createdBy], references: [user_id])
+  createdBy  Int
+  updatedBy  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Transaction {
+  transaction_id     Int     @id @default(autoincrement())
+  transaction_type   Int
+  transaction_status Int
+  transaction_slip   String?
+  balance            Float   @default(0)
+  member             Member  @relation(fields: [member_id], references: [member_id])
+  member_id          Int
+}
+
+model MemberBank {
+  member_bank_id    Int    @id @default(autoincrement())
+  bank_type         Int
+  bank_name         String
+  bank_number       String
+  bank_account_name String
+  member            Member @relation(fields: [member_id], references: [member_id])
+  member_id         Int
+}
+
+model Bank {
+  bank_id           Int    @id @default(autoincrement())
+  bank_type         Int
+  bank_name         String
+  bank_number       String
+  bank_account_name String
+  bank_status       Int
 }

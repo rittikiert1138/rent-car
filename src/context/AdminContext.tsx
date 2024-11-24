@@ -8,7 +8,7 @@ type User = {
 const AdminContext = createContext<User>({} as User);
 
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
-  const [admin, setAdmin] = useState("");
+  const [admin, setAdmin] = useState("admin");
 
   return <AdminContext.Provider value={{ admin }}>{children}</AdminContext.Provider>;
 };

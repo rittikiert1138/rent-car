@@ -152,12 +152,12 @@ const BetSection = (props: betSectionProps) => {
   const onSubmit = async (params: any) => {
     try {
       // if (true) {
-      //   Swal.fire({
-      //     text: "คุณมีเครดิตไม่เพียงพอ",
-      //     icon: "warning",
-      //     confirmButtonText: "ตกลง",
-      //     confirmButtonColor: "#059071",
-      //   });
+      // Swal.fire({
+      //   text: "คุณมีเครดิตไม่เพียงพอ",
+      //   icon: "warning",
+      //   confirmButtonText: "ตกลง",
+      //   confirmButtonColor: "#059071",
+      // });
       // } else {
       //   const payload = {
       //     userId: 1,

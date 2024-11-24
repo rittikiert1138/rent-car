@@ -66,3 +66,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+.cellCenter .ag-cell-wrapper {
+  justify-content: center;
+  text-align: center;
+}
+
+.rdt_Pagination{
+  border: 0!important;
+}
