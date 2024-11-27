@@ -8,7 +8,6 @@ import Link from "next/link";
 import cryptoRandomString from "crypto-random-string";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
-import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";

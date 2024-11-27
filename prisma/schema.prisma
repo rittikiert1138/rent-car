@@ -9,46 +9,36 @@ datasource db {
 }
 
 model User {
-  user_id   Int      @id @default(autoincrement())
-  phone     String   @unique
-  username  String   @unique
-  password  String
-  role      String
-  status    Int
+  user_id  Int    @id @default(autoincrement())
+  phone    String @unique
+  username String @unique
+  password String
+  role     String
+  status   Int
+
   createdBy Int
   updatedBy Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  lotto     Lotto[]
   member    Member[]
 }
 
 model Member {
-  member_id    Int           @id @default(autoincrement())
-  username     String        @unique @db.VarChar(50)
-  password     String
-  phone_number String        @unique @db.VarChar(10)
-  balance      Float         @default(0)
-  total_bet    Float         @default(0)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  user         User?         @relation(fields: [user_id], references: [user_id])
-  user_id      Int?
-  transaction  Transaction[]
-  bank         MemberBank[]
-}
-
-model Lotto {
-  lotto_id   Int      @id @default(autoincrement())
-  lotto_type String
-  close_time DateTime
-  period     Int
-  status     Int      @default(0)
-  lotto_list User     @relation(fields: [createdBy], references: [user_id])
-  createdBy  Int
-  updatedBy  Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  member_id   Int            @id @default(autoincrement())
+  username    String         @unique @db.VarChar(50)
+  password    String
+  status      Int
+  attemp      Int            @default(0)
+  phone       String         @unique @db.VarChar(10)
+  balance     Float          @default(0)
+  total_bet   Float          @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        User?          @relation(fields: [user_id], references: [user_id])
+  user_id     Int?
+  transaction Transaction[]
+  bank        MemberBank[]
+  lotto       member_lotto[]
 }
 
 model Transaction {
@@ -78,4 +68,33 @@ model Bank {
   bank_number       String
   bank_account_name String
   bank_status       Int
+}
+
+model otp_system {
+  otp_id  Int      @id @default(autoincrement())
+  otp     String
+  ref     String
+  phone   String   @db.VarChar(10)
+  expired DateTime
+}
+
+model lotto {
+  lotto_id   Int      @id @default(autoincrement())
+  lotto_type String   @unique
+  period     DateTime
+  close_time DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model member_lotto {
+  member_lotto_id Int      @id @default(autoincrement())
+  lotto_id        Int
+  member_id       Int
+  bet_type        Int
+  bet_number      String
+  bet_amount      Float
+  bet_status      Int
+  createdAt       DateTime @default(now())
+  member          Member   @relation(fields: [member_id], references: [member_id])
 }

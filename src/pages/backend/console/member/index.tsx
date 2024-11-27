@@ -26,7 +26,7 @@ const MemberPage = () => {
     {
       name: "Phone",
       sortable: true,
-      selector: (row: any) => row.phone_number,
+      selector: (row: any) => row.phone,
     },
     {
       name: "Balance",

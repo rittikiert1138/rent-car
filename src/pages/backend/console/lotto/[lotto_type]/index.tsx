@@ -1,14 +1,18 @@
 "use client";
-
 import React, { useState } from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
 import { Button } from "@/components/admin/ui/button";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import DataTable from "react-data-table-component";
+import { Input } from "@/components/admin/ui/input";
 
 const LottoList = () => {
   const [token, setToken] = useState("");
+
+  const { lotto_type } = useParams();
 
   const fetchToken = async () => {
     const response = await axios.get("/api/auth/generate-token");
@@ -27,23 +31,23 @@ const LottoList = () => {
 
   const columns = [
     {
-      name: "No.",
+      name: "เลขที่",
       width: "70px",
       sortable: true,
       selector: (row: any) => row.index,
     },
     {
-      name: "Username",
+      name: "ชื่อ",
       sortable: true,
       selector: (row: any) => row.username,
     },
     {
-      name: "Phone",
+      name: "งวดที่",
       sortable: true,
       selector: (row: any) => row.phone,
     },
     {
-      name: "Role",
+      name: "ปิดรับ",
       sortable: true,
       selector: (row: any) => row.role,
       cell: (row: any) => {
@@ -55,17 +59,12 @@ const LottoList = () => {
       },
     },
     {
-      name: "Created At",
+      name: "สร้างเมื่อ",
       sortable: true,
       selector: (row: any) => dayjs(row.createdAt).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
-      name: "Updated At",
-      sortable: true,
-      selector: (row: any) => dayjs(row.updatedAt).format("DD/MM/YYYY HH:mm:ss"),
-    },
-    {
-      name: "Action",
+      name: "",
       sortable: false,
       center: true,
       width: "20%",
@@ -88,10 +87,20 @@ const LottoList = () => {
   ];
 
   return (
-    <AdminLayout title="Lotto List" breadcrumb={[{ title: "Lotto List", path: "/backend/console/lotto" }]}>
-      LottoList
-      <Button onClick={() => fetchToken()}>Click</Button>
-      <Button onClick={() => verifyToken()}>Verify</Button>
+    <AdminLayout title="Lotto" breadcrumb={[{ title: "Lotto", path: "/backend/console/lotto" }]}>
+      <div className="grid grid-cols-12 mb-4">
+        <div className="col-span-8">
+          <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." />
+        </div>
+        <div className="col-span-4 text-right">
+          <Link href={`/backend/console/lotto/${lotto_type}/create`}>
+            <Button>
+              Create <i className="bi bi-plus-lg"></i>
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={[]} pagination />
     </AdminLayout>
   );
 };

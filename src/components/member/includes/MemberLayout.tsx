@@ -2,11 +2,13 @@ import React from "react";
 import Link from "next/link";
 import ButtonNavbar from "./ButtomNavbar";
 import TopNav from "./TopNav";
+import { useMember } from "@/context/MemberContext";
 
 const MemberLayout = ({ children, title = "แทงหวย", display = true }: Readonly<{ children: React.ReactNode; title?: string; display?: boolean }>) => {
+  const { member } = useMember();
   return (
     <div className="pt-14 pb-14">
-      <TopNav />
+      {member ? <TopNav /> : <></>}
       {display ? (
         <div className="flex px-2">
           <Link href="/member">
@@ -22,7 +24,7 @@ const MemberLayout = ({ children, title = "แทงหวย", display = true }
         <></>
       )}
       {children}
-      <ButtonNavbar />
+      {member ? <ButtonNavbar /> : <></>}
     </div>
   );
 };

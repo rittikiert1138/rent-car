@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Button } from "@/components/ui/button";
-import withProtectedUser from "@/hoc/withProtectedUser";
+import withProtectedMember from "@/hoc/withProtectedMember";
 
 const MemberPage = () => {
   return (
@@ -125,4 +125,4 @@ const MemberPage = () => {
   );
 };
 
-export default withProtectedUser(MemberPage);
+export default withProtectedMember(MemberPage);

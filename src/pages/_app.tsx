@@ -4,7 +4,7 @@ import "@/assets/css/font.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { AdminProvider } from "@/context/AdminContext";
-import { UserProvider } from "@/context/UserContext";
+import { MemberProvider } from "@/context/MemberContext";
 import { usePathname } from "next/navigation";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -23,10 +23,9 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </AdminProvider>
           ) : (
-            <UserProvider>
-              <>123</>
+            <MemberProvider>
               <Component {...pageProps} />
-            </UserProvider>
+            </MemberProvider>
           )}
         </>
       )}

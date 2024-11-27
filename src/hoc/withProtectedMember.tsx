@@ -1,45 +1,43 @@
-import { useAdmin } from "@/context/AdminContext";
+import { useMember } from "@/context/MemberContext";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { jwtVerify } from "jose";
 
-const withProtectedAdmin = (WrappedComponent: any) => {
+const withProtectedMember = (WrappedComponent: any) => {
   return (props: any) => {
-    const { admin, setAdmin } = useAdmin();
+    const { member, setMember } = useMember();
     const router = useRouter();
-    const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_BACKEND;
+    const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_FRONTEND;
 
     useEffect(() => {
       async function loadUser() {
         try {
           const token = localStorage.getItem("token");
           if (token != null && token.length) {
-            console.log("secret", secret);
             const secretKey = Buffer.from(secret, "utf8");
             const { payload } = await jwtVerify(token, secretKey as any);
-
             if (payload.exp && Date.now() >= payload.exp * 1000) {
               localStorage.removeItem("token");
-              setAdmin(null);
-              router.push("/backend/console/login");
+              setMember(null);
+              router.push("/login");
             }
-            setAdmin(payload);
+            setMember(payload);
           } else {
-            setAdmin(null);
+            setMember(null);
             localStorage.removeItem("token");
-            router.push("/backend/console/login");
+            router.push("/login");
           }
         } catch (error) {
-          setAdmin(null);
+          setMember(null);
           localStorage.removeItem("token");
-          router.push("/backend/console/login");
+          router.push("/login");
         }
       }
       loadUser();
     }, [router]);
 
-    return admin ? <WrappedComponent {...props} /> : <></>;
+    return member ? <WrappedComponent {...props} /> : <></>;
   };
 };
 
-export default withProtectedAdmin;
+export default withProtectedMember;

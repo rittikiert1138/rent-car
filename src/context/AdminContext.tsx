@@ -1,16 +1,47 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import Router, { useRouter } from "next/router";
+import { api } from "@/utils/api";
+import { alertError } from "@/utils/alert";
 
 type User = {
-  admin: string;
+  admin: any;
+  logout: () => void;
+  login: (params: FormValues) => void;
+  setAdmin: any;
+};
+
+type FormValues = {
+  username: string;
+  password: string;
 };
 
 const AdminContext = createContext<User>({} as User);
 
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
-  const [admin, setAdmin] = useState("admin");
+  const router = useRouter();
+  const [admin, setAdmin] = useState();
 
-  return <AdminContext.Provider value={{ admin }}>{children}</AdminContext.Provider>;
+  const logout = () => {
+    localStorage.removeItem("token");
+    router.push("/backend/console/login");
+  };
+
+  const login = async (params: FormValues) => {
+    try {
+      const response = await api.post("/api/user/auth/login", params);
+      console.log("response", response.data);
+      if (response.data.status === false) {
+        alertError(response.data.message);
+      } else {
+        localStorage.setItem("token", response.data.token);
+        router.push("/backend/console/dashboard");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  return <AdminContext.Provider value={{ admin, logout, login, setAdmin }}>{children}</AdminContext.Provider>;
 };
 
 export const useAdmin = () => useContext(AdminContext);

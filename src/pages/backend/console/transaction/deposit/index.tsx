@@ -111,10 +111,9 @@ const UserPage = () => {
   const handleView = (transaction_id: number) => {
     const transaction: any = transactions.find((item: any) => item.transaction_id === transaction_id);
     Swal.fire({
-      // title: "Sweet!" + transaction_id,
-      imageUrl: "https://unsplash.it/400/200",
+      imageUrl: `/uploads/${transaction?.transaction_slip}`,
       imageWidth: 400,
-      imageHeight: 200,
+      imageHeight: 600,
       imageAlt: "Custom image",
       showDenyButton: transaction.transaction_status === 1,
       showCancelButton: true,
@@ -125,7 +124,6 @@ const UserPage = () => {
       cancelButtonText: "ยกเลิก",
       cancelButtonColor: "#f5365c",
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         handleApprove(transaction_id);
       } else if (result.isDenied) {

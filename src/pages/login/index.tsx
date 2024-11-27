@@ -1,15 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useRouter, usePathname } from "next/navigation";
 import classNames from "classnames";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/UserContext";
+import { useMember } from "@/context/MemberContext";
 
 type FormValues = {
   username: string;
@@ -17,8 +15,7 @@ type FormValues = {
 };
 
 const LoginPage = () => {
-  const router = useRouter();
-  const { admin } = useUser();
+  const { login } = useMember();
 
   const {
     register,
@@ -28,16 +25,7 @@ const LoginPage = () => {
 
   const handleLogin = async (params: FormValues) => {
     try {
-      const payload = {
-        username: params.username,
-        password: params.password,
-      };
-      const response = await axios.post("/api/member/login", payload);
-
-      const { status } = response.data;
-      if (status) {
-        router.push("/member");
-      }
+      login(params);
     } catch (error: any) {
       toast.error("Error !");
       console.log("error", error.message);
@@ -49,10 +37,10 @@ const LoginPage = () => {
       <Toaster />
       <div className="px-2">
         <div className="md:w-[600px] w-full mx-auto bg-white p-8 rounded-sm">
-          <img src="/images/Logo.png" className="w-1/2 block mx-auto" />
+          <img src="/images/Head-logo.png" className="w-1/2 block mx-auto" />
           <form onSubmit={handleSubmit(handleLogin)}>
             <div className="mt-4">
-              <Label>ชื่อผู้ใช้งาน {admin} </Label>
+              <Label>ชื่อผู้ใช้งาน </Label>
               <Input
                 {...register("username", {
                   required: {
@@ -103,13 +91,14 @@ const LoginPage = () => {
           </form>
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-2">
-              <Button className="w-full mt-4" variant="outline">
-                ลืมรหัสผ่าน
-              </Button>
+              <Link href="/forgot-password">
+                <Button className="w-full mt-4" variant="outline">
+                  ลืมรหัสผ่าน
+                </Button>
+              </Link>
             </div>
             <div className="col-span-2">
               <Link href="/register">
-                {" "}
                 <Button className="w-full mt-4 bg-secondary" type="submit">
                   สมัครสมาชิก
                 </Button>

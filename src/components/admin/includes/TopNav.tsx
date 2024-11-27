@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useAdmin } from "@/context/AdminContext";
 
 const TopNav = () => {
+  const { admin, logout } = useAdmin();
   const [active, setActive] = useState(false);
   const wrapperRef = useRef(null);
 
@@ -44,12 +46,10 @@ const TopNav = () => {
               </div>
             </div>
             <div className="px-2 py-2 border-t">
-              <Link href="/backend/console/login">
-                <div className="w-full h-10  flex text-adanger  cursor-pointer px-2 hover:bg-adanger/20 rounded-lg transition-all duration-300">
-                  <i className="bi bi-box-arrow-right text-[20px] mt-1 mr-3"></i>
-                  <span className="mt-[6px]">Logout</span>
-                </div>
-              </Link>
+              <div className="w-full h-10  flex text-adanger  cursor-pointer px-2 hover:bg-adanger/20 rounded-lg transition-all duration-300" onClick={logout}>
+                <i className="bi bi-box-arrow-right text-[20px] mt-1 mr-3"></i>
+                <span className="mt-[6px]">Logout</span>
+              </div>
             </div>
           </div>
         )}
