@@ -9,18 +9,17 @@ datasource db {
 }
 
 model User {
-  user_id  Int    @id @default(autoincrement())
-  phone    String @unique
-  username String @unique
-  password String
-  role     String
-  status   Int
-
+  user_id   Int      @id @default(autoincrement())
+  phone     String   @unique
+  username  String   @unique
+  password  String
+  role      String
+  status    Int
   createdBy Int
   updatedBy Int
+  member    Member[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  member    Member[]
 }
 
 model Member {
@@ -32,42 +31,48 @@ model Member {
   phone       String         @unique @db.VarChar(10)
   balance     Float          @default(0)
   total_bet   Float          @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
   user        User?          @relation(fields: [user_id], references: [user_id])
   user_id     Int?
   transaction Transaction[]
   bank        MemberBank[]
   lotto       member_lotto[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model Transaction {
-  transaction_id     Int     @id @default(autoincrement())
+  transaction_id     Int      @id @default(autoincrement())
   transaction_type   Int
   transaction_status Int
   transaction_slip   String?
-  balance            Float   @default(0)
-  member             Member  @relation(fields: [member_id], references: [member_id])
+  balance            Float    @default(0)
+  member             Member   @relation(fields: [member_id], references: [member_id])
   member_id          Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model MemberBank {
-  member_bank_id    Int    @id @default(autoincrement())
+  member_bank_id    Int      @id @default(autoincrement())
   bank_type         Int
   bank_name         String
   bank_number       String
   bank_account_name String
-  member            Member @relation(fields: [member_id], references: [member_id])
+  member            Member   @relation(fields: [member_id], references: [member_id])
   member_id         Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Bank {
-  bank_id           Int    @id @default(autoincrement())
+  bank_id           Int      @id @default(autoincrement())
   bank_type         Int
   bank_name         String
   bank_number       String
   bank_account_name String
   bank_status       Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model otp_system {
@@ -76,6 +81,18 @@ model otp_system {
   ref     String
   phone   String   @db.VarChar(10)
   expired DateTime
+}
+
+model lotto_type {
+  lotto_type_id     Int      @id @default(autoincrement())
+  lotto_type_name   String   @unique
+  lotto_type_status Int
+  lotto_type_icon   String?
+  lotto_type_color  String?
+  order_seq         Int?
+  lotto_type_width  String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model lotto {
@@ -88,13 +105,25 @@ model lotto {
 }
 
 model member_lotto {
-  member_lotto_id Int      @id @default(autoincrement())
-  lotto_id        Int
-  member_id       Int
-  bet_type        Int
-  bet_number      String
-  bet_amount      Float
-  bet_status      Int
-  createdAt       DateTime @default(now())
-  member          Member   @relation(fields: [member_id], references: [member_id])
+  member_lotto_id   Int                 @id @default(autoincrement())
+  lotto_id          Int
+  member_id         Int
+  member            Member              @relation(fields: [member_id], references: [member_id])
+  member_lotto_list member_lotto_list[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model member_lotto_list {
+  member_lotto_list_id Int          @id @default(autoincrement())
+  lotto_id             Int
+  member_id            Int
+  bet_type             Int
+  bet_number           String
+  bet_amount           Float
+  bet_status           Int //1=กำลังรอ 2 = ถูกหวย 3 = ไม่ถูก
+  member_lotto_id      Int
+  member_lotto         member_lotto @relation(fields: [member_lotto_id], references: [member_lotto_id])
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
 }

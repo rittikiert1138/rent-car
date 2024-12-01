@@ -1,12 +1,7 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import bcrypt from "bcrypt";
-
-// type Data = {
-//   name: string | number | null;
-// };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

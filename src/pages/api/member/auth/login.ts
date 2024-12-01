@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         password: true,
         phone: true,
         attemp: true,
+        balance: true,
       },
     });
     if (!checkUser) {

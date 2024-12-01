@@ -39,20 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
     }
-
-    // const transactions = await prisma.transaction.findMany({
-    //   where: {
-    //     transaction_type: transaction_type,
-    //   },
-    //   include: {
-    //     member: {
-    //       select: {
-    //         username: true,
-    //       },
-    //     },
-    //   },
-    // });
-
     res.status(200).json({ status: true, message: "Success" });
   } catch (error: any) {
     console.log("Error ==>", error?.message);

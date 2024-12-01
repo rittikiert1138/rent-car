@@ -28,10 +28,6 @@ const AdminpageLogin = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  console.log("adminContext", admin);
-
-  // const randomString = cryptoRandomString({ length: 10 });
-
   const handleLogin = async (params: FormValues) => {
     try {
       login(params);
@@ -56,7 +52,7 @@ const AdminpageLogin = () => {
           </div>
           <div className="mb-4">
             <Label>Password</Label>
-            <Input placeholder="Password..." {...register("password")} />
+            <Input type="password" placeholder="Password..." {...register("password")} />
           </div>
           <div className="mb-4">
             <Button className="w-full" type="submit">

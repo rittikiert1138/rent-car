@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import "sweetalert2/src/sweetalert2.scss";
 import { LIST_BET_TYPE } from "@/constants/constants";
 import { useForm } from "react-hook-form";
+import { useMember } from "@/context/MemberContext";
+import { api } from "@/utils/api";
+import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
 
 interface ConditionTypes2 {
   listId?: number;
@@ -27,15 +31,13 @@ interface betSectionProps {
   setCondition: (_type: Array<ConditionTypes2 | undefined> | any) => void;
 }
 
-// type Inputs = {
-//   total?: string;
-//   slip?: File;
-// };
-
 const BetSection = (props: betSectionProps) => {
-  const router = useRouter();
+  const { member } = useMember();
+  const { lotto_id } = useParams();
 
   const { betList, setSection, setBetlist, setTypeactive, setBettype, setCondition } = props;
+
+  const [isShowDuplicate, setIsShowDuplicate] = useState(false);
 
   const {
     register,
@@ -79,6 +81,11 @@ const BetSection = (props: betSectionProps) => {
     setBetlist(resultDelete);
   };
 
+  const checkSameBet = (_unit: string, _betId: string) => {
+    const resultList = betList.filter((e: any) => e.unit === _unit && e.betId !== _betId);
+    return resultList.length > 0;
+  };
+
   const renderList = (_value: number, _type: number, _unit: number, _min: number, _max: number) => {
     const resultList = betList.filter((e: any) => e.typeId === _type && e.betType === _value);
     const resultElements = [];
@@ -88,8 +95,8 @@ const BetSection = (props: betSectionProps) => {
         <div className="grid grid-cols-12 gap-0 border h-9 rounded mb-1" key={`list_${i}`}>
           <div className="col-span-1 text-center pt-[8px] text-xs">{i + 1}</div>
           <div className="col-span-2">
-            <div className="w-full h-full bg-slate-300 text-center pt-[2px]">
-              <span className="text-primary text-xs">{bet.unit}</span>
+            <div className={classNames("w-full h-full  text-center pt-[2px]", checkSameBet(bet.unit, bet.betId) && isShowDuplicate ? "bg-red-500 text-white" : " bg-slate-300 text-primary")}>
+              <span className=" text-xs">{bet.unit}</span>
             </div>
           </div>
           <div className="col-span-2 text-center pt-[4px]">
@@ -151,6 +158,37 @@ const BetSection = (props: betSectionProps) => {
 
   const onSubmit = async (params: any) => {
     try {
+      const result = betList.map((t: any) => {
+        return {
+          ...t,
+          bet_price: parseInt(params[`bet_${t.betId}`]),
+        };
+      });
+
+      let _betCount = 0;
+
+      for (let i = 0; i < result.length; i++) {
+        const _bet = result[i];
+        _betCount += _bet.bet_price;
+      }
+
+      if (member.balance < _betCount) {
+        toast.error("คุณมีเครดิตไม่เพียงพอ");
+      } else {
+        const payload = {
+          member_id: member.member_id,
+          lotto_id: lotto_id,
+          betList: betList.map((bet: any) => {
+            return { ...bet, bet_price: params[`bet_${bet.betId}`] };
+          }),
+        };
+
+        const response = await api.post("/api/member/bet/create", payload);
+
+        console.log("response.data", response.data);
+      }
+
+      // console.log("betCount", _betCount);
       // if (true) {
       // Swal.fire({
       //   text: "คุณมีเครดิตไม่เพียงพอ",
@@ -168,11 +206,37 @@ const BetSection = (props: betSectionProps) => {
       //   };
       //   console.log("payload", payload);
       // }
-      console.log("params", params);
-      router.push("/member/stake/1");
+      // console.log("params", params);
+      // // router.push("/member/stake/1");
+
+      // const payload = {
+      //   member_id: member.member_id,
+      //   lotto_id: lotto_id,
+      //   betList: betList.map((bet: any) => {
+      //     return { ...bet, bet_price: params[`bet_${bet.betId}`] };
+      //   }),
+      // };
+
+      // const response = await api.post("/api/member/bet/create", payload);
+
+      // console.log("response.data", response.data);
+
+      // console.log("payload", payload);
     } catch (error: any) {
       console.log("Error submit", error.message);
     }
+  };
+
+  const handleDeleteDuplicate = () => {
+    let resultList: any = [];
+    for (let i = 0; i < betList.length; i++) {
+      const bet = betList[i];
+      const checkDuplicate = resultList.find((e: any) => e.unit === bet.unit);
+      if (!checkDuplicate) {
+        resultList.push(bet);
+      }
+    }
+    setBetlist(resultList);
   };
 
   useEffect(() => {
@@ -180,90 +244,97 @@ const BetSection = (props: betSectionProps) => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="container px-2">
-        <div className="flex text-primary ">
-          <div className="flex cursor-pointer" onClick={() => setSection(1)}>
-            <i className="bi bi-arrow-left-circle text-xl mr-2"></i>
-            <span className="mt-[2px]">ย้อนกลับ</span>
-          </div>
-        </div>
-        <div className="w-full bg-white rounded py-2 px-2 mt-2">
-          <div className="text-center">รายการแทงทั้งหมด {betList.length} รายการ</div>
-          {LIST_BET_TYPE.map((bet) => (
-            <div key={`bet__${bet.listId}`}>
-              {renderLabel(bet.value, bet.type, bet.label)}
-              {renderList(bet.value, bet.type, parseInt(bet.unit), bet.min, bet.max)}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-12 gap-2 mt-2">
-          <div className="col-span-4">
-            <div>
-              <Button className="h-8 w-full">แสดงเลขซ้ำ</Button>
+    <>
+      <Toaster />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="container px-2">
+          <div className="flex text-primary ">
+            <div className="flex cursor-pointer" onClick={() => setSection(1)}>
+              <i className="bi bi-arrow-left-circle text-xl mr-2"></i>
+              <span className="mt-[2px]">ย้อนกลับ</span>
             </div>
           </div>
-          <div className="col-span-4">
-            <div>
-              <Button className="h-8 w-full bg-slate-400">ตัดเลขซ้ำ</Button>
-            </div>
-          </div>
-          <div className="col-span-4">
-            <div>
-              <Button
-                className="h-8 w-full"
-                type="button"
-                onClick={() => {
-                  setBetlist([]);
-                  setSection(1);
-                  setTypeactive([]);
-                  setBettype(0);
-                  setCondition([]);
-                }}
-              >
-                ลบทั้งหมด
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="w-full bg-white p-2 mt-2 rounded">
-          <div className="relative border rounded h-10">
-            <div className="w-[140px] h-full bg-slate-300 absolute left-0 top-0 text-center pt-1">
-              <span className="text-sm">ราคาเท่ากัน</span>
-            </div>
-            <input className="w-full h-full pl-[156px] focus:outline-none" onChange={(e) => handleBetByValue(parseInt(e.target.value))} />
-          </div>
-          <div className="grid grid-cols-10 gap-2 mt-2">
-            {[5, 10, 20, 50, 100].map((item) => (
-              <div className="col-span-2" key={`bet_by_value_${item}`}>
-                <div className="w-full h-8 border border-primary text-center pt-[2px] rounded cursor-pointer" onClick={() => handleBetByValue(item)}>
-                  <span className="text-primary">{item}</span>
-                </div>
+          <div className="w-full bg-white rounded py-2 px-2 mt-2">
+            <div className="text-center">รายการแทงทั้งหมด {betList.length} รายการ</div>
+            {LIST_BET_TYPE.map((bet) => (
+              <div key={`bet__${bet.listId}`}>
+                {renderLabel(bet.value, bet.type, bet.label)}
+                {renderList(bet.value, bet.type, parseInt(bet.unit), bet.min, bet.max)}
               </div>
             ))}
           </div>
           <div className="grid grid-cols-12 gap-2 mt-2">
-            <div className="col-span-6">
-              <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">
-                <span className="text-xs">ยอดคงเหลือ</span>
+            <div className="col-span-4">
+              <div>
+                <Button className="h-8 w-full" type="button" onClick={() => setIsShowDuplicate(!isShowDuplicate)}>
+                  แสดงเลขซ้ำ
+                </Button>
               </div>
-              <div className="text-center border rounded-bl rounded-br pt-1 pb-2">12.34</div>
             </div>
-            <div className="col-span-6">
-              <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">
-                <span className="text-xs">ยอดเดิมพัน</span>
+            <div className="col-span-4">
+              <div>
+                <Button className="h-8 w-full bg-slate-400" type="button" onClick={() => handleDeleteDuplicate()}>
+                  ตัดเลขซ้ำ
+                </Button>
               </div>
-              <div className="text-center border rounded-bl rounded-br pt-1 pb-2">{generateCount()}</div>
+            </div>
+            <div className="col-span-4">
+              <div>
+                <Button
+                  className="h-8 w-full"
+                  type="button"
+                  onClick={() => {
+                    setBetlist([]);
+                    setSection(1);
+                    setTypeactive([]);
+                    setBettype(0);
+                    setCondition([]);
+                  }}
+                >
+                  ลบทั้งหมด
+                </Button>
+              </div>
             </div>
           </div>
+          <div className="w-full bg-white p-2 mt-2 rounded">
+            <div className="relative border rounded h-10">
+              <div className="w-[140px] h-full bg-slate-300 absolute left-0 top-0 text-center pt-1">
+                <span className="text-sm">ราคาเท่ากัน</span>
+              </div>
+              <input className="w-full h-full pl-[156px] focus:outline-none" onChange={(e) => handleBetByValue(parseInt(e.target.value))} />
+            </div>
+            <div className="grid grid-cols-10 gap-2 mt-2">
+              {[5, 10, 20, 50, 100].map((item) => (
+                <div className="col-span-2" key={`bet_by_value_${item}`}>
+                  <div className="w-full h-8 border border-primary text-center pt-[2px] rounded cursor-pointer" onClick={() => handleBetByValue(item)}>
+                    <span className="text-primary">{item}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-12 gap-2 mt-2">
+              <div className="col-span-6">
+                <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">
+                  <span className="text-xs">ยอดคงเหลือ</span>
+                </div>
+                <div className="text-center border rounded-bl rounded-br pt-1 pb-2">12.34</div>
+              </div>
+              <div className="col-span-6">
+                <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">
+                  <span className="text-xs">ยอดเดิมพัน</span>
+                </div>
+                <div className="text-center border rounded-bl rounded-br pt-1 pb-2">{generateCount()}</div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-2">
+            <Button className="w-full" type="submit">
+              ส่งโพย
+            </Button>
+          </div>
         </div>
-        <div className="mt-2">
-          <Button className="w-full" type="submit">
-            ส่งโพย
-          </Button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

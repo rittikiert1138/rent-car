@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 import { api } from "@/utils/api";
+import { useAdmin } from "@/context/AdminContext";
 
 type FormValues = {
   username: string;
@@ -21,6 +22,8 @@ type FormValues = {
 };
 
 const CreateUser = () => {
+  const { admin } = useAdmin();
+
   const {
     register,
     handleSubmit,
@@ -43,7 +46,7 @@ const CreateUser = () => {
         username: data.username,
         phone: data.phone,
         password: data.password,
-        user_id: 1,
+        user_id: admin.user_id,
       };
       const response = await api.post("/api/member/register", payload);
 

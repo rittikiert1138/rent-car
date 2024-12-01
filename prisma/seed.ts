@@ -7,7 +7,7 @@ async function main() {
   await prisma.user.create({
     data: {
       phone: "0838427291",
-      username: "MASTER",
+      username: "master",
       password: hashPassword,
       role: "MASTER",
       status: 1,

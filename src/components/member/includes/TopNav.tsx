@@ -4,11 +4,17 @@ import Link from "next/link";
 import classNames from "classnames";
 import { Button } from "../../ui/button";
 import { useMember } from "@/context/MemberContext";
+import { api } from "@/utils/api";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { jwtVerify } from "jose";
 
 const TopNav = () => {
+  const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const wrapperRef = useRef(null);
   const { logout, member } = useMember();
+  const [balance, setBalance] = useState<any>(null);
 
   const useOutsideAlerter = (ref: any) => {
     useEffect(() => {
@@ -26,6 +32,30 @@ const TopNav = () => {
 
   useOutsideAlerter(wrapperRef);
 
+  const refresh = async () => {
+    console.log("refresh");
+    try {
+      const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_FRONTEND;
+      const secretKey = Buffer.from(secret, "utf8");
+
+      const payloadData = {
+        member_id: member.member_id,
+      };
+      const response = await api.post("/api/member/auth/refresh", payloadData);
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+
+      const { payload } = await jwtVerify(token, secretKey as any);
+      setBalance(payload.balance);
+    } catch (error: any) {
+      toast.error(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    setBalance(member.balance);
+  }, []);
+
   return (
     <>
       {member ? (
@@ -42,8 +72,8 @@ const TopNav = () => {
               <div className="col-span-10">
                 <div className="flex justify-end">
                   <div className="w-auto h-8 mx-1 bg-white cursor-pointer flex mt-2 rounded-sm pl-2">
-                    <div className="pt-1">124.42</div>
-                    <div className="w-8 h-8 cursor-pointer pt-[4px] text-center">
+                    <div className="pt-1">{balance}</div>
+                    <div className="w-8 h-8 cursor-pointer pt-[4px] text-center" onClick={() => refresh()}>
                       <i className="bi bi-arrow-clockwise"></i>
                     </div>
                   </div>

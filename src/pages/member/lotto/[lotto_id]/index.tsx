@@ -9,6 +9,7 @@ import CheckboxList from "@/components/member/lotto/CheckboxList";
 import BetCondition from "@/components/member/lotto/BetCondition";
 import BetSection from "@/components/member/lotto/BetSection";
 import { LIST_BET_TYPE, LIST_BET_GROUP } from "@/constants/constants";
+import withProtectedMember from "@/hoc/withProtectedMember";
 
 interface ConditionTypes {
   listId?: number;
@@ -24,7 +25,7 @@ interface ConditionTypes {
 
 const LottoPage = () => {
   const [section, setSection] = useState<number>(1);
-  const [tabs, setTabs] = useState<number>(1);
+  const [tabs, setTabs] = useState<number>(2);
   const [currentGroup, setCurrentGroup] = useState<number>(0);
   const [typeActive, setTypeactive] = useState<Array<number>>([]);
   const [betType, setBettype] = useState<number>(0);
@@ -101,25 +102,142 @@ const LottoPage = () => {
     return resultElements;
   };
 
-  const handleBet = (_betType: number, _unit: string, price: number, _checkDuplicate: boolean = true) => {
-    const resultArray = [];
-    const currentValue = betList;
-    for (let i = 0; i < typeActive.length; i++) {
-      const _activeValue = typeActive[i];
+  const getThreeNumber = (_unit: string) => {
+    const s = _unit.split("");
+    const resultList: any = [];
+    for (let i = 0; i <= 5; i++) {
+      if (i === 0) {
+        const checkDuplicate = resultList.find((e: any) => e === s[0] + s[1] + s[2]);
+        if (!checkDuplicate) {
+          resultList.push(s[0] + s[1] + s[2]);
+        }
+      } else if (i === 1) {
+        const checkDuplicate = resultList.find((e: any) => e === s[0] + s[2] + s[1]);
+        if (!checkDuplicate) {
+          resultList.push(s[0] + s[2] + s[1]);
+        }
+      } else if (i === 2) {
+        const checkDuplicate = resultList.find((e: any) => e === s[1] + s[0] + s[2]);
+        if (!checkDuplicate) {
+          resultList.push(s[1] + s[0] + s[2]);
+        }
+      } else if (i === 3) {
+        const checkDuplicate = resultList.find((e: any) => e === s[1] + s[2] + s[0]);
+        if (!checkDuplicate) {
+          resultList.push(s[1] + s[2] + s[0]);
+        }
+      } else if (i === 4) {
+        const checkDuplicate = resultList.find((e: any) => e === s[2] + s[0] + s[1]);
+        if (!checkDuplicate) {
+          resultList.push(s[2] + s[0] + s[1]);
+        }
+      } else if (i === 5) {
+        const checkDuplicate = resultList.find((e: any) => e === s[2] + s[1] + s[0]);
+        if (!checkDuplicate) {
+          resultList.push(s[2] + s[1] + s[0]);
+        }
+      }
+    }
+    return resultList;
+  };
 
-      if (_checkDuplicate) {
-        const checkDuplicate = betList.find((e: any) => e.unit === _unit && e.betType === _activeValue);
+  const getTwoNumber = (_unit: string) => {
+    const s = _unit.split("");
+    const resultList: any = [];
 
-        if (checkDuplicate) {
-          const result = currentValue.filter((e: any) => e.unit !== _unit);
-          setBetlist(result);
-        } else {
-          resultArray.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: _unit, typeId: betType, price: price, bet_price: 1 });
-          setBetlist(betList.concat(resultArray));
+    for (let i = 0; i <= 1; i++) {
+      if (i === 0) {
+        const checkDuplicate = resultList.find((e: any) => e === s[0] + s[1]);
+        if (!checkDuplicate) {
+          resultList.push(s[0] + s[1]);
+        }
+      } else if (i === 1) {
+        const checkDuplicate = resultList.find((e: any) => e === s[1] + s[0]);
+        if (!checkDuplicate) {
+          resultList.push(s[1] + s[0]);
         }
       }
     }
 
+    return resultList;
+  };
+
+  const handleBet = (_betType: number, _unit: string, price: number, _checkDuplicate: boolean = true) => {
+    const _betList = [...betList];
+    const result: any = [];
+
+    const checkDuplicate = _betList.find((bet) => bet.unit === _unit);
+
+    if (checkDuplicate && tabs === 1) {
+      const checkReverse = typeActive.filter((t) => t === 3);
+      if (checkReverse.length > 0) {
+        if (betType === 1) {
+          const listUnit = getThreeNumber(_unit);
+          const resultFilter = _betList.filter((bet) => !listUnit.includes(bet.unit));
+          setBetlist(resultFilter);
+        } else if (betType === 2) {
+          const listUnit = getTwoNumber(_unit);
+          const resultFilter = _betList.filter((bet) => !listUnit.includes(bet.unit));
+          setBetlist(resultFilter);
+        }
+      } else {
+        const resultFilter = _betList.filter((bet) => bet.unit !== _unit);
+
+        setBetlist(resultFilter);
+      }
+    } else {
+      if (betType === 1) {
+        for (let i = 0; i < typeActive.length; i++) {
+          const _typeActive = typeActive[i];
+
+          if (_typeActive === 3) {
+            const listUnit = getThreeNumber(_unit);
+            for (let x = 0; x < listUnit.length; x++) {
+              const _list = listUnit[x];
+              const _checkDuplicateList = result.filter((r: any) => r.unit === _list);
+              if (!_checkDuplicateList.length) {
+                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: betType, unit: _list, typeId: betType, price: price, bet_price: 1 });
+              }
+            }
+          } else {
+            result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+          }
+        }
+
+        setBetlist(betList.concat(result));
+      } else if (betType === 2) {
+        const checkReverse = typeActive.filter((t) => t === 3);
+
+        if (checkReverse.length > 0) {
+          const listUnit = getTwoNumber(_unit);
+          for (let i = 0; i < typeActive.length; i++) {
+            const _typeActive = typeActive[i];
+            for (let x = 0; x < listUnit.length; x++) {
+              const _list = listUnit[x];
+              const _checkDuplicateList = result.filter((r: any) => r.unit === _list && r.betType === _typeActive);
+              if (!_checkDuplicateList.length && _typeActive !== 3) {
+                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _list, typeId: betType, price: price, bet_price: 1 });
+              }
+            }
+          }
+          setBetlist(betList.concat(result));
+        } else {
+          for (let i = 0; i < typeActive.length; i++) {
+            const _typeActive = typeActive[i];
+            result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+          }
+
+          setBetlist(betList.concat(result));
+        }
+      } else if (betType === 3) {
+        for (let i = 0; i < typeActive.length; i++) {
+          const _typeActive = typeActive[i];
+          result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+        }
+
+        setBetlist(betList.concat(result));
+      }
+    }
     setTimeout(() => {
       setDigit("");
     }, 300);
@@ -288,11 +406,9 @@ const LottoPage = () => {
     }
   };
 
-  console.log("betList", betList);
-
   return (
     <MemberLayout title="แทงหวย">
-      <div className="mt-2">
+      <div className="mt-2 relative">
         {section === 1 && (
           <>
             <div className="sm:container px-2">
@@ -317,7 +433,6 @@ const LottoPage = () => {
                       </div>
                     ))}
                   </div>
-                  {/* <div className="w-full h-[1px] bg-slate-200 mt-2"></div> */}
                   {betType === 0 && (
                     <div className="w-full py-10 text-center">
                       <i className="bi bi-arrow-up text-[100px] opacity-30 text-primary"></i>
@@ -326,14 +441,33 @@ const LottoPage = () => {
                   )}
                   {betType === 1 && (
                     <>
-                      <div className="grid grid-cols-10 gap-1 mt-2">
-                        {LIST_BET_GROUP.map((group, indexGroup) => (
-                          <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
-                            <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
+                      {/* {typeActive.length &&
+                        typeActive.map((item) => {
+                          if (item === 1 || item === 2) {
+                            return (
+                              <>
+                                <div className="grid grid-cols-10 gap-1 mt-2">
+                                  {LIST_BET_GROUP.map((group, indexGroup) => (
+                                    <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
+                                      <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
+                              </>
+                            );
+                          }
+                        })} */}
+                      <>
+                        <div className="grid grid-cols-10 gap-1 mt-2">
+                          {LIST_BET_GROUP.map((group, indexGroup) => (
+                            <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
+                              <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
+                      </>
                     </>
                   )}
                   {betType === 2 && (
@@ -585,6 +719,17 @@ const LottoPage = () => {
                 </div>
               )}
             </div>
+            <div className="absolute top-4 right-10 ">
+              <p>{JSON.stringify(typeActive)}</p>
+              <p>{betType}</p>
+              <ul>
+                {betList.map((bet: any, index: any) => (
+                  <li key={index}>
+                    betType : {bet.betType} Unit : {bet.unit} typeId : {bet.typeId}
+                  </li>
+                ))}
+              </ul>
+            </div>
             {betList.length > 0 ? (
               <div className="w-full h-12 fixed bg-slate-500 left-0 bottom-12 flex">
                 <div className="w-[calc(100%)] bg-slate-200 text-center pt-3">
@@ -605,4 +750,4 @@ const LottoPage = () => {
   );
 };
 
-export default LottoPage;
+export default withProtectedMember(LottoPage);
