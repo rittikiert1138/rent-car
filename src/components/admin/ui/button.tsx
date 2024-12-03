@@ -12,6 +12,7 @@ const buttonVariants = cva(" inline-flex items-center uppercase justify-center g
       success: "bg-asuccess text-white hover:bg-success/30",
       danger: "bg-adanger text-white hover:bg-adanger/80",
       secondary: "bg-white text-neutral-900 hover:bg-white/80 border border-[#dcdcddc]",
+      warning: "bg-awarning text-white hover:bg-awarning/80",
     },
     size: {
       default: "h-12 px-4 py-2",

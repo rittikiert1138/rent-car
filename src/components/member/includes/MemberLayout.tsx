@@ -3,6 +3,7 @@ import Link from "next/link";
 import ButtonNavbar from "./ButtomNavbar";
 import TopNav from "./TopNav";
 import { useMember } from "@/context/MemberContext";
+import Marquee from "react-fast-marquee";
 
 const MemberLayout = ({ children, title = "แทงหวย", display = true }: Readonly<{ children: React.ReactNode; title?: string; display?: boolean }>) => {
   const { member } = useMember();
@@ -10,14 +11,17 @@ const MemberLayout = ({ children, title = "แทงหวย", display = true }
     <div className="pt-14 pb-14">
       {member ? <TopNav /> : <></>}
       {display ? (
-        <div className="flex px-2">
+        <div className="container flex px-2">
           <Link href="/member">
             <div className="w-[40px] h-7 bg-white mr-[4px] text-center rounded-lg pt-[1px]">
               <i className="bi bi-house text-primary"></i>
             </div>
           </Link>
           <div className="w-[calc(100%-40px)] h-7 bg-white text-center rounded-lg">
-            <span className="text-primary text-sm">{title}</span>
+            {/* <span className="text-primary text-sm">{title}</span> */}
+            <Marquee>
+              <span className="text-primary text-sm">I can be a React component, multiple React components, or just some text.</span>
+            </Marquee>
           </div>
         </div>
       ) : (

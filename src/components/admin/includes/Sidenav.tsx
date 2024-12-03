@@ -52,18 +52,13 @@ const Sidenav = () => {
       list: [
         {
           id: 1,
-          name: "List",
+          name: "Lotto",
           path: "/backend/console/lotto",
         },
         {
           id: 2,
-          name: "Manage",
-          path: "/backend/console/user",
-        },
-        {
-          id: 2,
-          name: "Delete",
-          path: "/backend/console/user",
+          name: "Lotto Type",
+          path: "/backend/console/lotto-type",
         },
       ],
     },

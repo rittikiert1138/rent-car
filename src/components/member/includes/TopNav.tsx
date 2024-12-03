@@ -4,17 +4,13 @@ import Link from "next/link";
 import classNames from "classnames";
 import { Button } from "../../ui/button";
 import { useMember } from "@/context/MemberContext";
-import { api } from "@/utils/api";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { jwtVerify } from "jose";
 
 const TopNav = () => {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const wrapperRef = useRef(null);
-  const { logout, member } = useMember();
-  const [balance, setBalance] = useState<any>(null);
+  const { logout, member, balance, refresh } = useMember();
 
   const useOutsideAlerter = (ref: any) => {
     useEffect(() => {
@@ -32,30 +28,6 @@ const TopNav = () => {
 
   useOutsideAlerter(wrapperRef);
 
-  const refresh = async () => {
-    console.log("refresh");
-    try {
-      const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_FRONTEND;
-      const secretKey = Buffer.from(secret, "utf8");
-
-      const payloadData = {
-        member_id: member.member_id,
-      };
-      const response = await api.post("/api/member/auth/refresh", payloadData);
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-
-      const { payload } = await jwtVerify(token, secretKey as any);
-      setBalance(payload.balance);
-    } catch (error: any) {
-      toast.error(error?.message);
-    }
-  };
-
-  useEffect(() => {
-    setBalance(member.balance);
-  }, []);
-
   return (
     <>
       {member ? (
@@ -72,7 +44,7 @@ const TopNav = () => {
               <div className="col-span-10">
                 <div className="flex justify-end">
                   <div className="w-auto h-8 mx-1 bg-white cursor-pointer flex mt-2 rounded-sm pl-2">
-                    <div className="pt-1">{balance}</div>
+                    <div className="pt-1">{balance.toFixed(2)}</div>
                     <div className="w-8 h-8 cursor-pointer pt-[4px] text-center" onClick={() => refresh()}>
                       <i className="bi bi-arrow-clockwise"></i>
                     </div>
@@ -98,9 +70,9 @@ const TopNav = () => {
           </div>
           <div ref={wrapperRef} className={classNames(`w-[240px] h-[100vh] bg-white fixed top-12  transition-all z-10 p-2`, toggle ? `right-0` : `right-[-240px]`)}>
             <div className="w-full h-14 border border-primary rounded-sm px-1 relative">
-              <p>slottey1138</p>
+              <p>{member?.username}</p>
               <p>
-                <span className="text-primary">$</span> 24.31
+                <span className="text-primary">$</span> {balance.toFixed(2)}
               </p>
             </div>
             <div className="mt-2">

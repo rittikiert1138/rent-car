@@ -2,3 +2,9 @@ body{
     font-family: kanit_500;
     background-color: #b3f2e4;
 }
+.react-datepicker-wrapper{
+    width: 100%;
+}
+/* .react-datepicker-popper{
+    left: -100px!important;
+} */

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { alertError } from "@/utils/alert";
@@ -9,6 +9,8 @@ type User = {
   logout: () => void;
   login: (params: FormValues) => void;
   setMember: any;
+  balance: number;
+  refresh: () => void;
 };
 
 type FormValues = {
@@ -20,7 +22,8 @@ const MemberContext = createContext<User>({} as User);
 
 export const MemberProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const [member, setMember] = useState();
+  const [member, setMember] = useState<any>();
+  const [balance, setBalance] = useState<number>(0);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -41,7 +44,26 @@ export const MemberProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  return <MemberContext.Provider value={{ member, logout, login, setMember }}>{children}</MemberContext.Provider>;
+  const refresh = async () => {
+    try {
+      const payloadData = {
+        member_id: member?.member_id,
+      };
+      const response = await api.post("/api/member/auth/refresh", payloadData);
+      const { balance } = response.data;
+      setBalance(balance);
+    } catch (error: any) {
+      toast.error(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    if (member) {
+      refresh();
+    }
+  }, [member, router.pathname]);
+
+  return <MemberContext.Provider value={{ member, logout, login, setMember, balance, refresh }}>{children}</MemberContext.Provider>;
 };
 
 export const useMember = () => useContext(MemberContext);

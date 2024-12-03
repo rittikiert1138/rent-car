@@ -6,6 +6,7 @@ import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useMember } from "@/context/MemberContext";
 
 type Inputs = {
   total: string;
@@ -13,6 +14,7 @@ type Inputs = {
 };
 
 const WitdrawPage = () => {
+  const { balance } = useMember();
   const {
     register,
     handleSubmit,
@@ -49,7 +51,7 @@ const WitdrawPage = () => {
               </div>
               <div className="w-full h-[1px] bg-slate-200 mt-4"></div>
               <div className="mt-2">
-                จำนวนเงินคงเหลือ : <span className="text-primary f-bold">879.23</span>
+                จำนวนเงินคงเหลือ : <span className="text-primary f-bold">{balance.toFixed(2)}</span>
               </div>
               <div className="mt-2">
                 <Label>จำนวนเงิน</Label>

@@ -14,7 +14,6 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Lotto</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
       </Head>
       {pathName && (
         <>

@@ -6,7 +6,17 @@ const prisma = new PrismaClient();
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     console.log("req.body", req.body);
-    const { lotto_id, member_id, betList } = req.body;
+    const { lotto_id, member_id, betList, bet_count } = req.body;
+
+    await prisma.member.update({
+      where: {
+        member_id: member_id,
+      },
+      data: {
+        balance: { decrement: bet_count },
+        total_bet: { increment: bet_count },
+      },
+    });
 
     const createLottoMember = await prisma.member_lotto.create({
       data: {
@@ -22,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             lotto_id: Number(lotto_id),
             member_lotto_id: createLottoMember.member_lotto_id,
             member_id: member_id,
-            bet_type: bet.typeId,
+            bet_type: bet.bet_type,
             bet_number: bet.unit,
             bet_amount: bet.bet_price,
             bet_status: 1,

@@ -25,7 +25,7 @@ interface ConditionTypes {
 
 const LottoPage = () => {
   const [section, setSection] = useState<number>(1);
-  const [tabs, setTabs] = useState<number>(2);
+  const [tabs, setTabs] = useState<number>(1);
   const [currentGroup, setCurrentGroup] = useState<number>(0);
   const [typeActive, setTypeactive] = useState<Array<number>>([]);
   const [betType, setBettype] = useState<number>(0);
@@ -441,33 +441,14 @@ const LottoPage = () => {
                   )}
                   {betType === 1 && (
                     <>
-                      {/* {typeActive.length &&
-                        typeActive.map((item) => {
-                          if (item === 1 || item === 2) {
-                            return (
-                              <>
-                                <div className="grid grid-cols-10 gap-1 mt-2">
-                                  {LIST_BET_GROUP.map((group, indexGroup) => (
-                                    <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
-                                      <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
-                                    </div>
-                                  ))}
-                                </div>
-                                <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
-                              </>
-                            );
-                          }
-                        })} */}
-                      <>
-                        <div className="grid grid-cols-10 gap-1 mt-2">
-                          {LIST_BET_GROUP.map((group, indexGroup) => (
-                            <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
-                              <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
-                            </div>
-                          ))}
-                        </div>
-                        <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
-                      </>
+                      <div className="grid grid-cols-10 gap-1 mt-2">
+                        {LIST_BET_GROUP.map((group, indexGroup) => (
+                          <div className="col-span-2" key={`group_bet_${group.groupId}_${indexGroup}`}>
+                            <CheckboxGroup onClick={() => setCurrentGroup(group.value)} label={group.label} active={group.value === currentGroup} />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-10 gap-1 mt-4">{renderBetList(currentGroup, 3, "col-span-2", 900)}</div>
                     </>
                   )}
                   {betType === 2 && (
@@ -536,6 +517,12 @@ const LottoPage = () => {
                       </div>
                     ))}
                   </div>
+                  {betType === 0 && (
+                    <div className="w-full py-10 text-center">
+                      <i className="bi bi-arrow-up text-[100px] opacity-30 text-primary"></i>
+                      <p className="-mt-6 text-primary">กรุณาเลือกประเภท</p>
+                    </div>
+                  )}
                   {betType === 1 && (
                     <>
                       <div className="flex mt-4 justify-center">
@@ -718,17 +705,6 @@ const LottoPage = () => {
                   ))}
                 </div>
               )}
-            </div>
-            <div className="absolute top-4 right-10 ">
-              <p>{JSON.stringify(typeActive)}</p>
-              <p>{betType}</p>
-              <ul>
-                {betList.map((bet: any, index: any) => (
-                  <li key={index}>
-                    betType : {bet.betType} Unit : {bet.unit} typeId : {bet.typeId}
-                  </li>
-                ))}
-              </ul>
             </div>
             {betList.length > 0 ? (
               <div className="w-full h-12 fixed bg-slate-500 left-0 bottom-12 flex">

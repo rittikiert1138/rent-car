@@ -93,20 +93,26 @@ model lotto_type {
   lotto_type_width  String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  lotto             lotto[]
 }
 
 model lotto {
-  lotto_id   Int      @id @default(autoincrement())
-  lotto_type String   @unique
-  period     DateTime
-  close_time DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  lotto_id      Int            @id @default(autoincrement())
+  lotto_type_id Int
+  lotto_type    lotto_type     @relation(fields: [lotto_type_id], references: [lotto_type_id])
+  period        String
+  open_time     String
+  close_time    String
+  status        Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  member_lotto  member_lotto[]
 }
 
 model member_lotto {
   member_lotto_id   Int                 @id @default(autoincrement())
   lotto_id          Int
+  lotto             lotto               @relation(fields: [lotto_id], references: [lotto_id])
   member_id         Int
   member            Member              @relation(fields: [member_id], references: [member_id])
   member_lotto_list member_lotto_list[]

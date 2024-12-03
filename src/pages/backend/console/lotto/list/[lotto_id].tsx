@@ -8,20 +8,20 @@ import dayjs from "dayjs";
 import DataTable from "react-data-table-component";
 import { Switch } from "@/components/admin/ui/switch";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
-import "dayjs/locale/th";
-import buddhistEra from "dayjs/plugin/buddhistEra";
-
-dayjs.extend(buddhistEra);
-dayjs.locale("th");
+import { useParams } from "next/navigation";
+import { LIST_BET_TYPE } from "@/constants/constants";
 
 const LottoPage = () => {
-  const [lottos, setLottos] = useState([]);
+  const [lottoList, setLottoList] = useState([]);
+  const { lotto_id } = useParams();
 
-  const getLottos = async () => {
+  const getLottoList = async () => {
     try {
-      const response = await api.get("/api/backend/lotto/list");
+      const response = await api.post("/api/backend/lotto/bet-list", { lotto_id: lotto_id });
+
+      console.log("response.data", response.data);
       if (response.data.status === true) {
-        setLottos(response.data.lottos.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+        setLottoList(response.data.lottoList.map((item: any, index: number) => ({ ...item, index: index + 1 })));
       } else {
         alertError(response.data.message);
       }
@@ -31,8 +31,10 @@ const LottoPage = () => {
   };
 
   useEffect(() => {
-    getLottos();
-  }, []);
+    if (lotto_id) {
+      getLottoList();
+    }
+  }, [lotto_id]);
 
   const handleChangeStatus = async (lotto_id: number, status: number, lotto_type: number) => {
     try {
@@ -43,7 +45,7 @@ const LottoPage = () => {
       };
       const response = await api.post("/api/backend/lotto/change-status", payload);
       if (response.data.status === true) {
-        getLottos();
+        getLottoList();
       } else {
         alertError(response.data.message);
       }
@@ -60,7 +62,7 @@ const LottoPage = () => {
       const response = await api.post("/api/backend/lotto/delete", payload);
       if (response.data.status === true) {
         alertSuccess(response.data.message);
-        getLottos();
+        getLottoList();
       } else {
         alertError(response.data.message);
       }
@@ -77,65 +79,56 @@ const LottoPage = () => {
       selector: (row: any) => row.index,
     },
     {
-      name: "ชื่อหวย",
+      name: "ชื่อผู้ใช้",
       sortable: true,
-      selector: (row: any) => row.lotto_type.lotto_type_name,
+      selector: (row: any) => row.member_lotto.member.username,
+    },
+    {
+      name: "ประเภท",
+      sortable: true,
+      selector: (row: any) => LIST_BET_TYPE.find((e) => e.betTypeId === row.bet_type)?.label,
+    },
+    {
+      name: "ตัวเลขที่แทง",
+      sortable: true,
+      selector: (row: any) => row.bet_number,
     },
 
     {
-      name: "งวดประวันที่",
+      name: "จำนวนเงิน",
       sortable: true,
-      selector: (row: any) => dayjs(row.period).format("DD MMMM BBBB"),
-    },
-
-    {
-      name: "เวลาเปิดรับแทง",
-      sortable: true,
-      selector: (row: any) => dayjs(row.open_time).format("DD MMMM BBBB HH:mm:ss"),
+      selector: (row: any) => row.bet_amount,
     },
     {
-      name: "เวลาปิดรับแทง",
+      name: "วันที่แทง",
       sortable: true,
-      selector: (row: any) => dayjs(row.close_time).format("DD MMMM BBBB HH:mm:ss"),
+      center: true,
+      selector: (row: any) => dayjs(row.createdAt).format("DD/MM/YYYY HH:mm"),
     },
     {
       name: "สถานะ",
-      sortable: true,
       center: true,
+      sortable: true,
       cell: (row: any) => (
-        <>
-          <Switch checked={row.status === 1 ? true : false} onCheckedChange={(e) => handleChangeStatus(row.lotto_id, row.status, row.lotto_type)} />
-        </>
+        <div className="w-full text-center">
+          {row.bet_status === 1 && <span className="text-white bg-warning rounded-sm px-2">รอออกผล</span>}
+          {row.bet_status === 2 && <span className="text-white bg-asuccess rounded-sm px-2">ถูกรางวัล</span>}
+          {row.bet_status === 3 && <span className="text-white bg-adanger rounded-sm px-2">ไม่ถูกรางวัล</span>}
+        </div>
       ),
     },
     {
-      name: "Action",
+      name: "",
       sortable: false,
       center: true,
       width: "20%",
       cell: (row: any) => (
         <div className="w-full text-center">
-          <Link href={`/backend/console/lotto/list/${row.lotto_id}`}>
+          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
             <Button className="border h-10">
               <i className="bi bi-list-task"></i>
             </Button>
           </Link>
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10" variant="secondary">
-              <i className="bi bi-list-ul"></i>
-            </Button>
-          </Link>
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10" variant="warning">
-              <i className="bi bi-pencil"></i>
-            </Button>
-          </Link>
-          <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)}>
-            <i className="bi bi-trash3"></i>
-          </Button>
-          <Button className="border h-10" variant="success">
-            <i className="bi bi-search"></i>
-          </Button>
         </div>
       ),
     },
@@ -153,7 +146,7 @@ const LottoPage = () => {
           </Link>
         </div>
       </div>
-      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={lottos} pagination />
+      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={lottoList} pagination />
     </AdminLayout>
   );
 };

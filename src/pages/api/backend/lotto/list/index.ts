@@ -1,24 +1,23 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { member_id } = req.body;
-    const getMember: any = await prisma.member.findFirst({
-      where: {
-        member_id: member_id,
-      },
-      select: {
-        balance: true,
+    const lottos = await prisma.lotto.findMany({
+      include: {
+        lotto_type: {
+          select: {
+            lotto_type_name: true,
+          },
+        },
       },
     });
 
     res.status(200).json({
       status: true,
-      message: "Refresh success",
-      balance: getMember?.balance,
+      message: "ดึงข้อมูลหวยสำเร็จ",
+      lottos,
     });
   } catch (error: any) {
     console.log("Error ==>", error?.message);

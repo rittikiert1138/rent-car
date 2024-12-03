@@ -32,7 +32,7 @@ interface betSectionProps {
 }
 
 const BetSection = (props: betSectionProps) => {
-  const { member } = useMember();
+  const { member, balance, refresh } = useMember();
   const { lotto_id } = useParams();
 
   const { betList, setSection, setBetlist, setTypeactive, setBettype, setCondition } = props;
@@ -150,7 +150,7 @@ const BetSection = (props: betSectionProps) => {
     let resultCount = 0;
     for (let i = 0; i < betList.length; i++) {
       const bet = betList[i];
-      resultCount += watch(`bet_${bet.betId}`);
+      resultCount += parseInt(watch(`bet_${bet.betId}`));
     }
 
     return resultCount;
@@ -178,50 +178,20 @@ const BetSection = (props: betSectionProps) => {
         const payload = {
           member_id: member.member_id,
           lotto_id: lotto_id,
+          bet_count: _betCount,
           betList: betList.map((bet: any) => {
-            return { ...bet, bet_price: params[`bet_${bet.betId}`] };
+            const betTypeId = LIST_BET_TYPE.find((e) => e.value === bet.betType && e.type === bet.typeId);
+            return { ...bet, bet_type: betTypeId?.betTypeId, bet_price: params[`bet_${bet.betId}`] };
           }),
         };
+
+        console.log("payload", payload);
 
         const response = await api.post("/api/member/bet/create", payload);
 
         console.log("response.data", response.data);
+        refresh();
       }
-
-      // console.log("betCount", _betCount);
-      // if (true) {
-      // Swal.fire({
-      //   text: "คุณมีเครดิตไม่เพียงพอ",
-      //   icon: "warning",
-      //   confirmButtonText: "ตกลง",
-      //   confirmButtonColor: "#059071",
-      // });
-      // } else {
-      //   const payload = {
-      //     userId: 1,
-      //     betType: 1,
-      //     betList: betList.map((bet: any) => {
-      //       return { ...bet, bet_price: params[`bet_${bet.betId}`] };
-      //     }),
-      //   };
-      //   console.log("payload", payload);
-      // }
-      // console.log("params", params);
-      // // router.push("/member/stake/1");
-
-      // const payload = {
-      //   member_id: member.member_id,
-      //   lotto_id: lotto_id,
-      //   betList: betList.map((bet: any) => {
-      //     return { ...bet, bet_price: params[`bet_${bet.betId}`] };
-      //   }),
-      // };
-
-      // const response = await api.post("/api/member/bet/create", payload);
-
-      // console.log("response.data", response.data);
-
-      // console.log("payload", payload);
     } catch (error: any) {
       console.log("Error submit", error.message);
     }
@@ -317,7 +287,7 @@ const BetSection = (props: betSectionProps) => {
                 <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">
                   <span className="text-xs">ยอดคงเหลือ</span>
                 </div>
-                <div className="text-center border rounded-bl rounded-br pt-1 pb-2">12.34</div>
+                <div className="text-center border rounded-bl rounded-br pt-1 pb-2">{balance}</div>
               </div>
               <div className="col-span-6">
                 <div className="w-full h-8 bg-slate-900 text-white text-center rounded-tl rounded-tr">

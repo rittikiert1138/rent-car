@@ -28,8 +28,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (params: FormValues) => {
     try {
-      const response = await api.post("/api/user/auth/login", params);
-      console.log("response", response.data);
+      const response = await api.post("/api/backend/auth/login", params);
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
