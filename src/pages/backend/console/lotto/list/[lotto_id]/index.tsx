@@ -124,24 +124,28 @@ const LottoPage = () => {
       width: "20%",
       cell: (row: any) => (
         <div className="w-full text-center">
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10">
-              <i className="bi bi-list-task"></i>
-            </Button>
-          </Link>
+          <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.member_lotto_list_id)}>
+            <i className="bi bi-trash3"></i>
+          </Button>
         </div>
       ),
     },
   ];
 
   return (
-    <AdminLayout title="หวย" breadcrumb={[{ title: "หวย", path: "/backend/console/lotto" }]}>
+    <AdminLayout
+      title="หวย"
+      breadcrumb={[
+        { title: "หวย", path: "/backend/console/lotto" },
+        { title: "รายการ", path: "/backend/console/lotto" },
+      ]}
+    >
       <div className="grid grid-cols-12 gap-4 mb-4">
         <div className="col-span-6">{/* <h3 className="text-2xl font-bold">หวยไทย</h3> */}</div>
         <div className="col-span-6 text-right">
-          <Link href="/backend/console/lotto/create">
+          <Link href={`/backend/console/lotto/list/${lotto_id}/summary`}>
             <Button>
-              สร้าง <i className="bi bi-plus-lg"></i>
+              ออกผล <i className="bi bi-plus-lg"></i>
             </Button>
           </Link>
         </div>

@@ -109,6 +109,13 @@ model lotto {
   member_lotto  member_lotto[]
 }
 
+model lotto_result {
+  lotto_result_id Int      @id @default(autoincrement())
+  lotto_type_id   Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model member_lotto {
   member_lotto_id   Int                 @id @default(autoincrement())
   lotto_id          Int
@@ -128,8 +135,28 @@ model member_lotto_list {
   bet_number           String
   bet_amount           Float
   bet_status           Int //1=กำลังรอ 2 = ถูกหวย 3 = ไม่ถูก
+  bet_pay              Float?
+  bet_pay_result       Float?
+  bet_number_result    String?
   member_lotto_id      Int
   member_lotto         member_lotto @relation(fields: [member_lotto_id], references: [member_lotto_id])
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
+}
+
+model Banner {
+  banner_id     Int      @id @default(autoincrement())
+  banner_image  String
+  banner_status Int
+  order_seq     Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model flash_news {
+  flash_news_id      Int      @id @default(autoincrement())
+  flash_news_content String
+  flash_news_status  Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

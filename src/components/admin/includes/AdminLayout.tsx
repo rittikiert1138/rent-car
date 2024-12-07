@@ -6,13 +6,22 @@ import Link from "next/link";
 import "sweetalert2/src/sweetalert2.scss";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/admin/ui/breadcrumb";
 
-const AdminLayout = ({ children, title, breadcrumb }: { children: React.ReactNode; title: string; breadcrumb: { title: string; path: string }[] }) => {
+const AdminLayout = ({ children, title, breadcrumb, loading = false }: { children: React.ReactNode; title: string; breadcrumb: { title: string; path: string }[]; loading: boolean }) => {
   return (
     <div className="w-full h-[100vh] bg-white">
       <TopNav />
       <Sidenav />
       <div className="pl-[316px] fixed top-[70px] left-0 w-full h-[calc(100vh-70px)] p-[16px] bg-[#f2f2f2]">
-        <div className="w-full min-h-20 bg-white shadow-sm rounded-lg p-4">
+        <div className="w-full min-h-20 bg-white shadow-sm rounded-lg p-4 relative z-10">
+          {loading && (
+            <div className="absolute top-0 right-0 bg-black/25 z-20 w-full h-full rounded-lg">
+              <div className="w-full h-full  relative">
+                <div className="absolute -translate-y-1/2 -translate-x-1/2  top-1/2 left-1/2 w-[100px] h-[100px] rounded-lg">
+                  <img src="/icons/loading.gif" className="w-full" />
+                </div>
+              </div>
+            </div>
+          )}
           <div className="grid grid-cols-12 border-b pb-4 h-12 mb-4">
             <div className="col-span-7 text-right pt-2">
               <Breadcrumb>

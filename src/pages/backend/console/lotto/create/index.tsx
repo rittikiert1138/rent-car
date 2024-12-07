@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
-import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
 import Link from "next/link";

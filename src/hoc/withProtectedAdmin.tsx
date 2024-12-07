@@ -14,7 +14,6 @@ const withProtectedAdmin = (WrappedComponent: any) => {
         try {
           const token = localStorage.getItem("token");
           if (token != null && token.length) {
-            console.log("secret", secret);
             const secretKey = Buffer.from(secret, "utf8");
             const { payload } = await jwtVerify(token, secretKey as any);
 

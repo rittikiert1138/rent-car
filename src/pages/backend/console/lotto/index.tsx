@@ -116,13 +116,8 @@ const LottoPage = () => {
       cell: (row: any) => (
         <div className="w-full text-center">
           <Link href={`/backend/console/lotto/list/${row.lotto_id}`}>
-            <Button className="border h-10">
-              <i className="bi bi-list-task"></i>
-            </Button>
-          </Link>
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10" variant="secondary">
-              <i className="bi bi-list-ul"></i>
+            <Button className="border h-10" variant="success">
+              <i className="bi bi-search"></i>
             </Button>
           </Link>
           <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
@@ -132,9 +127,6 @@ const LottoPage = () => {
           </Link>
           <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)}>
             <i className="bi bi-trash3"></i>
-          </Button>
-          <Button className="border h-10" variant="success">
-            <i className="bi bi-search"></i>
           </Button>
         </div>
       ),

@@ -15,8 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    console.log("checkDuplicate", checkDuplicate);
-
     if (checkDuplicate) {
       res.status(200).json({
         status: false,
