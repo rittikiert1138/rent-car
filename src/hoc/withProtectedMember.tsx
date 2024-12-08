@@ -27,7 +27,8 @@ const withProtectedMember = (WrappedComponent: any) => {
             localStorage.removeItem("token");
             router.push("/login");
           }
-        } catch (error) {
+        } catch (error: any) {
+          console.log("error ==>", error?.message);
           setMember(null);
           localStorage.removeItem("token");
           router.push("/login");

@@ -6,8 +6,8 @@ import { Button } from "@/components/admin/ui/button";
 import { alertError } from "@/utils/alert";
 import { api } from "@/utils/api";
 import { Switch } from "@/components/admin/ui/switch";
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import styled from "styled-components";
+// import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
+// import styled from "styled-components";
 
 // fake data generator
 const getItems = (count: number) =>
@@ -17,34 +17,34 @@ const getItems = (count: number) =>
   }));
 
 // a little function to help us with reordering the result
-const reorder = (list: any[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+// const reorder = (list: any[], startIndex: number, endIndex: number) => {
+//   const result = Array.from(list);
+//   const [removed] = result.splice(startIndex, 1);
+//   result.splice(endIndex, 0, removed);
 
-  return result;
-};
+//   return result;
+// };
 
-const grid = 8;
+// const grid = 8;
 
-const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+// const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+//   // some basic styles to make the items look a bit nicer
+//   userSelect: "none",
+//   padding: grid * 2,
+//   margin: `0 0 ${grid}px 0`,
 
-  // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
+//   // change background colour if dragging
+//   background: isDragging ? "lightgreen" : "grey",
 
-  // styles we need to apply on draggables
-  ...draggableStyle,
-});
+//   // styles we need to apply on draggables
+//   ...draggableStyle,
+// });
 
-const getListStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
-  padding: grid,
-  width: 250,
-});
+// const getListStyle = (isDraggingOver: boolean) => ({
+//   background: isDraggingOver ? "lightblue" : "lightgrey",
+//   padding: grid,
+//   width: 250,
+// });
 
 const BannerPage = () => {
   const [banners, setBanners] = useState<any[]>([]);
@@ -85,16 +85,16 @@ const BannerPage = () => {
     }
   };
 
-  const [items, setItems] = useState<any[]>(getItems(10));
+  // const [items, setItems] = useState<any[]>(getItems(10));
 
-  const onDragEnd = (result: any) => {
-    console.log("result", result);
-    // const { source, destination } = result;
-    // if (!destination) return;
-    // const items = reorder(banners, source.index, destination.index);
-    // console.log("items", items);
-    // setBanners(items);
-  };
+  // const onDragEnd = (result: any) => {
+  //   console.log("result", result);
+  //   // const { source, destination } = result;
+  //   // if (!destination) return;
+  //   // const items = reorder(banners, source.index, destination.index);
+  //   // console.log("items", items);
+  //   // setBanners(items);
+  // };
 
   // const handleDragEnd = (result: DropResult) => {
   //   const { source, destination } = result;
@@ -112,11 +112,6 @@ const BannerPage = () => {
   //   margin: 10px;
   //   border: 1px solid black;
   // `;
-
-  const Container = styled.div`
-    margin: 10px;
-    border: 1px solid black;
-  `;
 
   return (
     <AdminLayout title="Banner" breadcrumb={[{ title: "Banner", path: "/backend/console/banner" }]}>
@@ -142,7 +137,7 @@ const BannerPage = () => {
         <tbody>
           {banners.length > 0 ? (
             banners.map((banner, index) => (
-              <tr className="border h-12">
+              <tr className="border h-12" key={index}>
                 <td className="text-center">{banner.order_seq}</td>
                 <td>
                   <img src={`/uploads/banners/${banner.banner_image}`} alt="banner" className="w-[80px] block mx-auto" />

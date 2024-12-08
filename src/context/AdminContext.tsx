@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import Router, { useRouter } from "next/router";
+import React, { createContext, useState, useContext } from "react";
+import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { alertError } from "@/utils/alert";
 

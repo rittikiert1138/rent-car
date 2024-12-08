@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
+// import { jwtVerify } from "jose";
 
 // Secret key for token verification (e.g., from environment variables)
-const SECRET_KEY: string = process.env.JWT_SECRET as string;
+// const SECRET_KEY: string = process.env.JWT_SECRET as string;
 export async function middleware(request: NextRequest) {
   const authHeader = request.headers.get("Authorization");
 
@@ -13,11 +13,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // Extract the token
-  const token = authHeader.split(" ")[1];
+  // const token = authHeader.split(" ")[1];
 
   try {
     // Verify token (use your preferred JWT library)
-    const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET_KEY));
+    // const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET_KEY));
 
     // Allow the request to continue
     return NextResponse.next();

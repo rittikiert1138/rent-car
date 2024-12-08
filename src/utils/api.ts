@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 // const token = jwtDecode.sign({ id: 1 }, process.env.JWT_SECRET as string);
 

@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { fields, files } = await parseForm(req);
+    const { files } = await parseForm(req);
     const banner_image: any = files?.banner_image?.[0]?.newFilename;
 
     const countBanner = await prisma.banner.count();

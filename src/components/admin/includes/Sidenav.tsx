@@ -17,7 +17,6 @@ const Sidenav = () => {
         const menu = element.list[m];
         const _path = `${menu.path}`;
         const checkToggle = currentPath.startsWith(_path);
-        const checkActive = currentPath.startsWith(_path);
         if (checkToggle) {
           setToggle(element.id);
           setActive(menu.id);

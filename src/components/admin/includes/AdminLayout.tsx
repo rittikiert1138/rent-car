@@ -4,7 +4,7 @@ import Sidenav from "./Sidenav";
 import TopNav from "./TopNav";
 import Link from "next/link";
 import "sweetalert2/src/sweetalert2.scss";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/admin/ui/breadcrumb";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "@/components/admin/ui/breadcrumb";
 
 const AdminLayout = ({ children, title, breadcrumb, loading = false }: { children: React.ReactNode; title: string; breadcrumb: { title: string; path: string }[]; loading: boolean }) => {
   return (

@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 
 interface OtpConponentProps {

@@ -7,7 +7,6 @@ import { LIST_BET_TYPE } from "@/constants/constants";
 import { useForm } from "react-hook-form";
 import { useMember } from "@/context/MemberContext";
 import { api } from "@/utils/api";
-import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 
 interface ConditionTypes2 {
@@ -205,7 +204,7 @@ const BetSection = (props: betSectionProps) => {
   console.log("betList", betList);
 
   const handleDeleteDuplicate = () => {
-    let resultList: any = [];
+    const resultList: any = [];
     for (let i = 0; i < betList.length; i++) {
       const bet = betList[i];
       const checkDuplicate = resultList.find((e: any) => e.unit === bet.unit);

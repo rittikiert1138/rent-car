@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         attemp: true,
         balance: true,
         user_id: true,
+        total_bet: true,
       },
     });
     if (!checkUser) {

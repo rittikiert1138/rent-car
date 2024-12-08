@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
-import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
@@ -26,7 +25,7 @@ type FormValues = {
 };
 
 const EditLotto = () => {
-  const { admin } = useAdmin();
+  // const { admin } = useAdmin();
   const router = useRouter();
   const { lotto_id } = router.query;
 

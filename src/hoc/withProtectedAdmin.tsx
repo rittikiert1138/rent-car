@@ -28,7 +28,8 @@ const withProtectedAdmin = (WrappedComponent: any) => {
             localStorage.removeItem("token");
             router.push("/backend/console/login");
           }
-        } catch (error) {
+        } catch (error: any) {
+          console.log("error ==>", error?.message);
           setAdmin(null);
           localStorage.removeItem("token");
           router.push("/backend/console/login");

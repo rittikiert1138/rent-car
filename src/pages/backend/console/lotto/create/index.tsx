@@ -5,11 +5,11 @@ import { Button } from "@/components/admin/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 import { api } from "@/utils/api";
-import { useAdmin } from "@/context/AdminContext";
+// import { useAdmin } from "@/context/AdminContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
@@ -25,14 +25,13 @@ type FormValues = {
 };
 
 const CreateLottoType = () => {
-  const { admin } = useAdmin();
+  // const { admin } = useAdmin();
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    clearErrors,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {

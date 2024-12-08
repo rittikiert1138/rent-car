@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/admin/ui/input";
 import { Button } from "@/components/admin/ui/button";
 import { api } from "@/utils/api";
-import { alertError } from "@/utils/alert";
+import { alertError, alertSuccess } from "@/utils/alert";
 import { getThreeNumber } from "@/utils/utils";
 
 const SummaryPage = () => {
@@ -30,9 +30,7 @@ const SummaryPage = () => {
     } catch (error: any) {
       alertError(error.message);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      setLoading(false);
     }
   };
 
@@ -113,13 +111,27 @@ const SummaryPage = () => {
 
       const payload = {
         lotto_id: lotto_id,
+        member_lotto_id: lottoList[0].member_lotto_id,
+        lotto_result: [
+          {
+            type: 1,
+            bet_number: data.lotto_number_3,
+          },
+          {
+            type: 4,
+            bet_number: data.lotto_number_2,
+          },
+        ],
         lotto_list: resultList,
       };
 
-      console.log(payload);
-
       const response = await api.post(`/api/backend/lotto/summary`, payload);
-      console.log(response);
+      const { status, message } = response.data;
+      if (status) {
+        alertSuccess(message);
+      } else {
+        alertError(message);
+      }
     } catch (error: any) {
       console.log(error.message);
     } finally {
@@ -128,8 +140,6 @@ const SummaryPage = () => {
       }, 2000);
     }
   };
-
-  console.log("lottoList", lottoList);
 
   return (
     <AdminLayout

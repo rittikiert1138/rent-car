@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json({
       status: true,
       message: "ดบข้อมูลหวยสำเร็จ",
+      limit,
     });
   } catch (error: any) {
     console.log("Error ==>", error?.message);

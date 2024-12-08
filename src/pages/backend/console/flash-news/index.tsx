@@ -5,8 +5,6 @@ import { Button } from "@/components/admin/ui/button";
 import Link from "next/link";
 import DataTable from "react-data-table-component";
 import { useForm } from "react-hook-form";
-
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/admin/ui/dialog";
 import { Label } from "@/components/admin/ui/label";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import classNames from "classnames";
@@ -23,9 +21,7 @@ const FlashNews = () => {
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
-    clearErrors,
     formState: { errors },
   } = useForm<FormValues>();
 
@@ -131,7 +127,7 @@ const FlashNews = () => {
       center: true,
       cell: (row: any) => (
         <>
-          <Switch checked={row.flash_news_status === 1 ? true : false} onCheckedChange={(e) => handleChangeStatus(row.flash_news_id, row.flash_news_status)} />
+          <Switch checked={row.flash_news_status === 1 ? true : false} onCheckedChange={() => handleChangeStatus(row.flash_news_id, row.flash_news_status)} />
         </>
       ),
     },

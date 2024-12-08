@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const hashPassword = await bcrypt.hash(req.body.password, 10);
 
-    const members = await prisma.member.update({
+    await prisma.member.update({
       where: {
         member_id: req.body.member_id,
       },

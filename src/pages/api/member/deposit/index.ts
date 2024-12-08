@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { request } from "http";
+// import { request } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // Disable body parsing for file uploads
@@ -44,13 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { fields, files } = await parseForm(req);
-    // console.log("fields", fields);
-    // console.log("files", files?.slip);
     const balance = fields?.total?.[0];
     const slip = files?.slip?.[0]?.newFilename;
     const member_id = fields?.member_id;
-
-    console.log("slip", slip);
 
     await prisma.transaction.create({
       data: {

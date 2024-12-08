@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import axios from "axios";
 import cryptoRandomString from "crypto-random-string";
 import dayjs from "dayjs";
 

@@ -1,13 +1,10 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import Link from "next/link";
 import classNames from "classnames";
 import { Button } from "../../ui/button";
 import { useMember } from "@/context/MemberContext";
-import { useRouter } from "next/navigation";
 
 const TopNav = () => {
-  const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const wrapperRef = useRef(null);
   const { logout, member, balance, refresh } = useMember();

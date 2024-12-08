@@ -1,8 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
-import { alertError } from "@/utils/alert";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
 
 type User = {

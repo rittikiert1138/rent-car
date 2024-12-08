@@ -4,7 +4,32 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { lotto_list } = req.body;
+    const { lotto_list, member_lotto_id, lotto_id, lotto_result } = req.body;
+
+    const createLottoResult = await prisma.lotto_result.create({
+      data: {
+        lotto_id: Number(lotto_id),
+      },
+    });
+
+    await prisma.lotto_result_list.createMany({
+      data: lotto_result.map((l: any) => {
+        return {
+          lotto_result_id: createLottoResult.lotto_result_id,
+          lotto_result_type: l.type,
+          lotto_result_number: l.bet_number.toString(),
+        };
+      }),
+    });
+
+    await prisma.member_lotto.update({
+      data: {
+        status: 2,
+      },
+      where: {
+        member_lotto_id: member_lotto_id,
+      },
+    });
 
     for (let i = 0; i < lotto_list.length; i++) {
       const s = lotto_list[i];
@@ -31,9 +56,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
     }
+
     res.status(200).json({
       status: true,
-      message: "ดึงข้อมูลหวยสำเร็จ",
+      message: "ออกผลหวยสำเร็จ",
     });
   } catch (error: any) {
     console.log("Error ==>", error?.message);

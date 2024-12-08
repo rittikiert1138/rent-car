@@ -17,9 +17,6 @@ const CreateBannerPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
-    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -39,7 +36,6 @@ const CreateBannerPage = () => {
       } else {
         alertError("สร้างรายการไม่สำเร็จ");
       }
-      console.log("res", res);
     } catch (error: any) {
       console.log("Error onSubmit ==>", error.message);
     }

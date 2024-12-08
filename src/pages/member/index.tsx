@@ -73,12 +73,12 @@ const MemberPage = () => {
           </div>
           <div className="grid grid-cols-12 gap-2 mt-2">
             <div className="col-span-6">
-              <Button className="w-full h-12 inline-block" size="xl" variant="info">
-                <i className="bi bi-piggy-bank text-primary text-lg"></i>
-                <Link href="/member/deposit">
+              <Link href="/member/request">
+                <Button className="w-full h-12 inline-block" size="xl" variant="info">
+                  <i className="bi bi-piggy-bank text-primary text-lg"></i>
                   <span className="w-full block text-xs leading-3 -mt-1">ฝาก-ถอน</span>
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
             <div className="col-span-6">
               <Button className="w-full h-12 inline-block" size="xl" variant="info">

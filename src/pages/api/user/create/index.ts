@@ -29,8 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         password: hashPassword,
         role: role,
         status: 1,
-        createdBy: 1,
-        updatedBy: 1,
+        createdBy: createdBy,
+        updatedBy: updatedBy,
       },
     });
 

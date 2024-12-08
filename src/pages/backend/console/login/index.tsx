@@ -1,15 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-
 import { useAdmin } from "@/context/AdminContext";
 import { Label } from "@/components/admin/ui/label";
 import { Input } from "@/components/admin/ui/input";
 import { Button } from "@/components/admin/ui/button";
-import { api } from "@/utils/api";
-import { alertError } from "@/utils/alert";
-import { alertSuccess } from "@/utils/alert";
-import router from "next/router";
 
 type FormValues = {
   username: string;
@@ -17,16 +12,9 @@ type FormValues = {
 };
 
 const AdminpageLogin = () => {
-  const { admin, login } = useAdmin();
+  const { login } = useAdmin();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const { register, handleSubmit } = useForm<FormValues>();
 
   const handleLogin = async (params: FormValues) => {
     try {

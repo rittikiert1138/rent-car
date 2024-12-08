@@ -30,7 +30,6 @@ const StakePage = () => {
         limit: limit,
       };
       const response = await api.post("/api/member/lotto/stake/list", payload);
-      console.log("responsesss ==>", response.data);
       setStakeList(response.data.lottos);
       setCountLottos(response.data.countLottos);
     } catch (error: any) {

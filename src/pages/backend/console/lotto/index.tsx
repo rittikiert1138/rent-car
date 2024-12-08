@@ -108,7 +108,7 @@ const LottoPage = () => {
       center: true,
       cell: (row: any) => (
         <>
-          <Switch disabled={admin.role === "AGENT"} checked={row.status === 1 ? true : false} onCheckedChange={(e) => handleChangeStatus(row.lotto_id, row.status, row.lotto_type)} />
+          <Switch disabled={admin.role === "AGENT"} checked={row.status === 1 ? true : false} onCheckedChange={() => handleChangeStatus(row.lotto_id, row.status, row.lotto_type)} />
         </>
       ),
     },
@@ -128,7 +128,7 @@ const LottoPage = () => {
               </Link>
             </div>
           )}
-          {admin.role === "ADMIN" && (
+          {["MASTER", "ADMIN"].includes(admin.role) && (
             <div className="w-full text-center">
               <Link href={`/backend/console/lotto/list/${row.lotto_id}`}>
                 <Button className="border h-10" variant="success">

@@ -9,6 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const countLottos = await prisma.member_lotto.count({
       where: {
         member_id: req.body.member_id,
+        status: 1,
       },
     });
 
