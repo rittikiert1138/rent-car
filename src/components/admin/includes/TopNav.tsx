@@ -32,8 +32,8 @@ const TopNav = () => {
         {active && (
           <div className="w-[260px] bg-white absolute right-4 top-[60px] shadow-lg rounded-lg border" ref={wrapperRef}>
             <div className="w-full  rounded-tl rounded-tr px-4 pb-2 pt-3 border-b">
-              <p className="text-semibold  text-sm font-light">Slottey1138</p>
-              <h4 className="text-aprimary text-lg">Admin</h4>
+              <p className="text-semibold  text-sm font-light">{admin.username}</p>
+              <h4 className="text-aprimary text-lg">{admin.role}</h4>
             </div>
             <div className="px-2 py-2">
               <div className="h-10 pt-1 cursor-pointer hover:bg-aprimary/20 rounded-lg px-2 transition-all duration-300">

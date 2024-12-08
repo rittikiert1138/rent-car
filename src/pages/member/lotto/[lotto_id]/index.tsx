@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import classNames from "classnames";
 import MemberLayout from "@/components/member/includes/MemberLayout";
@@ -10,6 +10,9 @@ import BetCondition from "@/components/member/lotto/BetCondition";
 import BetSection from "@/components/member/lotto/BetSection";
 import { LIST_BET_TYPE, LIST_BET_GROUP } from "@/constants/constants";
 import withProtectedMember from "@/hoc/withProtectedMember";
+import { api } from "@/utils/api";
+import { useMember } from "@/context/MemberContext";
+import { useParams } from "next/navigation";
 
 interface ConditionTypes {
   listId?: number;
@@ -24,6 +27,9 @@ interface ConditionTypes {
 }
 
 const LottoPage = () => {
+  const { member } = useMember();
+  const { lotto_id } = useParams();
+
   const [section, setSection] = useState<number>(1);
   const [tabs, setTabs] = useState<number>(1);
   const [currentGroup, setCurrentGroup] = useState<number>(0);
@@ -36,6 +42,30 @@ const LottoPage = () => {
   const [backSwipe, setBackSwipe] = useState<Array<number>>([]);
   const [digit, setDigit] = useState<string>("");
   const [shortcut, setShortcut] = useState<number>(1);
+  const [limit, setLimit] = useState<Array<any>>([]);
+
+  const getLimits = async () => {
+    try {
+      const payload = {
+        user_id: member?.user_id,
+        lotto_id: Number(lotto_id),
+      };
+      const response = await api.post("/api/member/lotto/limit/list", payload);
+      if (response.data.status === true) {
+        setLimit(response.data.limits);
+      }
+    } catch (error) {
+      console.log("Error ==>", error?.message);
+    }
+  };
+
+  useEffect(() => {
+    if (lotto_id && member?.user_id) {
+      getLimits();
+    }
+  }, [lotto_id, member]);
+
+  // console.log(limit);
 
   const zeroPad = (num: number, places: number) => String(num).padStart(places, "0");
 
@@ -182,7 +212,6 @@ const LottoPage = () => {
         }
       } else {
         const resultFilter = _betList.filter((bet) => bet.unit !== _unit);
-
         setBetlist(resultFilter);
       }
     } else {
@@ -196,18 +225,26 @@ const LottoPage = () => {
               const _list = listUnit[x];
               const _checkDuplicateList = result.filter((r: any) => r.unit === _list);
               if (!_checkDuplicateList.length) {
-                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: betType, unit: _list, typeId: betType, price: price, bet_price: 1 });
+                const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+                const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: betType, unit: _list, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : price, bet_price: 1 });
               }
             }
           } else {
-            result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+            if (_typeActive === 1) {
+              const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+              const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+              result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : price, bet_price: 1 });
+            } else if (_typeActive === 2) {
+              const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+              const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+              result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : 150, bet_price: 1 });
+            }
           }
         }
-
         setBetlist(betList.concat(result));
       } else if (betType === 2) {
         const checkReverse = typeActive.filter((t) => t === 3);
-
         if (checkReverse.length > 0) {
           const listUnit = getTwoNumber(_unit);
           for (let i = 0; i < typeActive.length; i++) {
@@ -216,7 +253,9 @@ const LottoPage = () => {
               const _list = listUnit[x];
               const _checkDuplicateList = result.filter((r: any) => r.unit === _list && r.betType === _typeActive);
               if (!_checkDuplicateList.length && _typeActive !== 3) {
-                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _list, typeId: betType, price: price, bet_price: 1 });
+                const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+                const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+                result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _list, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : price, bet_price: 1 });
               }
             }
           }
@@ -224,15 +263,18 @@ const LottoPage = () => {
         } else {
           for (let i = 0; i < typeActive.length; i++) {
             const _typeActive = typeActive[i];
-            result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+            const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+            const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+            result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : price, bet_price: 1 });
           }
-
           setBetlist(betList.concat(result));
         }
       } else if (betType === 3) {
         for (let i = 0; i < typeActive.length; i++) {
           const _typeActive = typeActive[i];
-          result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: price, bet_price: 1 });
+          const betTypeId = LIST_BET_TYPE.find((e) => e.value === _typeActive && e.type === betType)?.betTypeId;
+          const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === _unit);
+          result.push({ betId: uuidv4().replaceAll("-", "_"), betType: _typeActive, unit: _unit, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : price, bet_price: 1 });
         }
 
         setBetlist(betList.concat(result));
@@ -263,7 +305,9 @@ const LottoPage = () => {
           for (let i = 0; i < 100; i++) {
             const element = zeroPad(i, 2);
             if (element.indexOf(_unit) === 1 || element.indexOf(_unit) === 0) {
-              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: _price, bet_price: 1 });
+              const betTypeId = LIST_BET_TYPE.find((e) => e.value === _activeValue && e.type === betType)?.betTypeId;
+              const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === element);
+              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : _price, bet_price: 1 });
             }
             setBetlist(betList.concat(resultList));
           }
@@ -283,7 +327,9 @@ const LottoPage = () => {
           for (let i = 0; i < 100; i++) {
             const element = zeroPad(i, 2);
             if (element.indexOf(_unit) === 0 && element.length === 2) {
-              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: _price, bet_price: 1 });
+              const betTypeId = LIST_BET_TYPE.find((e) => e.value === _activeValue && e.type === betType)?.betTypeId;
+              const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === element);
+              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : _price, bet_price: 1 });
             }
             setBetlist(betList.concat(resultList));
           }
@@ -304,7 +350,9 @@ const LottoPage = () => {
             const element = zeroPad(i, 2);
             const checkSameDigit = element.indexOf(_unit) === 0 && element.lastIndexOf(_unit) === 1;
             if ((element.indexOf(_unit) === 1 && element.length === 2) || checkSameDigit) {
-              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: _price, bet_price: 1 });
+              const betTypeId = LIST_BET_TYPE.find((e) => e.value === _activeValue && e.type === betType)?.betTypeId;
+              const checkLimit = limit.find((l: any) => l.bet_type === betTypeId && l.limit_number === element);
+              resultList.push({ betId: uuidv4().replaceAll("-", "_"), betType: _activeValue, unit: element, typeId: betType, price: checkLimit ? parseFloat(checkLimit.limit_amount) : _price, bet_price: 1 });
             }
             setBetlist(betList.concat(resultList));
           }
@@ -407,7 +455,7 @@ const LottoPage = () => {
   };
 
   return (
-    <MemberLayout title="แทงหวย">
+    <MemberLayout title="แทงหวยนะ">
       <div className="mt-2 relative">
         {section === 1 && (
           <>
@@ -712,7 +760,12 @@ const LottoPage = () => {
                   <span>รายการแทงทั้งหมด {betList.length} รายการ</span>
                 </div>
                 <div className="w-[200px] bg-purple-400 text-center pt-3 cursor-pointer" onClick={() => setSection(2)}>
-                  <span className="text-white">ใส่ราคา</span>
+                  <span className="text-white">
+                    <span>
+                      <i className="bi bi-currency-dollar"></i>
+                    </span>
+                    ใส่ราคา
+                  </span>
                 </div>
               </div>
             ) : (

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { alertError } from "@/utils/alert";
 import toast, { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 type User = {
   member: any;
@@ -22,12 +23,14 @@ const MemberContext = createContext<User>({} as User);
 
 export const MemberProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [member, setMember] = useState<any>();
   const [balance, setBalance] = useState<number>(0);
 
   const logout = () => {
     localStorage.removeItem("token");
     router.push("/login");
+    window.location.reload();
   };
 
   const login = async (params: FormValues) => {
@@ -61,7 +64,7 @@ export const MemberProvider = ({ children }: { children: React.ReactNode }) => {
     if (member) {
       refresh();
     }
-  }, [member, router.pathname]);
+  }, [member, pathname]);
 
   return <MemberContext.Provider value={{ member, logout, login, setMember, balance, refresh }}>{children}</MemberContext.Provider>;
 };

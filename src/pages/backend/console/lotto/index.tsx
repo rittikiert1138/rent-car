@@ -10,11 +10,13 @@ import { Switch } from "@/components/admin/ui/switch";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
+import { useAdmin } from "@/context/AdminContext";
 
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
 
 const LottoPage = () => {
+  const { admin } = useAdmin();
   const [lottos, setLottos] = useState([]);
 
   const getLottos = async () => {
@@ -69,6 +71,8 @@ const LottoPage = () => {
     }
   };
 
+  console.log("admin", admin);
+
   const columns = [
     {
       name: "ลำดับ",
@@ -104,7 +108,7 @@ const LottoPage = () => {
       center: true,
       cell: (row: any) => (
         <>
-          <Switch checked={row.status === 1 ? true : false} onCheckedChange={(e) => handleChangeStatus(row.lotto_id, row.status, row.lotto_type)} />
+          <Switch disabled={admin.role === "AGENT"} checked={row.status === 1 ? true : false} onCheckedChange={(e) => handleChangeStatus(row.lotto_id, row.status, row.lotto_type)} />
         </>
       ),
     },
@@ -114,21 +118,34 @@ const LottoPage = () => {
       center: true,
       width: "20%",
       cell: (row: any) => (
-        <div className="w-full text-center">
-          <Link href={`/backend/console/lotto/list/${row.lotto_id}`}>
-            <Button className="border h-10" variant="success">
-              <i className="bi bi-search"></i>
-            </Button>
-          </Link>
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10" variant="warning">
-              <i className="bi bi-pencil"></i>
-            </Button>
-          </Link>
-          <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)}>
-            <i className="bi bi-trash3"></i>
-          </Button>
-        </div>
+        <>
+          {admin.role === "AGENT" && (
+            <div>
+              <Link href={`/backend/console/lotto/limit/${row.lotto_id}`}>
+                <Button className="border h-10">
+                  <i className="bi bi-exclamation-circle"></i>
+                </Button>
+              </Link>
+            </div>
+          )}
+          {admin.role === "ADMIN" && (
+            <div className="w-full text-center">
+              <Link href={`/backend/console/lotto/list/${row.lotto_id}`}>
+                <Button className="border h-10" variant="success">
+                  <i className="bi bi-search"></i>
+                </Button>
+              </Link>
+              <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
+                <Button className="border h-10" variant="warning">
+                  <i className="bi bi-pencil"></i>
+                </Button>
+              </Link>
+              <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)}>
+                <i className="bi bi-trash3"></i>
+              </Button>
+            </div>
+          )}
+        </>
       ),
     },
   ];

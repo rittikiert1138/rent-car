@@ -32,7 +32,7 @@ const TopNav = () => {
     <>
       {member ? (
         <>
-          <div className="w-full h-12 bg-primary fixed left-0 top-0 z-10">
+          <div className="w-full h-12 bg-primary fixed left-0 top-0 z-50">
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-2">
                 <div className="pt-2">
@@ -68,7 +68,7 @@ const TopNav = () => {
               </div>
             </div>
           </div>
-          <div ref={wrapperRef} className={classNames(`w-[240px] h-[100vh] bg-white fixed top-12  transition-all z-10 p-2`, toggle ? `right-0` : `right-[-240px]`)}>
+          <div ref={wrapperRef} className={classNames(`w-[240px] h-[100vh] bg-white fixed top-12  transition-all z-50 p-2`, toggle ? `right-0` : `right-[-240px]`)}>
             <div className="w-full h-14 border border-primary rounded-sm px-1 relative">
               <p>{member?.username}</p>
               <p>

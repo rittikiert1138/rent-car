@@ -18,7 +18,8 @@ const LottoList = () => {
     const fetchLottoList = async () => {
       try {
         const response = await api.get("/api/member/lotto/list");
-        setLottoList(response.data);
+        console.log("response ==>", response.data);
+        setLottoList(response.data.lottos);
       } catch (error: any) {
         console.log("Error ==>", error?.message);
       }

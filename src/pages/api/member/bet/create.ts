@@ -5,8 +5,17 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log("req.body", req.body);
     const { lotto_id, member_id, betList, bet_count } = req.body;
+
+    const checkBalance = await prisma.member.findUnique({
+      where: {
+        member_id: member_id,
+      },
+    });
+
+    if (checkBalance.balance < bet_count) {
+      res.status(200).json({ status: false, message: "คุณมีเครดิตไม่เพียงพอ" });
+    }
 
     await prisma.member.update({
       where: {
@@ -26,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (createLottoMember) {
-      const createLottoList = await prisma.member_lotto_list.createMany({
+      await prisma.member_lotto_list.createMany({
         data: betList.map((bet: any) => {
           return {
             lotto_id: Number(lotto_id),
@@ -36,16 +45,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             bet_number: bet.unit,
             bet_amount: bet.bet_price,
             bet_status: 1,
+            bet_pay: parseFloat(bet.bet_pay),
           };
         }),
       });
 
-      res.status(200).json(createLottoList);
+      res.status(200).json({ status: true, message: "สำเร็จ", memberLotto: createLottoMember });
     } else {
-      res.status(400).json(createLottoMember);
+      res.status(400).json({ status: false, message: "เกิดข้อผิดพลาด" });
     }
   } catch (error: any) {
     console.log("error", error);
-    res.status(400).json({ status: false, message: "มีผู้ใช้งานนี้ในระบบแล้ว" });
+    res.status(400).json({ status: false, message: "เกิดข้อผิดพลาด" });
   }
 }

@@ -32,6 +32,7 @@ interface betSectionProps {
 }
 
 const BetSection = (props: betSectionProps) => {
+  const router = useRouter();
   const { member, balance, refresh } = useMember();
   const { lotto_id } = useParams();
 
@@ -100,10 +101,10 @@ const BetSection = (props: betSectionProps) => {
             </div>
           </div>
           <div className="col-span-2 text-center pt-[4px]">
-            <span className="text-primary text-xs">{_unit}</span>
+            <span className="text-primary text-xs">{bet.price}</span>
           </div>
           <div className="col-span-3 text-center pt-[3px]">
-            <span className="text-white bg-primary px-2 rounded text-xs">{_unit * watch(`bet_${bet.betId}`)}</span>
+            <span className="text-white bg-primary px-2 rounded text-xs">{bet.price * watch(`bet_${bet.betId}`)}</span>
           </div>
           <div className="col-span-2 text-center pt-[4px]">
             <input
@@ -181,21 +182,27 @@ const BetSection = (props: betSectionProps) => {
           bet_count: _betCount,
           betList: betList.map((bet: any) => {
             const betTypeId = LIST_BET_TYPE.find((e) => e.value === bet.betType && e.type === bet.typeId);
-            return { ...bet, bet_type: betTypeId?.betTypeId, bet_price: params[`bet_${bet.betId}`] };
+            return { ...bet, bet_pay: bet.price, bet_type: betTypeId?.betTypeId, bet_price: params[`bet_${bet.betId}`] };
           }),
         };
 
-        console.log("payload", payload);
-
         const response = await api.post("/api/member/bet/create", payload);
 
-        console.log("response.data", response.data);
-        refresh();
+        const { status, message, memberLotto } = response.data;
+
+        if (status) {
+          refresh();
+          router.push(`/member/stake/${memberLotto.member_lotto_id}`);
+        } else {
+          toast.error(message);
+        }
       }
     } catch (error: any) {
       console.log("Error submit", error.message);
     }
   };
+
+  console.log("betList", betList);
 
   const handleDeleteDuplicate = () => {
     let resultList: any = [];

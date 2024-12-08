@@ -120,17 +120,23 @@ const StakeResult = () => {
                       </div>
                       <div className="col-span-4 text-center">
                         <p className="text-xs text-gray-500">จ่าย</p>
-                        <p className="text-primary">{item.bet_pay}</p>
+                        <p className="text-primary">{item.bet_pay ?? "0"}</p>
                       </div>
                       <div className="col-span-4 text-center">
                         <p className="text-xs text-gray-500">เลขที่ออก</p>
-                        <p className="text-primary">{item.bet_number_result}</p>
+                        <p className="text-primary">{item.bet_number_result ?? "-"}</p>
                       </div>
                       <div className="col-span-12 text-center px-2">
-                        <div className="w-full h-6 bg-gray-200 pt-1 rounded-sm">
-                          <p className={classNames("text-xs", item.bet_pay_result > 0 ? "text-green-500" : "text-red-500")}>
-                            ผลได้เสีย <span>{item.bet_pay_result}</span>
-                          </p>
+                        <div className="w-full h-8 bg-gray-200 pt-[2px] rounded-sm">
+                          {item.bet_status === 1 ? (
+                            <span className="border border-ainfo text-xs px-2 rounded-lg font-bold text-ainfo">รับแทง</span>
+                          ) : (
+                            <>
+                              <p className={classNames("text-xs mt-1", item.bet_pay_result > 0 ? "text-green-500" : "text-red-500")}>
+                                ผลได้เสีย <span>{item.bet_pay_result}</span>
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>

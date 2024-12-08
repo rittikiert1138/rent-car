@@ -9,17 +9,18 @@ datasource db {
 }
 
 model User {
-  user_id   Int      @id @default(autoincrement())
-  phone     String   @unique
-  username  String   @unique
-  password  String
-  role      String
-  status    Int
-  createdBy Int
-  updatedBy Int
-  member    Member[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user_id     Int           @id @default(autoincrement())
+  phone       String        @unique
+  username    String        @unique
+  password    String
+  role        String
+  status      Int
+  createdBy   Int
+  updatedBy   Int
+  member      Member[]
+  lotto_limit lotto_limit[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model Member {
@@ -31,6 +32,7 @@ model Member {
   phone       String         @unique @db.VarChar(10)
   balance     Float          @default(0)
   total_bet   Float          @default(0)
+  isLogin     Int            @default(0)
   user        User?          @relation(fields: [user_id], references: [user_id])
   user_id     Int?
   transaction Transaction[]
@@ -103,17 +105,53 @@ model lotto {
   period        String
   open_time     String
   close_time    String
+  lotto_result  lotto_result[]
   status        Int            @default(0)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   member_lotto  member_lotto[]
+  lotto_limit   lotto_limit[]
+}
+
+model lotto_limit {
+  lotto_limit_id   Int                @id @default(autoincrement())
+  lotto_id         Int
+  lotto            lotto              @relation(fields: [lotto_id], references: [lotto_id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  lotto_limit_list lotto_limit_list[]
+  user             User?              @relation(fields: [user_id], references: [user_id])
+  user_id          Int?
+}
+
+model lotto_limit_list {
+  lotto_limit_list_id Int         @id @default(autoincrement())
+  lotto_limit_id      Int
+  lotto_limit         lotto_limit @relation(fields: [lotto_limit_id], references: [lotto_limit_id])
+  limit_number        String
+  limit_amount        Float
+  bet_type            Int
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 }
 
 model lotto_result {
-  lotto_result_id Int      @id @default(autoincrement())
-  lotto_type_id   Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  lotto_result_id   Int                 @id @default(autoincrement())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  lotto_id          Int
+  lotto             lotto               @relation(fields: [lotto_id], references: [lotto_id])
+  lotto_result_list lotto_result_list[]
+}
+
+model lotto_result_list {
+  lotto_result_list_id Int          @id @default(autoincrement())
+  lotto_result_id      Int
+  lotto_result         lotto_result @relation(fields: [lotto_result_id], references: [lotto_result_id])
+  lotto_result_type    Int
+  lotto_result_number  String
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
 }
 
 model member_lotto {
@@ -123,6 +161,7 @@ model member_lotto {
   member_id         Int
   member            Member              @relation(fields: [member_id], references: [member_id])
   member_lotto_list member_lotto_list[]
+  status            Int                 @default(1)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }

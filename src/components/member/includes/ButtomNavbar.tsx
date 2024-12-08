@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const ButtomNavbar = () => {
   return (
-    <div className="w-full h-12 bg-primary fixed left-0 bottom-0">
+    <div className="w-full h-12 bg-primary fixed left-0 bottom-0 z-50">
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-2">
           <Link href="/member">

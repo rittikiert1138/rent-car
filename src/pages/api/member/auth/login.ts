@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         phone: true,
         attemp: true,
         balance: true,
+        user_id: true,
       },
     });
     if (!checkUser) {

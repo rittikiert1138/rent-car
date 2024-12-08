@@ -8,6 +8,8 @@ import dayjs from "dayjs";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import classNames from "classnames";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
@@ -15,16 +17,22 @@ dayjs.locale("th");
 const StakePage = () => {
   const { member } = useMember();
 
+  const listPerPage = 10;
   const [stakeList, setStakeList] = useState([]);
+  const [page, setPage] = useState(0);
+  const [countLottos, setCountLottos] = useState(0);
 
-  const fetchStakeList = async () => {
+  const fetchStakeList = async (skip: number, limit: number) => {
     try {
       const payload = {
         member_id: member?.member_id,
+        skip: skip,
+        limit: limit,
       };
       const response = await api.post("/api/member/lotto/stake/list", payload);
-      console.log("response ==>", response.data.lottos[0]);
+      console.log("responsesss ==>", response.data);
       setStakeList(response.data.lottos);
+      setCountLottos(response.data.countLottos);
     } catch (error: any) {
       console.log("Error ==>", error?.message);
     }
@@ -32,7 +40,7 @@ const StakePage = () => {
 
   useEffect(() => {
     if (member) {
-      fetchStakeList();
+      fetchStakeList(0, listPerPage);
     }
   }, [member]);
 
@@ -50,6 +58,11 @@ const StakePage = () => {
       total += item.bet_pay_result;
     });
     return total;
+  };
+
+  const handlePagination = (page: number) => {
+    fetchStakeList(page * listPerPage, listPerPage);
+    setPage(page);
   };
 
   return (
@@ -71,18 +84,18 @@ const StakePage = () => {
             </div>
           </div>
         </div>
-        {stakeList.length > 0 &&
+        {stakeList.length > 0 ? (
           stakeList.map((stake: any, index) => (
             <Link href={`/member/stake/${stake.member_lotto_id}`} key={index}>
               <div className="w-full">
-                <div className={classNames("w-full h-9 mt-2 rounded-tl-sm rounded-tr-sm px-2 pt-1", generateResult(stake.member_lotto_list) <= 0 ? "bg-red-100" : "bg-green-100")}>
+                <div className={classNames("w-full h-9 mt-2 rounded-tl-sm rounded-tr-sm px-2 pt-1", stake.status === 1 && "bg-red-100")}>
                   <div className="grid grid-cols-12 gap-0">
                     <div className="col-span-6">
                       <span className="text-gray-500 text-xs -mt-[10px] mr-1"># เลขที่รายการ</span>
-                      <span className={classNames("text-xs", generateResult(stake.member_lotto_list) <= 0 ? "text-red-500" : "text-green-500")}>{stake.member_lotto_id}</span>
+                      <span className={classNames("text-xs", stake.status === 1 ? "text-warning" : generateResult(stake.member_lotto_list) <= 0 ? "text-red-500" : "text-green-500")}>{stake.member_lotto_id}</span>
                     </div>
                     <div className="col-span-6">
-                      <div className="text-right">{generateResult(stake.member_lotto_list) <= 0 ? <span className="border border-red-500 text-xs px-1 rounded-lg font-bold text-red-500">ไม่ถูกรางวัล</span> : <span className="border border-green-500 text-xs px-1 rounded-lg font-bold text-green-500">ถูกรางวัล</span>}</div>
+                      <div className="text-right">{stake.status === 1 ? <span className="border border-ainfo text-xs px-2 rounded-lg font-bold text-ainfo">รับแทง</span> : generateResult(stake.member_lotto_list) <= 0 ? <span className="border border-red-500 text-xs px-1 rounded-lg font-bold text-red-500">ไม่ถูกรางวัล</span> : <span className="border border-green-500 text-xs px-1 rounded-lg font-bold text-green-500">ถูกรางวัล</span>}</div>
                     </div>
                   </div>
                 </div>
@@ -116,7 +129,36 @@ const StakePage = () => {
                 </div>
               </div>
             </Link>
-          ))}
+          ))
+        ) : (
+          <div className="text-center mt-2 w-full h-[200px] bg-white rounded-sm pt-12">
+            <i className="bi bi-clipboard2-check text-primary text-[50px]"></i>
+            <p className="text-primary">ยังไม่มีรายการ</p>
+          </div>
+        )}
+        {countLottos > 0 && (
+          <Pagination className="mt-2">
+            <PaginationContent>
+              <PaginationItem>
+                <Button onClick={() => handlePagination(page - 1)} disabled={page === 0}>
+                  <i className="bi bi-chevron-left"></i>
+                </Button>
+              </PaginationItem>
+              {Array.from({ length: Math.ceil(countLottos / listPerPage) }, (_, index) => (
+                <PaginationItem key={index}>
+                  <Button className="w-10" onClick={() => handlePagination(index)} variant={page === index ? "default" : "outline"}>
+                    {index + 1}
+                  </Button>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <Button onClick={() => handlePagination(page + 1)} disabled={page === Math.ceil(countLottos / listPerPage) - 1}>
+                  <i className="bi bi-chevron-right"></i>
+                </Button>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </MemberLayout>
   );

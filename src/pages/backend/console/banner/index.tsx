@@ -130,25 +130,7 @@ const BannerPage = () => {
           </Link>
         </div>
       </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
-              {items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <Container ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      {item.content}
-                    </Container>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {/* <table className="w-full border-collapse border rounded-lg">
+      <table className="w-full border-collapse border rounded-lg">
         <thead>
           <tr className="border h-12">
             <th className="w-[5%]">ลำดับ</th>
@@ -179,7 +161,7 @@ const BannerPage = () => {
             <></>
           )}
         </tbody>
-      </table> */}
+      </table>
     </AdminLayout>
   );
 };

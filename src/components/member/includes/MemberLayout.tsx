@@ -5,6 +5,7 @@ import TopNav from "./TopNav";
 import { useMember } from "@/context/MemberContext";
 import Marquee from "react-fast-marquee";
 import { api } from "@/utils/api";
+import classNames from "classnames";
 
 const MemberLayout = ({ children, title = "แทงหวย", display = true }: Readonly<{ children: React.ReactNode; title?: string; display?: boolean }>) => {
   const { member } = useMember();
@@ -30,23 +31,22 @@ const MemberLayout = ({ children, title = "แทงหวย", display = true }
   return (
     <div className="pt-14 pb-14">
       {member ? <TopNav /> : <></>}
+      {flashNews ? (
+        <div className={classNames("container px-2 mb-2", !member ? "-mt-12" : "")}>
+          <div className="w-[100%] h-7 bg-white text-center rounded-lg relative pl-8">
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-primary">
+              <i className="bi bi-megaphone"></i>
+            </span>
+            <Marquee>
+              <span className="text-primary text-sm">{flashNews}</span>
+            </Marquee>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       {display ? (
         <>
-          {flashNews ? (
-            <div className="container  px-2 mb-2">
-              <div className="w-[100%] h-7 bg-white text-center rounded-lg relative pl-8">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-primary">
-                  <i className="bi bi-megaphone"></i>
-                </span>
-                <Marquee>
-                  <span className="text-primary text-sm">{flashNews}</span>
-                </Marquee>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-
           <div className="container flex px-2">
             <Link href="/member">
               <div className="w-[40px] h-7 bg-white mr-[4px] text-center rounded-lg pt-[1px]">
@@ -61,7 +61,7 @@ const MemberLayout = ({ children, title = "แทงหวย", display = true }
       ) : (
         <></>
       )}
-      {children}
+      <div className="relative z-10">{children}</div>
       {member ? <ButtonNavbar /> : <></>}
     </div>
   );

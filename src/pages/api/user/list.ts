@@ -17,7 +17,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // console.log("decoded", decoded);
 
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      where: {
+        role: {
+          not: "MASTER",
+        },
+      },
+    });
 
     res.status(200).json(users);
   } catch (error: any) {

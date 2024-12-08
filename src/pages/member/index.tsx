@@ -1,30 +1,52 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Button } from "@/components/ui/button";
 import withProtectedMember from "@/hoc/withProtectedMember";
+import { api } from "@/utils/api";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const MemberPage = () => {
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    const getBanners = async () => {
+      try {
+        const response = await api.get("/api/member/banner/list");
+        setBanners(response.data.banners);
+      } catch (error: any) {
+        console.log("error", error.message);
+      }
+    };
+    getBanners();
+  }, []);
+
   return (
     <MemberLayout>
       <div className="sm:container px-2 pb-20 mt-2">
         <div className="w-full  ">
-          {/* <Carousel>
-          <CarouselContent>
-            <CarouselItem>
-              <div className="w-full h-[1000px] bg-slate-300"></div>
-            </CarouselItem>
-            <CarouselItem>
-              <div className="w-full h-[1000px] bg-slate-300"></div>
-            </CarouselItem>
-            <CarouselItem>
-              <div className="w-full h-[1000px] bg-slate-300"></div>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel> */}
-
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 2000,
+              }),
+            ]}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent>
+              {banners.map((banner: any) => (
+                <CarouselItem key={banner.banner_id}>
+                  <div className="w-full bg-slate-300">
+                    <img src={`/uploads/banners/${banner.banner_image}`} className="w-full h-full object-cover" />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
           <div className="grid grid-cols-12 gap-2 mt-2">
             <div className="col-span-6">
               <Link href="/member/deposit">
