@@ -8,6 +8,7 @@ import { useMember } from "@/context/MemberContext";
 import { api } from "@/utils/api";
 import { LIST_BET_TYPE } from "@/constants/constants";
 import classNames from "classnames";
+import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 
 const StakeResult = () => {
   const router = useRouter();
@@ -15,21 +16,28 @@ const StakeResult = () => {
   const { stake_id } = router.query;
 
   const [lotto, setLotto] = useState<any>(null);
+  const [lottos, setLottos] = useState([]);
+  const listPerPage = 10;
+  const [page, setPage] = useState(0);
+  const [countLottos, setCountLottos] = useState(0);
 
-  const getStakeDetail = async () => {
+  const getStakeDetail = async (skip: number, limit: number) => {
     const response = await api.post("/api/member/lotto/stake/detail", {
       member_id: member.member_id,
       member_lotto_id: stake_id,
+      skip: skip,
+      limit: limit,
     });
-    console.log("response ==>", response.data.lotto);
     if (response.data.status) {
-      setLotto(response.data.lotto);
+      setLotto(response.data.lottos);
+      setLottos(response.data.lottos.member_lotto_list);
+      setCountLottos(response.data.count);
     }
   };
 
   useEffect(() => {
     if (stake_id) {
-      getStakeDetail();
+      getStakeDetail(0, listPerPage);
     }
   }, [stake_id]);
 
@@ -47,6 +55,11 @@ const StakeResult = () => {
       total += item.bet_pay_result;
     });
     return total;
+  };
+
+  const handlePagination = (page: number) => {
+    getStakeDetail(page * listPerPage, listPerPage);
+    setPage(page);
   };
 
   return (
@@ -95,8 +108,8 @@ const StakeResult = () => {
           </div>
         </div> */}
 
-        {lotto?.member_lotto_list.length > 0 ? (
-          lotto?.member_lotto_list.map((item: any, index: number) => (
+        {lottos.length > 0 ? (
+          lottos.map((item: any, index: number) => (
             <div className="w-full" key={index}>
               <div className={classNames("w-full  h-7 mt-2 rounded-tl-sm rounded-tr-sm px-2", item.bet_pay_result > 0 ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500")}>
                 <span className=" text-xs -mt-[10px]">
@@ -147,6 +160,29 @@ const StakeResult = () => {
           ))
         ) : (
           <></>
+        )}
+        {countLottos > listPerPage && (
+          <Pagination className="mt-2">
+            <PaginationContent>
+              <PaginationItem>
+                <Button onClick={() => handlePagination(page - 1)} disabled={page === 0}>
+                  <i className="bi bi-chevron-left"></i>
+                </Button>
+              </PaginationItem>
+              {Array.from({ length: Math.ceil(countLottos / listPerPage) }, (_, index) => (
+                <PaginationItem key={index}>
+                  <Button className="w-10" onClick={() => handlePagination(index)} variant={page === index ? "default" : "outline"}>
+                    {index + 1}
+                  </Button>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <Button onClick={() => handlePagination(page + 1)} disabled={page === Math.ceil(countLottos / listPerPage) - 1}>
+                  <i className="bi bi-chevron-right"></i>
+                </Button>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         )}
       </div>
     </MemberLayout>

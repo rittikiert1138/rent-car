@@ -8,19 +8,27 @@ import dayjs from "dayjs";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import classNames from "classnames";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
+import { usePathname, useSearchParams } from "next/navigation";
 
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
 
 const StakePage = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { member } = useMember();
+
+  const searchParams = useSearchParams();
 
   const listPerPage = 10;
   const [stakeList, setStakeList] = useState([]);
   const [page, setPage] = useState(0);
   const [countLottos, setCountLottos] = useState(0);
+
+  const _type = searchParams.get("type");
 
   const fetchStakeList = async (skip: number, limit: number) => {
     try {
@@ -28,6 +36,7 @@ const StakePage = () => {
         member_id: member?.member_id,
         skip: skip,
         limit: limit,
+        type: _type,
       };
       const response = await api.post("/api/member/lotto/stake/list", payload);
       setStakeList(response.data.lottos);
@@ -64,20 +73,29 @@ const StakePage = () => {
     setPage(page);
   };
 
+  const changeType = () => {
+    const params = new URLSearchParams();
+    params.set("type", "archive");
+    router.push(`${pathname}?${params.toString()}`);
+    fetchStakeList(0, listPerPage);
+  };
+
   return (
     <MemberLayout title="โพยหวย">
       <div className="container px-2">
         <div className="grid grid-cols-12 gap-2 mt-2">
           <div className="col-span-6">
-            <div className="w-full bg-primary px-2 rounded-bl-sm rounded-br-sm pb-2 rounded-sm pt-1">
-              <span className="text-white text-sm">
-                <i className="bi bi-calendar3 mr-2"></i>โพยหวย
-              </span>
-            </div>
+            <Link href="/member/stake">
+              <div className={classNames("w-full px-2 rounded-bl-sm rounded-br-sm pb-2 rounded-sm pt-1", _type === "archive" ? "bg-white text-primary" : "bg-primary text-white")}>
+                <span className=" text-sm">
+                  <i className="bi bi-calendar3 mr-2"></i>โพยหวย
+                </span>
+              </div>
+            </Link>
           </div>
           <div className="col-span-6">
-            <div className="w-full bg-white px-2 rounded-bl-sm rounded-br-sm pb-2 rounded-sm pt-1">
-              <span className="text-primary text-sm">
+            <div className={classNames("w-full px-2 rounded-bl-sm rounded-br-sm pb-2 rounded-sm pt-1", _type === "archive" ? "bg-primary text-white" : "bg-white text-primary")} onClick={changeType}>
+              <span className=" text-sm">
                 <i className="bi bi-clock mr-2"></i>โพยหวยย้อนหลัง
               </span>
             </div>
@@ -87,11 +105,11 @@ const StakePage = () => {
           stakeList.map((stake: any, index) => (
             <Link href={`/member/stake/${stake.member_lotto_id}`} key={index}>
               <div className="w-full">
-                <div className={classNames("w-full h-9 mt-2 rounded-tl-sm rounded-tr-sm px-2 pt-1", stake.status === 1 && "bg-red-100")}>
+                <div className={classNames("w-full h-9 mt-2 rounded-tl-sm rounded-tr-sm px-2 pt-1", stake.status === 1 ? "bg-red-100" : "bg-white")}>
                   <div className="grid grid-cols-12 gap-0">
                     <div className="col-span-6">
                       <span className="text-gray-500 text-xs -mt-[10px] mr-1"># เลขที่รายการ</span>
-                      <span className={classNames("text-xs", stake.status === 1 ? "text-warning" : generateResult(stake.member_lotto_list) <= 0 ? "text-red-500" : "text-green-500")}>{stake.member_lotto_id}</span>
+                      <span className={classNames("text-xs text-red-500")}>{stake.member_lotto_id}</span>
                     </div>
                     <div className="col-span-6">
                       <div className="text-right">{stake.status === 1 ? <span className="border border-ainfo text-xs px-2 rounded-lg font-bold text-ainfo">รับแทง</span> : generateResult(stake.member_lotto_list) <= 0 ? <span className="border border-red-500 text-xs px-1 rounded-lg font-bold text-red-500">ไม่ถูกรางวัล</span> : <span className="border border-green-500 text-xs px-1 rounded-lg font-bold text-green-500">ถูกรางวัล</span>}</div>
@@ -135,7 +153,7 @@ const StakePage = () => {
             <p className="text-primary">ยังไม่มีรายการ</p>
           </div>
         )}
-        {countLottos > 0 && (
+        {countLottos > listPerPage && (
           <Pagination className="mt-2">
             <PaginationContent>
               <PaginationItem>
