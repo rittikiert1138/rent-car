@@ -192,7 +192,7 @@ const LottoPage = () => {
     return resultList;
   };
 
-  const handleBet = (_betType: number, _unit: string, price: number, _checkDuplicate: boolean = true) => {
+  const handleBet = (_betType: number, _unit: string, price: number) => {
     const _betList = [...betList];
     const result: any = [];
 

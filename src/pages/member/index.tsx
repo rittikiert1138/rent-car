@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Button } from "@/components/ui/button";

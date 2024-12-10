@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `lotto` ADD COLUMN `status` INTEGER NOT NULL DEFAULT 0;

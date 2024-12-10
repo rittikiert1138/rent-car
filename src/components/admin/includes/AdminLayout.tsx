@@ -11,7 +11,7 @@ const AdminLayout = ({ children, title, breadcrumb, loading = false }: { childre
     <div className="w-full h-[100vh] bg-white">
       <TopNav />
       <Sidenav />
-      <div className="pl-[316px] fixed top-[70px] left-0 w-full h-[calc(100vh-70px)] p-[16px] bg-[#f2f2f2]">
+      <div className="pl-[316px] fixed top-[70px] left-0 w-full h-[calc(100vh-70px)] p-[16px] bg-[#f2f2f2] overflow-y-auto">
         <div className="w-full min-h-20 bg-white shadow-sm rounded-lg p-4 relative z-10">
           {loading && (
             <div className="absolute top-0 right-0 bg-black/25 z-20 w-full h-full rounded-lg">

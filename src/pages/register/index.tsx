@@ -1,10 +1,9 @@
 "use client";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname, useParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import Countdown, { zeroPad } from "react-countdown";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,7 +44,7 @@ const RegisterPage = () => {
     message: "",
     resend: false,
   });
-  const [resend, setResend] = useState(false);
+  // const [resend, setResend] = useState(false);
 
   useEffect(() => {
     const rendomNumber = Math.floor(1000 + Math.random() * 9000);
@@ -151,25 +150,25 @@ const RegisterPage = () => {
     }
   };
 
-  const renderer = (params: any) => {
-    const { minutes, seconds, completed } = params;
-    if (completed) {
-      return;
-    } else {
-      return (
-        <div className="text-center">
-          <button className={classNames("text-[12px] underline", !resend ? "cursor-not-allowed text-slate-500" : "")} disabled={!resend} onClick={() => console.log("click")}>
-            <span>ส่งรหัสอีกครั้ง </span>
-            {!resend && (
-              <span>
-                ({minutes}:{zeroPad(seconds)})
-              </span>
-            )}
-          </button>
-        </div>
-      );
-    }
-  };
+  // const renderer = (params: any) => {
+  //   const { minutes, seconds, completed } = params;
+  //   if (completed) {
+  //     return;
+  //   } else {
+  //     return (
+  //       <div className="text-center">
+  //         <button className={classNames("text-[12px] underline", !resend ? "cursor-not-allowed text-slate-500" : "")} disabled={!resend} onClick={() => console.log("click")}>
+  //           <span>ส่งรหัสอีกครั้ง </span>
+  //           {!resend && (
+  //             <span>
+  //               ({minutes}:{zeroPad(seconds)})
+  //             </span>
+  //           )}
+  //         </button>
+  //       </div>
+  //     );
+  //   }
+  // };
 
   useEffect(() => {
     const currentDate = dayjs();

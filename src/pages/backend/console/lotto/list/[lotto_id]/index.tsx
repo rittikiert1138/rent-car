@@ -6,7 +6,6 @@ import { api } from "@/utils/api";
 import { alertSuccess, alertError } from "@/utils/alert";
 import dayjs from "dayjs";
 import DataTable from "react-data-table-component";
-import { Switch } from "@/components/admin/ui/switch";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import { useParams } from "next/navigation";
 import { LIST_BET_TYPE } from "@/constants/constants";
@@ -36,23 +35,23 @@ const LottoPage = () => {
     }
   }, [lotto_id]);
 
-  const handleChangeStatus = async (lotto_id: number, status: number, lotto_type: number) => {
-    try {
-      const payload = {
-        lotto_id: lotto_id,
-        status: status === 1 ? 0 : 1,
-        lotto_type: lotto_type,
-      };
-      const response = await api.post("/api/backend/lotto/change-status", payload);
-      if (response.data.status === true) {
-        getLottoList();
-      } else {
-        alertError(response.data.message);
-      }
-    } catch (error: any) {
-      alertError(error.message);
-    }
-  };
+  // const handleChangeStatus = async (lotto_id: number, status: number, lotto_type: number) => {
+  //   try {
+  //     const payload = {
+  //       lotto_id: lotto_id,
+  //       status: status === 1 ? 0 : 1,
+  //       lotto_type: lotto_type,
+  //     };
+  //     const response = await api.post("/api/backend/lotto/change-status", payload);
+  //     if (response.data.status === true) {
+  //       getLottoList();
+  //     } else {
+  //       alertError(response.data.message);
+  //     }
+  //   } catch (error: any) {
+  //     alertError(error.message);
+  //   }
+  // };
 
   const handleDelete = async (lotto_id: number) => {
     try {

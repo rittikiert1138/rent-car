@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
 import DataTable from "react-data-table-component";
 import { Button } from "@/components/admin/ui/button";
 import { Input } from "@/components/admin/ui/input";
-import Link from "next/link";
 import { alertSuccess } from "@/utils/alert";
-import axios from "axios";
 import { alertError } from "@/utils/alert";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
@@ -39,32 +37,32 @@ const UserPage = () => {
     fetchTransactions();
   }, []);
 
-  const handleDelete = async (user_id: number) => {
-    try {
-      Swal.fire({
-        text: "Are you sure you want to delete this user?",
-        icon: "question",
-        confirmButtonText: "ตกลง",
-        confirmButtonColor: "#5e72e4",
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        cancelButtonColor: "#f5365c",
-      }).then(async (result: any) => {
-        if (result.isConfirmed) {
-          const response = await axios.delete(`/api/user/delete/${user_id}`);
+  // const handleDelete = async (user_id: number) => {
+  //   try {
+  //     Swal.fire({
+  //       text: "Are you sure you want to delete this user?",
+  //       icon: "question",
+  //       confirmButtonText: "ตกลง",
+  //       confirmButtonColor: "#5e72e4",
+  //       showCancelButton: true,
+  //       cancelButtonText: "ยกเลิก",
+  //       cancelButtonColor: "#f5365c",
+  //     }).then(async (result: any) => {
+  //       if (result.isConfirmed) {
+  //         const response = await axios.delete(`/api/user/delete/${user_id}`);
 
-          if (response.data.status === false) {
-            alertError(response.data.message);
-          } else {
-            alertSuccess(response.data.message);
-            fetchTransactions();
-          }
-        }
-      });
-    } catch (error: any) {
-      alertError(error.message);
-    }
-  };
+  //         if (response.data.status === false) {
+  //           alertError(response.data.message);
+  //         } else {
+  //           alertSuccess(response.data.message);
+  //           fetchTransactions();
+  //         }
+  //       }
+  //     });
+  //   } catch (error: any) {
+  //     alertError(error.message);
+  //   }
+  // };
 
   const handleApprove = async (transaction_id: number) => {
     try {

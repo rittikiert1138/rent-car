@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMember } from "@/context/MemberContext";
-import { api } from "@/utils/api";
 import toast, { Toaster } from "react-hot-toast";
 
 type Inputs = {

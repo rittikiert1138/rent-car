@@ -79,18 +79,8 @@ export const MENU = [
     list: [
       {
         id: 1,
-        name: "ฝาก",
-        path: "/backend/console/transaction/deposit",
-      },
-      {
-        id: 2,
-        name: "ถอน",
-        path: "/backend/console/transaction/withdraw",
-      },
-      {
-        id: 3,
-        name: "ธนาคาร",
-        path: "/backend/console/bank",
+        name: "Role",
+        path: "/backend/console/role",
       },
     ],
   },

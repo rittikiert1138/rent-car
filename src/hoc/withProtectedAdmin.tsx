@@ -42,4 +42,6 @@ const withProtectedAdmin = (WrappedComponent: any) => {
   };
 };
 
+withProtectedAdmin.displayName = "WithProtectedAdmin";
+
 export default withProtectedAdmin;

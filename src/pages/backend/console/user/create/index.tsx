@@ -3,13 +3,12 @@ import AdminLayout from "@/components/admin/includes/AdminLayout";
 import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/admin/ui/select";
 import Link from "next/link";
 import cryptoRandomString from "crypto-random-string";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 

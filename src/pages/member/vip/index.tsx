@@ -8,8 +8,6 @@ import classNames from "classnames";
 const VipPage = () => {
   const { member } = useMember();
 
-  console.log(member);
-
   const vipList = [
     {
       level: 1,
@@ -44,7 +42,7 @@ const VipPage = () => {
   ];
 
   const calculatePercentage = (_tota_bet: number, _bet_count: number) => {
-    let percentage = (_tota_bet * 100) / _bet_count;
+    const percentage = (_tota_bet * 100) / _bet_count;
 
     return percentage;
   };

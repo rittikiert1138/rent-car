@@ -49,7 +49,7 @@ const LottoPage = () => {
       if (status === true) {
         setLimits(limits.map((item: any, index: number) => ({ ...item, index: index + 1 })));
       } else {
-        alertError(response.data.message);
+        alertError(message);
       }
     } catch (error: any) {
       alertError(error.message);
@@ -121,7 +121,7 @@ const LottoPage = () => {
     } else if (formData.price === "") {
       setError({ ...error, price: true });
     } else {
-      let currentList = [...limitList];
+      const currentList = [...limitList];
       for (let i = 0; i < checklist.length; i++) {
         const checkDuplicate = currentList.filter((item: any) => item.number === formData.number && item.type === checklist[i]);
         if (checkDuplicate.length > 0) {
@@ -131,7 +131,7 @@ const LottoPage = () => {
             const listNumber = getThreeNumber(formData.number);
             for (let x = 0; x < listNumber.length; x++) {
               const _list = listNumber[x];
-              let result = {
+              const result = {
                 number: _list,
                 price: formData.price,
                 type: checklist[i],
@@ -139,7 +139,7 @@ const LottoPage = () => {
               currentList.push(result);
             }
           } else {
-            let result = {
+            const result = {
               number: formData.number,
               price: formData.price,
               type: checklist[i],

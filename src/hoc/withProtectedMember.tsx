@@ -41,4 +41,6 @@ const withProtectedMember = (WrappedComponent: any) => {
   };
 };
 
+withProtectedMember.displayName = "withProtectedMember";
+
 export default withProtectedMember;

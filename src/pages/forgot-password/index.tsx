@@ -1,10 +1,9 @@
 "use client";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import Countdown, { zeroPad } from "react-countdown";
 import MemberLayout from "@/components/member/includes/MemberLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +13,6 @@ import OtpConponent from "@/components/member/register/OtpConponent";
 import { api } from "@/utils/api";
 import cryptoRandomString from "crypto-random-string";
 import dayjs from "dayjs";
-import axios from "axios";
 
 type FormValues = {
   phone: string;
@@ -45,7 +43,6 @@ const ForgotPasswordPage = () => {
     message: "",
     resend: false,
   });
-  const [resend, setResend] = useState(false);
 
   useEffect(() => {
     const rendomNumber = cryptoRandomString({ length: 4, type: "numeric" });
@@ -157,26 +154,6 @@ const ForgotPasswordPage = () => {
       } catch (error: any) {
         toast.error(error.message);
       }
-    }
-  };
-
-  const renderer = (params: any) => {
-    const { minutes, seconds, completed } = params;
-    if (completed) {
-      return;
-    } else {
-      return (
-        <div className="text-center">
-          <button className={classNames("text-[12px] underline", !resend ? "cursor-not-allowed text-slate-500" : "")} disabled={!resend} onClick={() => console.log("click")}>
-            <span>ส่งรหัสอีกครั้ง </span>
-            {!resend && (
-              <span>
-                ({minutes}:{zeroPad(seconds)})
-              </span>
-            )}
-          </button>
-        </div>
-      );
     }
   };
 

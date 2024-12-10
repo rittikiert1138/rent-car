@@ -10,11 +10,11 @@ import { Switch } from "@/components/admin/ui/switch";
 // import styled from "styled-components";
 
 // fake data generator
-const getItems = (count: number) =>
-  Array.from({ length: count }, (v, k) => k).map((k) => ({
-    id: `item-${k}`,
-    content: `item ${k}`,
-  }));
+// const getItems = (count: number) =>
+//   Array.from({ length: count }, (v, k) => k).map((k) => ({
+//     id: `item-${k}`,
+//     content: `item ${k}`,
+//   }));
 
 // a little function to help us with reordering the result
 // const reorder = (list: any[], startIndex: number, endIndex: number) => {
