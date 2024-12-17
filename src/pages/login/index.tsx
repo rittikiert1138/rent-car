@@ -107,6 +107,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <div className="fixed right-2 bottom-2">{process.env.NEXT_PUBLIC_VERSION}</div>
     </MemberLayout>
   );
 };
