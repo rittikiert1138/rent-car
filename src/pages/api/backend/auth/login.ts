@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { username, password } = req.body;
+    const { username, password, user_path } = req.body;
 
     const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_BACKEND;
 
@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       where: {
         username: username,
         status: 1,
+        user_path: user_path,
       },
       select: {
         user_id: true,
@@ -26,6 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         role: true,
       },
     });
+
+    console.log("checkUser", checkUser);
 
     if (!checkUser) {
       return res.status(200).json({

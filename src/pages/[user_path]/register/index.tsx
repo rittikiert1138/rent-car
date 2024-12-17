@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import MemberLayout from "@/components/member/includes/MemberLayout";
@@ -25,6 +25,7 @@ type FormValues = {
 };
 
 const RegisterPage = () => {
+  const { user_path } = useParams();
   const router = useRouter();
   const pathname = usePathname();
   const {
@@ -267,7 +268,7 @@ const RegisterPage = () => {
               </div>
               <div className="grid grid-cols-4 gap-4">
                 <div className="col-span-2">
-                  <Link href="/login">
+                  <Link href={`/${user_path}/login`}>
                     <Button className="w-full mt-4" variant="outline">
                       มีบัญชีแล้ว
                     </Button>
@@ -390,193 +391,6 @@ const RegisterPage = () => {
             </div>
           )}
         </div>
-        {/* <div className="md:w-[600px] w-full mx-auto bg-white p-8 rounded-sm">
-          <img src="/images/Logo.png" className="w-1/2 block mx-auto" />
-          {section === 1 && (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mt-4">
-                <Label>หมายเลขโทรศัพท์</Label>
-                <Input
-                  className={classNames(errors?.phone ? "border-danger focus:border-danger" : "")}
-                  {...register("phone", {
-                    required: {
-                      value: true,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    minLength: {
-                      value: 10,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    maxLength: {
-                      value: 10,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    pattern: {
-                      value: /^[0-9]*$/,
-                      message: "Error pattern",
-                    },
-                    validate: {
-                      checkDigit: (e) => e.split("")[0] === "0" || "ข้อมูลไม่ถูกต้อง",
-                    },
-                  })}
-                />
-                {errors?.phone && <small className="text-danger">{errors.phone.message}</small>}
-              </div>
-              <div className=" p-4 mt-4 flex justify-center">
-                {numberCaptcha.split("").map((item: any, indexImage) => (
-                  <img src={`/number/${item}.png`} className="h-10 mr-4" key={`captcha_${indexImage}`} />
-                ))}
-              </div>
-              <div className="mt-2">
-                <Label>รหัสความปลอดภัย</Label>
-                <Input
-                  className={classNames(errors?.captcha ? "border-danger focus:border-danger" : "")}
-                  {...register("captcha", {
-                    required: {
-                      value: true,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    minLength: {
-                      value: 4,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    maxLength: {
-                      value: 4,
-                      message: "ข้อมูลไม่ถูกต้อง",
-                    },
-                    pattern: {
-                      value: /^[0-9]*$/,
-                      message: "Error pattern",
-                    },
-                  })}
-                  maxLength={4}
-                />
-                {errors?.captcha && <small className="text-danger">{errors.captcha.message}</small>}
-              </div>
-              <div className="grid grid-cols-4 gap-4">
-                <div className="col-span-2">
-                  <Link href="/login">
-                    <Button className="w-full mt-4">มีบัญชีแล้ว</Button>
-                  </Link>
-                </div>
-                <div className="col-span-2">
-                  <Button className="w-full mt-4" type="submit">
-                    ถัดไป
-                  </Button>
-                </div>
-              </div>
-            </form>
-          )}
-          {section === 2 && (
-            <>
-              <div className="text-center justify-center w-full">
-                <OtpConponent dataOTP={dataOTP} setDataOTP={setDataOTP} />
-                {dataOTP.error && <small className="text-danger">{dataOTP.message}</small>}
-              </div>
-              <div className="flex justify-center">
-                <Button className="w-1/3 mt-4 mx-1" onClick={() => setSection(1)}>
-                  ย้อนกลับ
-                </Button>
-                <Button className="w-1/3 mt-4 mx-1" onClick={() => handleVerify(dataOTP.data)}>
-                  ยืนยันรหัส
-                </Button>
-              </div>
-            </>
-          )}
-
-          {section === 3 && (
-            <div className="w-full">
-              <form onSubmit={handleSubmit(handleRegister)}>
-                <div className="mt-4">
-                  <Label>หมายเลขโทรศัพท์</Label>
-                  <Input className={classNames(errors?.captcha ? "border-danger focus:border-danger" : "")} defaultValue={data.phone} disabled />
-                </div>
-                <div className="mt-2">
-                  <Label>บัญชีผู้ใช้งาน</Label>
-                  <Input
-                    className={classNames(errors?.username ? "border-danger focus:border-danger" : "")}
-                    {...register("username", {
-                      required: {
-                        value: true,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      minLength: {
-                        value: 3,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      maxLength: {
-                        value: 50,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      pattern: {
-                        value: /^[a-z0-9_-]{3,15}$/,
-                        message: "รูปแบบข้อมูลไม่ถูกต้อง",
-                      },
-                    })}
-                    maxLength={50}
-                  />
-                  {errors?.username && <small className="text-danger">{errors.username.message}</small>}
-                </div>
-                <div className="mt-2">
-                  <Label>รหัสผ่าน</Label>
-                  <Input
-                    type="password"
-                    className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
-                    {...register("password", {
-                      required: {
-                        value: true,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      minLength: {
-                        value: 4,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      maxLength: {
-                        value: 50,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                    })}
-                    maxLength={50}
-                  />
-                  {errors?.password && <small className="text-danger">{errors.password.message}</small>}
-                </div>
-                <div className="mt-2">
-                  <Label>ยืนยันรหัสผ่าน</Label>
-                  <Input
-                    type="password"
-                    className={classNames(errors?.confirmPassword ? "border-danger focus:border-danger" : "")}
-                    {...register("confirmPassword", {
-                      required: {
-                        value: true,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      minLength: {
-                        value: 4,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      maxLength: {
-                        value: 50,
-                        message: "ข้อมูลไม่ถูกต้อง",
-                      },
-                      validate: {
-                        checkSame: (e) => e === watch("password") || "รหัสผ่านไม่ตรงกัน",
-                      },
-                    })}
-                    maxLength={50}
-                  />
-                  {errors?.confirmPassword && <small className="text-danger">{errors.confirmPassword.message}</small>}
-                </div>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="col-span-4">
-                    <Button className="w-full mt-4" type="submit">
-                      สมัครสมาชิก
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          )} 
-        </div>*/}
       </div>
     </MemberLayout>
   );

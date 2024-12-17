@@ -17,33 +17,34 @@ model User {
   status      Int
   createdBy   Int
   updatedBy   Int
+  user_path   String        @unique
   member      Member[]
   lotto_limit lotto_limit[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
 
-model Role {
-  role_id   Int      @id @default(autoincrement())
-  role_name String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model Role {
+//   role_id   Int      @id @default(autoincrement())
+//   role_name String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
-model Permission {
-  permission_id   Int      @id @default(autoincrement())
-  permission_name String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
+// model Permission {
+//   permission_id   Int      @id @default(autoincrement())
+//   permission_name String
+//   createdAt       DateTime @default(now())
+//   updatedAt       DateTime @updatedAt
+// }
 
-model RolePermission {
-  role_permission_id Int      @id @default(autoincrement())
-  role_id            Int
-  permission_id      Int
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
+// model RolePermission {
+//   role_permission_id Int      @id @default(autoincrement())
+//   role_id            Int
+//   permission_id      Int
+//   createdAt          DateTime @default(now())
+//   updatedAt          DateTime @updatedAt
+// }
 
 model Member {
   member_id   Int            @id @default(autoincrement())

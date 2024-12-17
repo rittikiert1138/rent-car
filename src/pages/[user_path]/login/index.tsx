@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMember } from "@/context/MemberContext";
+import { useParams } from "next/navigation";
 
 type FormValues = {
   username: string;
@@ -15,6 +16,7 @@ type FormValues = {
 };
 
 const LoginPage = () => {
+  const { user_path } = useParams();
   const { login } = useMember();
 
   const {
@@ -91,14 +93,14 @@ const LoginPage = () => {
           </form>
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-2">
-              <Link href="/forgot-password">
+              <Link href={`/${user_path}/forgot-password`}>
                 <Button className="w-full mt-4" variant="outline">
                   ลืมรหัสผ่าน
                 </Button>
               </Link>
             </div>
             <div className="col-span-2">
-              <Link href="/register">
+              <Link href={`/${user_path}/register`}>
                 <Button className="w-full mt-4 bg-secondary" type="submit">
                   สมัครสมาชิก
                 </Button>

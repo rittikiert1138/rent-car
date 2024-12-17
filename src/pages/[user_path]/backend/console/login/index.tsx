@@ -5,19 +5,23 @@ import { useAdmin } from "@/context/AdminContext";
 import { Label } from "@/components/admin/ui/label";
 import { Input } from "@/components/admin/ui/input";
 import { Button } from "@/components/admin/ui/button";
+import { useParams } from "next/navigation";
 
 type FormValues = {
   username: string;
   password: string;
+  user_path: string;
 };
 
 const AdminpageLogin = () => {
   const { login } = useAdmin();
+  const { user_path } = useParams();
 
   const { register, handleSubmit } = useForm<FormValues>();
 
   const handleLogin = async (params: FormValues) => {
     try {
+      console.log("user_path", user_path);
       login(params);
     } catch (error) {
       console.log("error", error);

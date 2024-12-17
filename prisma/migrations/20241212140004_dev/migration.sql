@@ -8,43 +8,14 @@ CREATE TABLE `User` (
     `status` INTEGER NOT NULL,
     `createdBy` INTEGER NOT NULL,
     `updatedBy` INTEGER NOT NULL,
+    `user_path` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `User_phone_key`(`phone`),
     UNIQUE INDEX `User_username_key`(`username`),
+    UNIQUE INDEX `User_user_path_key`(`user_path`),
     PRIMARY KEY (`user_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Role` (
-    `role_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `role_name` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`role_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Permission` (
-    `permission_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `permission_name` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`permission_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `RolePermission` (
-    `role_permission_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `role_id` INTEGER NOT NULL,
-    `permission_id` INTEGER NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`role_permission_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable

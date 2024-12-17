@@ -13,6 +13,7 @@ type User = {
 type FormValues = {
   username: string;
   password: string;
+  user_path: string;
 };
 
 const AdminContext = createContext<User>({} as User);
@@ -33,7 +34,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         alertError(response.data.message);
       } else {
         localStorage.setItem("token", response.data.token);
-        router.push("/backend/console/dashboard");
+        router.push(`/${params.user_path}/backend/console/dashboard`);
       }
     } catch (error) {
       console.log("error", error);
