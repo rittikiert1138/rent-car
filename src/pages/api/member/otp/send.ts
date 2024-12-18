@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import cryptoRandomString from "crypto-random-string";
 import dayjs from "dayjs";
+import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -39,24 +40,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         });
 
-        // const textOTP = `OTP code = ${createOTP.otp} for Ref ${createOTP.ref} do not disclose and use within 5 mins.`;
+        const textOTP = `OTP code = ${createOTP.otp} for Ref ${createOTP.ref} do not disclose and use within 5 mins.`;
 
-        // const dataSendSMS = {
-        //   sender: "LUCA",
-        //   msisdn: [createOTP.phone],
-        //   message: textOTP,
-        // };
+        const dataSendSMS = {
+          sender: "LUCA",
+          msisdn: [createOTP.phone],
+          message: textOTP,
+        };
 
-        // const resSendSMS = await axios.post(`${process.env.NEXT_PUBLIC_API_SEND_OTP}`, dataSendSMS, {
-        //   data: dataSendSMS,
-        //   headers: {
-        //     Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_SEND_OTP_TOKEN}`,
-        //   },
-        // });
+        const resSendSMS = await axios.post(`${process.env.NEXT_PUBLIC_API_SEND_OTP}`, dataSendSMS, {
+          data: dataSendSMS,
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_SEND_OTP_TOKEN}`,
+          },
+        });
 
-        // const { success } = resSendSMS?.data;
+        const { success } = resSendSMS?.data;
 
-        const success = true;
+        // const success = true;
 
         if (success) {
           res.status(200).json({ status: true, message: "Send otp success", data: createOTP });
@@ -93,23 +94,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         });
 
-        // const textOTP = `OTP code = ${createOTP.otp} for Ref ${createOTP.ref} do not disclose and use within 5 mins.`;
+        const textOTP = `OTP code = ${createOTP.otp} for Ref ${createOTP.ref} do not disclose and use within 5 mins.`;
 
-        // const dataSendSMS = {
-        //   sender: "LUCA",
-        //   msisdn: [createOTP.phone],
-        //   message: textOTP,
-        // };
+        const dataSendSMS = {
+          sender: "LUCA",
+          msisdn: [createOTP.phone],
+          message: textOTP,
+        };
 
-        // const resSendSMS = await axios.post(`${process.env.NEXT_PUBLIC_API_SEND_OTP}`, dataSendSMS, {
-        //   data: dataSendSMS,
-        //   headers: {
-        //     Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_SEND_OTP_TOKEN}`,
-        //   },
-        // });
+        const resSendSMS = await axios.post(`${process.env.NEXT_PUBLIC_API_SEND_OTP}`, dataSendSMS, {
+          data: dataSendSMS,
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_SEND_OTP_TOKEN}`,
+          },
+        });
 
-        // const { success } = resSendSMS?.data;
-        const success = true;
+        const { success } = resSendSMS?.data;
 
         if (success) {
           res.status(200).json({ status: true, message: "Send otp success", data: createOTP });
