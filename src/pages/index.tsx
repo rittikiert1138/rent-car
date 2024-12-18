@@ -10,7 +10,7 @@ export default function Home() {
       const res = await fetch("/api/hello", {
         method: "POST",
       });
-      let response = await res.json();
+      const response = await res.json();
       console.log("response==>", response);
     } catch (error) {
       console.log("error", error);
