@@ -107,7 +107,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-      <div className="fixed right-2 bottom-2">1.0.1</div>
+      <div className="fixed right-2 bottom-2">1.0.2</div>
     </MemberLayout>
   );
 };
