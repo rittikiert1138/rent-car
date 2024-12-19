@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           username: username,
           password: hashPassword,
           role: role,
-          updatedBy: updatedBy,
+          updatedBy: Number(updatedBy),
         },
         where: {
           user_id: Number(user_id),
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           phone: phone,
           username: username,
           role: role,
-          updatedBy: 1,
+          updatedBy: Number(updatedBy),
         },
         where: {
           user_id: Number(user_id),

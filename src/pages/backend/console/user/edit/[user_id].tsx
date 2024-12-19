@@ -11,6 +11,7 @@ import axios from "axios";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 import { useParams } from "next/navigation";
+import { useAdmin } from "@/context/AdminContext";
 
 type FormValues = {
   username: string;
@@ -21,6 +22,7 @@ type FormValues = {
 };
 
 const CreateUser = () => {
+  const { admin } = useAdmin();
   const {
     register,
     handleSubmit,
@@ -63,9 +65,12 @@ const CreateUser = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await axios.post(`/api/user/update/${user_id}`, data);
+      const payload = {
+        ...data,
+        updatedBy: admin.user_id,
+      };
 
-      console.log("response", response.data);
+      const response = await axios.post(`/api/user/update/${user_id}`, payload);
 
       if (response.data.status === false) {
         alertError(response.data.message);

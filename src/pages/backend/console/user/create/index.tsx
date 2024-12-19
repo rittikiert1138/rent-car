@@ -11,6 +11,7 @@ import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
+import { useAdmin } from "@/context/AdminContext";
 
 type FormValues = {
   username: string;
@@ -21,6 +22,8 @@ type FormValues = {
 };
 
 const CreateUser = () => {
+  const { admin } = useAdmin();
+
   const {
     register,
     handleSubmit,
@@ -39,7 +42,12 @@ const CreateUser = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await axios.post("/api/user/create", data);
+      const payload = {
+        ...data,
+        createdBy: admin.user_id,
+        updatedBy: admin.user_id,
+      };
+      const response = await axios.post("/api/user/create", payload);
 
       if (response.data.status === false) {
         alertError(response.data.message);

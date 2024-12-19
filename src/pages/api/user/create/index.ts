@@ -5,7 +5,10 @@ import bcrypt from "bcrypt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    console.log("req.body", req.body);
     const { phone, username, password, role, createdBy, updatedBy } = req.body;
+
+    console.log("createdBy, updatedBy", createdBy, updatedBy);
 
     const checkPhone = await prisma.user.findFirst({
       where: {
@@ -29,8 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         password: hashPassword,
         role: role,
         status: 1,
-        createdBy: createdBy,
-        updatedBy: updatedBy,
+        createdBy: Number(createdBy),
+        updatedBy: Number(updatedBy),
       },
     });
 
