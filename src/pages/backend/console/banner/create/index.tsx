@@ -51,7 +51,7 @@ const CreateBannerPage = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 items-center">
-          <div className="w-1/2">
+          <div className="md:w-1/2 w-full">
             <div className="mb-4">{imageUrl && <img src={imageUrl} alt="Selected Image" className="w-1/2 block mx-auto" />}</div>
             <Input
               className={classNames("pt-3", errors?.banner_image ? "border-adanger focus:border-adanger" : "border-aprimary focus:border-aprimary")}
@@ -84,7 +84,7 @@ const CreateBannerPage = () => {
             />
             {errors?.banner_image && <small className="text-adanger">{errors?.banner_image.message}</small>}
           </div>
-          <div className="w-1/2 text-right">
+          <div className="md:w-1/2 w-full text-right">
             <Link href="/backend/console/banner">
               <Button variant="danger" className="mr-2">
                 ยกเลิก <i className="bi bi-x-circle"></i>

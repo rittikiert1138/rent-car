@@ -47,8 +47,8 @@ const CreateLottoType = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4 justify-center">
-          <div className="col-span-6">
-            <Label>Username</Label>
+          <div className="md:col-span-6 col-span-12">
+            <Label>ประเภทหวย</Label>
             <Input
               className={classNames(errors?.lotto_type_name ? "border-danger focus:border-danger" : "")}
               {...register("lotto_type_name", {

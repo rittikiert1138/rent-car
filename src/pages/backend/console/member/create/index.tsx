@@ -70,8 +70,8 @@ const CreateUser = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4 justify-center">
-          <div className="col-span-6">
-            <Label>Username</Label>
+          <div className="md:col-span-6 col-span-12">
+            <Label>ชื่อผู้ใช้</Label>
             <Input
               className={classNames(errors?.username ? "border-danger focus:border-danger" : "")}
               {...register("username", {
@@ -96,8 +96,8 @@ const CreateUser = () => {
             />
             {errors?.username && <small className="text-danger">{errors.username.message}</small>}
           </div>
-          <div className="col-span-6">
-            <Label>Phone</Label>
+          <div className="md:col-span-6 col-span-12">
+            <Label>เบอร์โทรศัพท์</Label>
             <Input
               className={classNames(errors?.phone ? "border-danger focus:border-danger" : "")}
               {...register("phone", {
@@ -124,35 +124,37 @@ const CreateUser = () => {
             />
             {errors?.phone && <small className="text-danger">{errors.phone.message}</small>}
           </div>
-          <div className="col-span-6">
-            <Label>Password</Label>
-            <Input
-              className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
-              {...register("password", {
-                required: {
-                  value: true,
-                  message: "ข้อมูลไม่ถูกต้อง",
-                },
-                minLength: {
-                  value: 4,
-                  message: "ข้อมูลไม่ถูกต้อง",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "ข้อมูลไม่ถูกต้อง",
-                },
-              })}
-              maxLength={50}
-            />
-            {errors?.password && <small className="text-danger">{errors.password.message}</small>}
-            <div>
-              <Button type="button" variant="success" className="mt-2" size="sm" onClick={handleRandomString}>
-                Generate
-              </Button>
+          <div className="md:col-span-6 col-span-12">
+            <Label>รหัสผ่าน</Label>
+            <div className="relative">
+              <Input
+                className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  minLength: {
+                    value: 4,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                })}
+                maxLength={50}
+              />
+              <div className="absolute right-2 top-0">
+                <Button type="button" variant="success" className="mt-2" size="sm" onClick={handleRandomString}>
+                  Generate
+                </Button>
+              </div>
             </div>
+            {errors?.password && <small className="text-danger">{errors.password.message}</small>}
           </div>
-          <div className="col-span-6">
-            <Label>Confirm Password</Label>
+          <div className="md:col-span-6 col-span-12">
+            <Label>ยืนยันรหัสผ่าน</Label>
             <Input
               className={classNames(errors?.confirmPassword ? "border-danger focus:border-danger" : "")}
               {...register("confirmPassword", {
@@ -178,13 +180,13 @@ const CreateUser = () => {
           </div>
         </div>
         <div className="text-right mt-4  pt-4">
-          <Link href="/backend/console/user">
+          <Link href="/backend/console/member">
             <Button variant="danger" className="mr-2">
-              Cancel <i className="bi bi-x-circle"></i>
+              ยกเลิก <i className="bi bi-x-circle"></i>
             </Button>
           </Link>
           <Button type="submit">
-            Create <i className="bi bi-plus-circle"></i>
+            บันทึก <i className="bi bi-plus-circle"></i>
           </Button>
         </div>
       </form>

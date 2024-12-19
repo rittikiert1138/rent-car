@@ -100,7 +100,7 @@ const CreateLottoType = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4 justify-center">
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>ประเภทหวย</Label>
             <select
               className={classNames("w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary", errors?.lotto_type_id ? "border-danger focus:border-danger" : "")}
@@ -110,31 +110,37 @@ const CreateLottoType = () => {
                   message: "ข้อมูลไม่ถูกต้อง",
                 },
               })}
+              defaultValue={""}
             >
               <option value="">ตัวเลือก</option>
-              {types.map((item: any, index) => (
+              {/* {types.map((item: any, index) => (
                 <option key={index} value={item.lotto_type_id}>
                   {item.lotto_type_name}
                 </option>
-              ))}
+              ))} */}
+              <option value={1}>หวยไทย</option>
+              <option value={2}>หวยธกส.</option>
+              <option value={3}>หวยลาว</option>
+              <option value={4}>หวยลาวพัฒนา</option>
+              <option value={5}>หวยฮานอย</option>
             </select>
             {errors?.lotto_type_id && <small className="text-danger">{errors.lotto_type_id.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>งวดประวันที่</Label>
             <div className="w-full">
               <DatePicker selected={watch("period")} onChange={(date: any) => setValue("period", new Date(date))} className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />
             </div>
             {errors?.period && <small className="text-danger">{errors.period.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>วันที่เปิดแทง</Label>
             <div className="w-full">
               <DatePicker selected={watch("open_time")} onChange={(date: any) => setValue("open_time", new Date(date))} timeInputLabel="Time:" dateFormat="MM/dd/yyyy h:mm aa" showTimeInput className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />
             </div>
             {errors?.open_time && <small className="text-danger">{errors.open_time.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>วันที่ปิดแทง</Label>
             <div className="w-full">
               <DatePicker selected={watch("close_time")} onChange={(date: any) => setValue("close_time", new Date(date))} timeInputLabel="Time:" dateFormat="MM/dd/yyyy h:mm aa" showTimeInput className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />

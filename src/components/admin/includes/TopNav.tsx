@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAdmin } from "@/context/AdminContext";
 
-const TopNav = () => {
+interface PropMain {
+  toggle: boolean;
+  setToggle: any;
+}
+
+const TopNav = (props: PropMain) => {
   const { admin, logout } = useAdmin();
   const [active, setActive] = useState(false);
   const wrapperRef = useRef(null);
@@ -23,8 +28,13 @@ const TopNav = () => {
   useOutsideAlerter(wrapperRef);
 
   return (
-    <div className="w-full h-[70px] bg-white fixed top-0 right-0 z-10 pl-[300px] shadow-sm">
+    <div className="w-full h-[70px] bg-white fixed top-0 right-0 z-10 md:pl-[300px] pl-[16px] shadow-sm">
       <div className="relative w-full h-full ">
+        <div className="md:hidden block pt-3">
+          <button onClick={() => props.setToggle(true)}>
+            <i className="bi bi-list text-[32px] text-gray-400"></i>
+          </button>
+        </div>
         <div className="w-10 h-10  absolute right-4 top-4 rounded-full cursor-pointer text-center border border-aprimary" onClick={() => setActive(true)}>
           <i className="bi bi-person text-[24px] text-aprimary"></i>
         </div>

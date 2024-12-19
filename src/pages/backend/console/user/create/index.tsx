@@ -70,7 +70,7 @@ const CreateUser = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4 justify-center">
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>Username</Label>
             <Input
               className={classNames(errors?.username ? "border-danger focus:border-danger" : "")}
@@ -96,7 +96,7 @@ const CreateUser = () => {
             />
             {errors?.username && <small className="text-danger">{errors.username.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>Phone</Label>
             <Input
               className={classNames(errors?.phone ? "border-danger focus:border-danger" : "")}
@@ -124,7 +124,7 @@ const CreateUser = () => {
             />
             {errors?.phone && <small className="text-danger">{errors.phone.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>Password</Label>
             <Input
               className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
@@ -151,7 +151,7 @@ const CreateUser = () => {
               </Button>
             </div>
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>Confirm Password</Label>
             <Input
               className={classNames(errors?.confirmPassword ? "border-danger focus:border-danger" : "")}
@@ -176,7 +176,7 @@ const CreateUser = () => {
             />
             {errors?.confirmPassword && <small className="text-danger">{errors.confirmPassword.message}</small>}
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <Label>Role</Label>
             <select
               className={classNames("w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary", errors?.role ? "border-danger focus:border-danger" : "")}

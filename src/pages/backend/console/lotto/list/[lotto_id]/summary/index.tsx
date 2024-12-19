@@ -156,19 +156,19 @@ const SummaryPage = () => {
           <div className="col-span-12">
             <h3 className="text-2xl font-bold">ออกผล</h3>
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <div className="w-full">
               <label htmlFor="lotto_number">3 ตัวบน</label>
               <Input type="text" {...register("lotto_number_3")} className="w-full" />
             </div>
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12">
             <div className="w-full">
               <label htmlFor="lotto_number">2 ตัวล่าง</label>
               <Input type="text" {...register("lotto_number_2")} className="w-full" />
             </div>
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6 col-span-12 text-right">
             <Button type="submit">ออกผล</Button>
           </div>
         </div>

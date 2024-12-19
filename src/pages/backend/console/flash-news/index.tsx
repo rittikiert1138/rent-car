@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 
 type FormValues = {
   flash_news_content: string;
+  flash_news_id?: number;
 };
 
 const FlashNews = () => {
@@ -27,6 +28,7 @@ const FlashNews = () => {
 
   const [flashNews, setFlashNews] = useState([]);
   const [modal, setModal] = useState(false);
+  const [modalEdit, setModaledit] = useState(false);
 
   const getFlashNews = async () => {
     try {
@@ -98,6 +100,13 @@ const FlashNews = () => {
     });
   };
 
+  const handleEdit = (id: number) => {
+    const news = flashNews.find((e) => e.flash_news_id === id);
+    setValue("flash_news_content", news.flash_news_content);
+    setValue("flash_news_id", news.flash_news_id);
+    setModaledit(true);
+  };
+
   const columns = [
     {
       name: "ลำดับ",
@@ -132,17 +141,15 @@ const FlashNews = () => {
       ),
     },
     {
-      name: "Action",
+      name: "",
       sortable: false,
       center: true,
       width: "20%",
       cell: (row: any) => (
         <div className="w-full text-center">
-          <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-            <Button className="border h-10" variant="warning">
-              <i className="bi bi-pencil"></i>
-            </Button>
-          </Link>
+          <Button className="border h-10" variant="warning" onClick={() => handleEdit(row.flash_news_id)}>
+            <i className="bi bi-pencil"></i>
+          </Button>
           <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.flash_news_id)}>
             <i className="bi bi-trash3"></i>
           </Button>
@@ -163,6 +170,25 @@ const FlashNews = () => {
         alertSuccess(response.data.message);
       } else {
         alertError(response.data.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+      alertError(error.message);
+    }
+  };
+
+  const onSubmitUpdate = async (params: any) => {
+    try {
+      setModaledit(false);
+      const response = await api.post("/api/backend/flash-news/update", params);
+
+      const { status, message } = response.data;
+
+      if (status) {
+        getFlashNews();
+        alertSuccess(message);
+      } else {
+        alertError(message);
       }
     } catch (error: any) {
       console.log(error);
@@ -210,6 +236,40 @@ const FlashNews = () => {
                   </Button>
                   <Button type="submit">
                     เพิ่มข้อมูล <i className="bi bi-plus-lg"></i>
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {modalEdit && (
+        <div className="w-full h-[100vh] bg-black/20 fixed top-0 left-0 z-[900]">
+          <div className="w-full h-full  relative">
+            <div className="absolute -translate-y-1/2 -translate-x-1/2  top-1/2 left-[58%] bg-white w-1/2 rounded-lg p-8">
+              <form onSubmit={handleSubmit(onSubmitUpdate)}>
+                <input type="hidden" className="border" {...register("flash_news_id")} />
+                <div className="w-full">
+                  <Label>รายละเอียด</Label>
+                  <textarea
+                    {...register("flash_news_content", {
+                      required: {
+                        value: true,
+                        message: "กรุณาระบุรายละเอียด",
+                      },
+                    })}
+                    className={classNames("w-full border focus:outline-none  p-2 rounded-sm", errors?.flash_news_content ? "border-danger focus:border-danger" : "border-aprimary focus:border-aprimary")}
+                    rows={8}
+                    // defaultValue="asdasd"
+                  ></textarea>
+                  {errors?.flash_news_content && <small className="text-danger">{errors?.flash_news_content.message}</small>}
+                </div>
+                <div className="w-full text-right mt-2">
+                  <Button type="button" onClick={() => setModaledit(false)} variant="danger" className="mr-2">
+                    ยกเลิก <i className="bi bi-x-lg"></i>
+                  </Button>
+                  <Button type="submit">
+                    บันทึก <i className="bi bi-plus-lg"></i>
                   </Button>
                 </div>
               </form>
