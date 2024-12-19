@@ -65,23 +65,23 @@ export const MENU = [
         name: "ถอน",
         path: "/backend/console/transaction/withdraw",
       },
-      {
-        id: 9,
-        name: "ธนาคาร",
-        path: "/backend/console/bank",
-      },
+      // {
+      //   id: 9,
+      //   name: "ธนาคาร",
+      //   path: "/backend/console/bank",
+      // },
     ],
   },
-  {
-    id: 5,
-    name: "Setting",
-    icon: <i className="bi bi-gear mr-2 text-aprimary text-xl"></i>,
-    list: [
-      {
-        id: 1,
-        name: "Role",
-        path: "/backend/console/role",
-      },
-    ],
-  },
+  // {
+  //   id: 5,
+  //   name: "Setting",
+  //   icon: <i className="bi bi-gear mr-2 text-aprimary text-xl"></i>,
+  //   list: [
+  //     {
+  //       id: 1,
+  //       name: "Role",
+  //       path: "/backend/console/role",
+  //     },
+  //   ],
+  // },
 ];
