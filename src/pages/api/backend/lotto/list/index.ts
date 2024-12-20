@@ -12,6 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         },
       },
+      orderBy: {
+        lotto_type_id: "asc",
+      },
     });
 
     res.status(200).json({
@@ -24,5 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({
       message: "Internal server error",
     });
+  } finally {
+    await prisma.$disconnect();
   }
 }

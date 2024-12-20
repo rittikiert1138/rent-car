@@ -12,7 +12,8 @@ import { LIST_BET_TYPE, LIST_BET_GROUP } from "@/constants/constants";
 import withProtectedMember from "@/hoc/withProtectedMember";
 import { api } from "@/utils/api";
 import { useMember } from "@/context/MemberContext";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 interface ConditionTypes {
   listId?: number;
@@ -29,6 +30,7 @@ interface ConditionTypes {
 const LottoPage = () => {
   const { member } = useMember();
   const { lotto_id } = useParams();
+  const router = useRouter();
 
   const [section, setSection] = useState<number>(1);
   const [tabs, setTabs] = useState<number>(1);
@@ -43,6 +45,7 @@ const LottoPage = () => {
   const [digit, setDigit] = useState<string>("");
   const [shortcut, setShortcut] = useState<number>(1);
   const [limit, setLimit] = useState<Array<any>>([]);
+  const [lotto, setLotto] = useState<any>(null);
 
   const getLimits = async () => {
     try {
@@ -59,13 +62,38 @@ const LottoPage = () => {
     }
   };
 
+  const getLotto = async () => {
+    try {
+      const payload = {
+        lotto_id: Number(lotto_id),
+      };
+      const response = await api.post("/api/member/lotto/view", payload);
+
+      console.log("response ==>", response.data);
+      if (response.data.status === true) {
+        setLotto(response.data.lotto);
+      } else {
+        router.push("/member/lotto");
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     if (lotto_id && member?.user_id) {
       getLimits();
+      getLotto();
+    } else if (lotto_id) {
+      getLotto();
     }
   }, [lotto_id, member]);
 
-  // console.log(limit);
+  useEffect(() => {
+    if (lotto) {
+      if (dayjs(lotto.close_time) < dayjs()) {
+        router.push("/member/lotto");
+      }
+    }
+  });
 
   const zeroPad = (num: number, places: number) => String(num).padStart(places, "0");
 

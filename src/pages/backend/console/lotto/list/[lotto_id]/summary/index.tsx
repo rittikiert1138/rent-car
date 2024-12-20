@@ -42,6 +42,7 @@ const SummaryPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
+      console.log("data", data);
       setLoading(true);
       const result: any = [
         {
@@ -111,7 +112,7 @@ const SummaryPage = () => {
 
       const payload = {
         lotto_id: lotto_id,
-        member_lotto_id: lottoList[0].member_lotto_id,
+        member_lotto_id: lottoList.length ? lottoList[0].member_lotto_id : null,
         lotto_result: [
           {
             type: 1,
@@ -125,7 +126,10 @@ const SummaryPage = () => {
         lotto_list: resultList,
       };
 
+      console.log("payload", payload);
+
       const response = await api.post(`/api/backend/lotto/summary`, payload);
+      console.log("response.data", response.data);
       const { status, message } = response.data;
       if (status) {
         alertSuccess(message);

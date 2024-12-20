@@ -43,11 +43,11 @@ export const MENU = [
         name: "Lotto",
         path: "/backend/console/lotto",
       },
-      {
-        id: 6,
-        name: "Lotto Type",
-        path: "/backend/console/lotto-type",
-      },
+      // {
+      //   id: 6,
+      //   name: "Lotto Type",
+      //   path: "/backend/console/type-lotto",
+      // },
     ],
   },
   {

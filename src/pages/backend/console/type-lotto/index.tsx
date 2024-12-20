@@ -76,23 +76,7 @@ const LottoTypePage = () => {
       sortable: true,
       selector: (row: any) => row.lotto_type_name,
     },
-    {
-      name: "Phone",
-      sortable: true,
-      selector: (row: any) => row.phone,
-    },
-    {
-      name: "Role",
-      sortable: true,
-      selector: (row: any) => row.role,
-      cell: (row: any) => {
-        if (row.role === "ADMIN") {
-          return <span className="badge bg-aprimary/40 uppercase px-2 py-1 text-aprimary font-bold rounded">Admin</span>;
-        } else if (row.role === "AGENT") {
-          return <span className="badge bg-adanger/30 uppercase px-2 py-1 text-adanger font-bold rounded">AGENT</span>;
-        }
-      },
-    },
+
     {
       name: "สร้างเมื่อ",
       sortable: true,
@@ -104,13 +88,13 @@ const LottoTypePage = () => {
       selector: (row: any) => dayjs(row.updatedAt).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
-      name: "Action",
+      name: "",
       sortable: false,
       center: true,
       width: "20%",
       cell: (row: any) => (
         <div className="w-full text-center">
-          <Link href={`/backend/console/user/edit/${row.user_id}`}>
+          <Link href={`/backend/console/type-lotto/edit/${row.lotto_type_id}`}>
             <Button className="border h-10">
               <i className="bi bi-pencil"></i>
             </Button>
@@ -127,15 +111,15 @@ const LottoTypePage = () => {
   ];
 
   return (
-    <AdminLayout title="User" breadcrumb={[{ title: "User", path: "/backend/console/user" }]}>
+    <AdminLayout title="ประเภทหวย" breadcrumb={[{ title: "ประเภทหวย", path: "/backend/console/type-lotto" }]}>
       <div className="grid grid-cols-12 mb-4">
         <div className="col-span-8">
           <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." />
         </div>
         <div className="col-span-4 text-right">
-          <Link href="/backend/console/lotto-type/create">
+          <Link href="/backend/console/type-lotto/create">
             <Button>
-              Create <i className="bi bi-plus-lg"></i>
+              เพิ่ม <i className="bi bi-plus-lg"></i>
             </Button>
           </Link>
         </div>

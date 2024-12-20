@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           period: dayjs(period).format("YYYY-MM-DD HH:mm"),
           open_time: dayjs(open_time).format("YYYY-MM-DD HH:mm"),
           close_time: dayjs(close_time).format("YYYY-MM-DD HH:mm"),
-          status: 1,
+          status: 0,
         },
       });
 
@@ -42,5 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({
       message: "Internal server error",
     });
+  } finally {
+    await prisma.$disconnect();
   }
 }

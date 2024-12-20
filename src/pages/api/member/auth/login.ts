@@ -13,7 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const checkUser: any = await prisma.member.findFirst({
       where: {
         username: username,
-        status: 1,
       },
       select: {
         member_id: true,
@@ -24,12 +23,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         balance: true,
         user_id: true,
         total_bet: true,
+        status: true,
       },
     });
+    console.log("checkUser", checkUser);
     if (!checkUser) {
       return res.status(200).json({
         status: false,
         message: "ไม่มีผู้ใช้นี้ในระบบ",
+      });
+    }
+
+    if (checkUser.status !== 1) {
+      return res.status(200).json({
+        status: false,
+        message: "กรุณาติดต่อผู้ดูแลระบบ",
       });
     }
 
@@ -38,6 +46,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         status: false,
         type: "attemp",
         message: "คุณได้พยายามลองเข้าระบบมากกว่า 5 ครั้ง กรุณาติดต่อทีมงาน",
+      });
+    }
+
+    if (checkUser?.isLogin === 1) {
+      return res.status(200).json({
+        status: false,
+        type: "isLogin",
+        message: "มีการใช้งานจากอุปกรณ์อื่น กรุณารอสักครู่",
       });
     }
 
@@ -78,5 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({
       message: "Internal server error",
     });
+  } finally {
+    await prisma.$disconnect();
   }
 }

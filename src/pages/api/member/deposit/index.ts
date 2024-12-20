@@ -66,5 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error) {
     console.log("error", (error as Error).message);
     res.status(500).json({ error: `File upload failed: ${(error as Error).message}` });
+  } finally {
+    await prisma.$disconnect();
   }
 }

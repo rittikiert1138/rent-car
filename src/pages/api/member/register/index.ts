@@ -35,5 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error: any) {
     console.log("error", error.message);
     res.status(400).json({ status: false, message: "มีผู้ใช้งานนี้ในระบบแล้ว" });
+  } finally {
+    await prisma.$disconnect();
   }
 }

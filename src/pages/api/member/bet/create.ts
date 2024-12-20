@@ -57,5 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error: any) {
     console.log("error", error);
     res.status(400).json({ status: false, message: "เกิดข้อผิดพลาด" });
+  } finally {
+    await prisma.$disconnect();
   }
 }

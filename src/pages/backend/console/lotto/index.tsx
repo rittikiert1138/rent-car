@@ -11,6 +11,7 @@ import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import { useAdmin } from "@/context/AdminContext";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
 
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
@@ -83,7 +84,7 @@ const LottoPage = () => {
     {
       name: "ชื่อหวย",
       sortable: true,
-      selector: (row: any) => row.lotto_type.lotto_type_name,
+      selector: (row: any) => LOTTO_TYPE.find((e) => e.lotto_type_id === row.lotto_type_id)?.lotto_type_name,
     },
 
     {

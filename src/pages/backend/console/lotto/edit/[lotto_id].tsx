@@ -13,6 +13,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
 
 type FormValues = {
   lotto_type_id: number;
@@ -37,24 +38,8 @@ const EditLotto = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const [types, setTypes] = useState([]);
   const [lotto, setLotto] = useState<FormValues | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const fetchTypes = async () => {
-    try {
-      const response = await api.get("/api/backend/lotto-type/list");
-
-      if (response.data.status === false) {
-        alertError(response.data.message);
-      } else {
-        const { lotto_types } = response.data;
-        setTypes(lotto_types.map((item: any, index: number) => ({ ...item, index: index + 1 })));
-      }
-    } catch (error: any) {
-      alertError(error.message);
-    }
-  };
 
   const getLotto = async (lotto_id: number) => {
     try {
@@ -77,7 +62,6 @@ const EditLotto = () => {
 
   useEffect(() => {
     if (lotto_id) {
-      fetchTypes();
       getLotto(Number(lotto_id));
     }
   }, [lotto_id]);
@@ -127,8 +111,7 @@ const EditLotto = () => {
                 })}
                 defaultValue={lotto?.lotto_type_id}
               >
-                <option value="">ตัวเลือก</option>
-                {types.map((item: any, index) => (
+                {LOTTO_TYPE.map((item: any, index) => (
                   <option key={index} value={item.lotto_type_id}>
                     {item.lotto_type_name}
                   </option>

@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
 
 type FormValues = {
   lotto_type_id: number;
@@ -112,17 +113,11 @@ const CreateLottoType = () => {
               })}
               defaultValue={""}
             >
-              <option value="">ตัวเลือก</option>
-              {/* {types.map((item: any, index) => (
+              {LOTTO_TYPE.map((item: any, index) => (
                 <option key={index} value={item.lotto_type_id}>
                   {item.lotto_type_name}
                 </option>
-              ))} */}
-              <option value={1}>หวยไทย</option>
-              <option value={2}>หวยธกส.</option>
-              <option value={3}>หวยลาว</option>
-              <option value={4}>หวยลาวพัฒนา</option>
-              <option value={5}>หวยฮานอย</option>
+              ))}
             </select>
             {errors?.lotto_type_id && <small className="text-danger">{errors.lotto_type_id.message}</small>}
           </div>
