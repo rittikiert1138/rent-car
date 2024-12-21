@@ -75,7 +75,9 @@ const LottoPage = () => {
       } else {
         router.push("/member/lotto");
       }
-    } catch (error) {}
+    } catch (error: any) {
+      console.log("error", error.message);
+    }
   };
 
   useEffect(() => {

@@ -11,7 +11,6 @@ import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 import { api } from "@/utils/api";
-import { useAdmin } from "@/context/AdminContext";
 import { useParams } from "next/navigation";
 
 type FormValues = {
@@ -24,7 +23,6 @@ type FormValues = {
 };
 
 const EditMember = () => {
-  const { admin } = useAdmin();
   const { member_id } = useParams();
 
   const {

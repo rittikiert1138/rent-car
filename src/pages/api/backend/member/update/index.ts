@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // const { user_id } = req.query;
 
-    const { phone, username, password, status, updatedBy, member_id, balance } = req.body;
+    const { phone, username, password, status, member_id, balance } = req.body;
 
     const checkDuplicate = await prisma.member.findFirst({
       where: {

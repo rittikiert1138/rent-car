@@ -41,7 +41,8 @@ const EditLottoType = () => {
       } else {
         alertError(message);
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.log("getLottoType error==>", error.message);
     } finally {
       setLoading(false);
     }

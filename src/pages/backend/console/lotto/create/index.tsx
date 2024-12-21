@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
@@ -43,28 +43,28 @@ const CreateLottoType = () => {
     },
   });
 
-  const [types, setTypes] = useState([]);
+  // const [types, setTypes] = useState([]);
 
-  const fetchTypes = async () => {
-    try {
-      const response = await api.get("/api/backend/lotto-type/list");
+  // const fetchTypes = async () => {
+  //   try {
+  //     const response = await api.get("/api/backend/lotto-type/list");
 
-      console.log("response.data", response.data);
+  //     console.log("response.data", response.data);
 
-      if (response.data.status === false) {
-        alertError(response.data.message);
-      } else {
-        const { lotto_types } = response.data;
-        setTypes(lotto_types.map((item: any, index: number) => ({ ...item, index: index + 1 })));
-      }
-    } catch (error: any) {
-      alertError(error.message);
-    }
-  };
+  //     if (response.data.status === false) {
+  //       alertError(response.data.message);
+  //     } else {
+  //       const { lotto_types } = response.data;
+  //       setTypes(lotto_types.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+  //     }
+  //   } catch (error: any) {
+  //     alertError(error.message);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchTypes();
-  }, []);
+  // useEffect(() => {
+  //   fetchTypes();
+  // }, []);
 
   const onSubmit = async (data: FormValues) => {
     try {

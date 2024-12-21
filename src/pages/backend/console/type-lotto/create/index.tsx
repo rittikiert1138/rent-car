@@ -7,8 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { Toaster } from "react-hot-toast";
-import { alertSuccess, alertError } from "@/utils/alert";
-import router from "next/router";
+import { alertError } from "@/utils/alert";
 
 type FormValues = {
   lotto_type_name: string;

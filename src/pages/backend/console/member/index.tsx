@@ -7,7 +7,6 @@ import DataTable from "react-data-table-component";
 import { Input } from "@/components/admin/ui/input";
 import { api } from "@/utils/api";
 import { alertError, alertSuccess } from "@/utils/alert";
-import axios from "axios";
 import Swal from "sweetalert2";
 
 const MemberPage = () => {
