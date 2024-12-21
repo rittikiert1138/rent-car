@@ -6,7 +6,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { user_id } = req.body;
 
-    const limit = await prisma.lotto_limit.findFirstOrThrow({
+    console.log("user_id", user_id);
+
+    const limit = await prisma.lotto_limit.findFirst({
       include: {
         lotto_limit_list: {
           orderBy: {
@@ -19,11 +21,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    res.status(200).json({
-      status: true,
-      message: "ดึงข้อมูลหวยสำเร็จ",
-      limits: limit.lotto_limit_list,
-    });
+    if (limit) {
+      res.status(200).json({
+        status: true,
+        message: "ดึงข้อมูลหวยสำเร็จ",
+        limits: limit.lotto_limit_list ?? [],
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        message: "ดึงข้อมูลหวยไม่สำเร็จ",
+        limits: [],
+      });
+    }
   } catch (error: any) {
     console.log("Error ==>", error?.message);
     res.status(500).json({

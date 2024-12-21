@@ -172,7 +172,7 @@ const SummaryPage = () => {
               <Input type="text" {...register("lotto_number_2")} className="w-full" />
             </div>
           </div>
-          <div className="md:col-span-6 col-span-12 text-right">
+          <div className="md:col-span-12 col-span-12 text-right">
             <Button type="submit">ออกผล</Button>
           </div>
         </div>

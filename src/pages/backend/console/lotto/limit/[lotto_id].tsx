@@ -253,6 +253,8 @@ const LottoPage = () => {
     },
   ];
 
+  console.log("limitList", limitList);
+
   return (
     <AdminLayout title="หวย" breadcrumb={[{ title: "หวย", path: "/backend/console/lotto" }]}>
       <div className="grid grid-cols-12 gap-4 mb-4">
@@ -267,42 +269,42 @@ const LottoPage = () => {
       {modal && (
         <CreateModal>
           <div className="relative">
-            <Button className="absolute -top-[20px] -right-[20px]" size="sm" variant="danger" onClick={() => setModal(false)}>
+            <Button className="absolute md:-top-[20px] md:-right-[20px] -top-[6px] -right-[6px]" size="sm" variant="danger" onClick={() => setModal(false)}>
               <i className="bi bi-x-lg"></i>
             </Button>
             <h1>เพิ่มเลขอั้น</h1>
             <div className="grid grid-cols-12 gap-4 mt-2">
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={1} onChange={(e) => handleChecklist(e)} checked={checklist.includes("1")} />
                   <Label className="mt-[3px]">3 ตัวบน</Label>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={2} onChange={(e) => handleChecklist(e)} checked={checklist.includes("2")} />
                   <Label className="mt-[3px]">3 ตัวโต๊ด</Label>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={3} onChange={(e) => handleChecklist(e)} checked={checklist.includes("3")} />
                   <Label className="mt-[3px]">2 ตัวบน</Label>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={4} onChange={(e) => handleChecklist(e)} checked={checklist.includes("4")} />
                   <Label className="mt-[3px]">2 ตัวล่าง</Label>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={5} onChange={(e) => handleChecklist(e)} checked={checklist.includes("5")} />
                   <Label className="mt-[3px]">วิ่งบน</Label>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-2 col-span-4">
                 <div className="flex">
                   <input type="checkbox" className="mr-2" value={6} onChange={(e) => handleChecklist(e)} checked={checklist.includes("6")} />
                   <Label className="mt-[3px]">วิ่งล่าง</Label>
@@ -310,7 +312,7 @@ const LottoPage = () => {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-4 mt-4">
-              <div className="col-span-6">
+              <div className="md:col-span-6 col-span-12">
                 <Label className="mt-[3px]">ตัวเลขอั้น</Label>
                 <Input
                   placeholder="ตัวเลขอั้น"
@@ -330,7 +332,7 @@ const LottoPage = () => {
                 />
                 {error.number && <p className="text-red-500 text-sm">กรุณาระบุตัวเลขอั้น</p>}
               </div>
-              <div className="col-span-6">
+              <div className="md:col-span-6 col-span-12">
                 <Label className="mt-[3px]">ราคาจ่าย</Label>
                 <Input
                   placeholder="ราคาจ่าย"
@@ -351,21 +353,24 @@ const LottoPage = () => {
                 {error.price && <p className="text-red-500 text-sm">กรุณาระบุราคาจ่าย</p>}
               </div>
               <div className="col-span-12 text-right">
-                <Button onClick={handleAddList}>เพิ่ม</Button>
+                <Button onClick={handleAddList}>
+                  เพิ่ม <i className="bi bi-plus-lg"></i>
+                </Button>
               </div>
             </div>
             <div className="w-full h-[1px] bg-gray-200 my-4"></div>
             <h1>รายการเลขอั้น</h1>
-
             <div className="flex">
-              <div className="w-[45%]">ตัวเลขอั้น</div>
-              <div className="w-[45%]">ราคาจ่าย</div>
+              <div className="w-[20%]">ประเภท</div>
+              <div className="w-[35%]">ตัวเลขอั้น</div>
+              <div className="w-[35%]">ราคาจ่าย</div>
             </div>
             {limitList.length > 0 ? (
               limitList.map((item: any, index: number) => (
                 <div className="flex" key={index}>
-                  <div className="w-[45%] border h-10 pl-2 pt-1">{item.number}</div>
-                  <div className="w-[45%] border h-10 pl-2 pt-1">{item.price}</div>
+                  <div className="w-[20%] border h-10 pl-2 pt-1">{LIST_BET_TYPE.find((e) => e.betTypeId == item.type)?.label}</div>
+                  <div className="w-[35%] border h-10 pl-2 pt-1">{item.number}</div>
+                  <div className="w-[35%] border h-10 pl-2 pt-1">{item.price}</div>
                   <div className="w-[10%] border h-10 pl-2 pt-1 text-center">
                     <Button variant="danger" onClick={() => handleDelete(item.number)} size="sm">
                       <i className="bi bi-trash3"></i>
