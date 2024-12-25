@@ -1,3 +1,11 @@
+//Bet type
+// 1 = 3 ตัวบน
+// 2 = 3 ตัวโต๊ด
+// 3 = 2 ตัวบน
+// 4 = 2 ตัวล่าง
+// 5 = วิ่งบน
+// 6 = วิ่งล่าง
+
 export const LIST_BET_TYPE = [
   {
     listId: 1,
@@ -7,7 +15,7 @@ export const LIST_BET_TYPE = [
     value: 1,
     type: 1,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -19,7 +27,7 @@ export const LIST_BET_TYPE = [
     value: 2,
     type: 1,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -31,7 +39,7 @@ export const LIST_BET_TYPE = [
     value: 3,
     type: 1,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -43,7 +51,7 @@ export const LIST_BET_TYPE = [
     value: 1,
     type: 2,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -55,7 +63,7 @@ export const LIST_BET_TYPE = [
     value: 2,
     type: 2,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -67,7 +75,7 @@ export const LIST_BET_TYPE = [
     value: 3,
     type: 2,
     span: 4,
-    min: 10,
+    min: 1,
     max: 5000,
     maxPerUnit: 10000,
   },
@@ -79,7 +87,7 @@ export const LIST_BET_TYPE = [
     value: 1,
     type: 3,
     span: 6,
-    min: 10,
+    min: 1,
     max: 50000,
     maxPerUnit: 100000,
   },
@@ -91,7 +99,7 @@ export const LIST_BET_TYPE = [
     value: 2,
     type: 3,
     span: 6,
-    min: 10,
+    min: 1,
     max: 50000,
     maxPerUnit: 100000,
   },

@@ -4,29 +4,26 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const lottos = await prisma.lotto.findMany({
+    const lottos = await prisma.lotto_result.findMany({
       include: {
-        lotto_type: {
-          select: {
-            lotto_type_name: true,
-          },
-        },
-        lotto_result: {
-          include: {
-            lotto_result_list: true,
-          },
-        },
-      },
-      orderBy: {
-        lotto_type_id: "asc",
+        lotto_result_list: true,
+        lotto: true,
       },
     });
 
-    res.status(200).json({
-      status: true,
-      message: "ดึงข้อมูลหวยสำเร็จ",
-      lottos,
-    });
+    if (lottos) {
+      res.status(200).json({
+        status: true,
+        message: "Success",
+        lottos: lottos,
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        message: "Success",
+        lottos: [],
+      });
+    }
   } catch (error: any) {
     console.log("Error ==>", error?.message);
     res.status(500).json({

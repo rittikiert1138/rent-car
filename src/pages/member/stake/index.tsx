@@ -12,6 +12,7 @@ import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/p
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { usePathname, useSearchParams } from "next/navigation";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
 
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
@@ -39,6 +40,7 @@ const StakePage = () => {
         type: _type,
       };
       const response = await api.post("/api/member/lotto/stake/list", payload);
+      console.log("ss", response.data);
       setStakeList(response.data.lottos);
       setCountLottos(response.data.countLottos);
     } catch (error: any) {
@@ -80,6 +82,8 @@ const StakePage = () => {
     fetchStakeList(0, listPerPage);
   };
 
+  console.log("stakeList", stakeList);
+
   return (
     <MemberLayout title="โพยหวย">
       <div className="container px-2">
@@ -120,7 +124,7 @@ const StakePage = () => {
                   <div className="grid grid-cols-12 gap-0 py-2">
                     <div className="col-span-6">
                       <div className="w-full h-10 border-r">
-                        <h4 className="text-primary">{stake.lotto.lotto_type.lotto_type_name}</h4>
+                        <h4 className="text-primary">{LOTTO_TYPE.find((e) => e.lotto_type_id === stake.lotto.lotto_type_id)?.lotto_type_name}</h4>
                         <p className="text-xs text-gray-500">{dayjs(stake.lotto.period).format("DD MMMM BBBB")}</p>
                       </div>
                     </div>

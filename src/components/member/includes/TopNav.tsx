@@ -29,7 +29,7 @@ const TopNav = () => {
     <>
       {member ? (
         <>
-          <div className="w-full h-12 bg-primary fixed left-0 top-0 z-50">
+          <div className="w-full h-12 bg-primary fixed left-0 top-0 z-30">
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-2">
                 <div className="pt-2">

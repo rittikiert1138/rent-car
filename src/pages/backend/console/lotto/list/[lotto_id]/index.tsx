@@ -9,9 +9,16 @@ import DataTable from "react-data-table-component";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import { useParams } from "next/navigation";
 import { LIST_BET_TYPE } from "@/constants/constants";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
+import "dayjs/locale/th";
+import buddhistEra from "dayjs/plugin/buddhistEra";
+
+dayjs.extend(buddhistEra);
+dayjs.locale("th");
 
 const LottoPage = () => {
   const [lottoList, setLottoList] = useState([]);
+  const [lottoResult, setLottoResult] = useState(null);
   const { lotto_id } = useParams();
 
   const getLottoList = async () => {
@@ -21,6 +28,7 @@ const LottoPage = () => {
       console.log("response.data", response.data);
       if (response.data.status === true) {
         setLottoList(response.data.lottoList.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+        setLottoResult(response.data.lottoResult);
       } else {
         alertError(response.data.message);
       }
@@ -131,6 +139,41 @@ const LottoPage = () => {
     },
   ];
 
+  const getFlag = (_id: number) => {
+    const image = LOTTO_TYPE.find((e) => e.lotto_type_id == _id);
+
+    return image.lotto_type_icon;
+  };
+
+  const getBuyAll = () => {
+    let _buyAll = 0;
+
+    for (let i = 0; i < lottoList.length; i++) {
+      const _list = lottoList[i];
+      _buyAll += _list.bet_amount;
+    }
+
+    return _buyAll;
+  };
+
+  const getPayAll = () => {
+    const _result = lottoList.filter((e) => e.bet_status == 2);
+    let _payAll = 0;
+    for (let i = 0; i < _result.length; i++) {
+      const _list = _result[i];
+      _payAll += _list.bet_amount;
+    }
+    return _payAll * 1000;
+  };
+
+  const getSome = () => {
+    let _buyAll = getBuyAll();
+    let _payAll = getPayAll();
+    return _buyAll - _payAll;
+  };
+
+  console.log("lottoResult", lottoResult);
+
   return (
     <AdminLayout
       title="หวย"
@@ -139,16 +182,67 @@ const LottoPage = () => {
         { title: "รายการ", path: "/backend/console/lotto" },
       ]}
     >
-      <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-6">{/* <h3 className="text-2xl font-bold">หวยไทย</h3> */}</div>
-        <div className="col-span-6 text-right">
-          <Link href={`/backend/console/lotto/list/${lotto_id}/summary`}>
-            <Button>
-              ออกผล <i className="bi bi-plus-lg"></i>
-            </Button>
-          </Link>
+      {lottoResult ? (
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="xl:col-span-3 md:col-span-6 col-span-12">
+            <div className="w-full bg-aprimary px-2 pb-2 text-white rounded">
+              <div className="grid grid-cols-12 gap-4">
+                <div className="col-span-6">
+                  <div className="flex">
+                    <span>
+                      <img src={getFlag(lottoResult?.lotto?.lotto_type_id)} className="w-6 h-4 mt-2 mr-2" />
+                    </span>
+                    <span>{LOTTO_TYPE.find((e) => e.lotto_type_id == lottoResult?.lotto?.lotto_type_id)?.lotto_type_name}</span>
+                  </div>
+                </div>
+                <div className="col-span-6 text-right">
+                  <span className="text-white text-xs">{dayjs(lottoResult?.lotto?.period).format("DD MMMM BBBB")}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-12 gap-4">
+                <div className="col-span-6 text-center">
+                  <p>เลขท้าย 3 ตัว</p>
+                  <span className="bg-white text-aprimary rounded px-2">{lottoResult?.lotto_result_list.find((l: any) => l.lotto_result_type === 1)?.lotto_result_number}</span>
+                </div>
+                <div className="col-span-6 text-center">
+                  <p>เลขท้าย 2 ตัว</p>
+                  <span className="bg-white text-aprimary rounded px-2">{lottoResult?.lotto_result_list.find((l: any) => l.lotto_result_type === 4)?.lotto_result_number}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="xl:col-span-3 md:col-span-6 col-span-12">
+            <div className="w-full bg-asuccess px-2 pb-2 text-white rounded h-[80px]">
+              <p>ยอดซื้อทั้งหมด</p>
+              <span className="text-2xl">{getBuyAll().toLocaleString()}</span>
+            </div>
+          </div>
+          <div className="xl:col-span-3 md:col-span-6 col-span-12">
+            <div className="w-full bg-adanger px-2 pb-2 text-white rounded h-[80px]">
+              <p>ยอดจ่ายทั้งหมด</p>
+              <span className="text-2xl">{getPayAll().toLocaleString()}</span>
+            </div>
+          </div>
+          <div className="xl:col-span-3 md:col-span-6 col-span-12">
+            <div className="w-full bg-ainfo px-2 pb-2 text-white rounded h-[80px]">
+              <p>ผลลัพท์</p>
+              <span className="text-2xl">{getSome().toLocaleString()}</span>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="col-span-6">{/* <h3 className="text-2xl font-bold">หวยไทย</h3> */}</div>
+          <div className="col-span-6 text-right">
+            <Link href={`/backend/console/lotto/list/${lotto_id}/summary`}>
+              <Button>
+                ออกผล <i className="bi bi-plus-lg"></i>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
+
       <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={lottoList} pagination />
     </AdminLayout>
   );

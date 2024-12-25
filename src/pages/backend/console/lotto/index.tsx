@@ -23,6 +23,7 @@ const LottoPage = () => {
   const getLottos = async () => {
     try {
       const response = await api.get("/api/backend/lotto/list");
+      console.log("ss", response.data);
       if (response.data.status === true) {
         setLottos(response.data.lottos.map((item: any, index: number) => ({ ...item, index: index + 1 })));
       } else {
@@ -71,8 +72,6 @@ const LottoPage = () => {
       alertError(error.message);
     }
   };
-
-  console.log("admin", admin);
 
   const columns = [
     {
@@ -136,12 +135,18 @@ const LottoPage = () => {
                   <i className="bi bi-search"></i>
                 </Button>
               </Link>
-              <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
-                <Button className="border h-10" variant="warning">
+              {row.lotto_result.length > 0 ? (
+                <Button className="border h-10" variant="warning" disabled>
                   <i className="bi bi-pencil"></i>
                 </Button>
-              </Link>
-              <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)}>
+              ) : (
+                <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
+                  <Button className="border h-10" variant="warning">
+                    <i className="bi bi-pencil"></i>
+                  </Button>
+                </Link>
+              )}
+              <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.lotto_id)} disabled={row.lotto_result.length > 0}>
                 <i className="bi bi-trash3"></i>
               </Button>
             </div>

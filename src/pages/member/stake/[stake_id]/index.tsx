@@ -9,6 +9,7 @@ import { api } from "@/utils/api";
 import { LIST_BET_TYPE } from "@/constants/constants";
 import classNames from "classnames";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
+import { LOTTO_TYPE } from "@/constants/lotto_type";
 
 const StakeResult = () => {
   const router = useRouter();
@@ -62,6 +63,8 @@ const StakeResult = () => {
     setPage(page);
   };
 
+  console.log("lotto", lotto);
+
   return (
     <MemberLayout title="โพยหวย">
       <div className="container px-2 ">
@@ -73,7 +76,7 @@ const StakeResult = () => {
         </Link>
         <div className="w-full bg-white rounded-sm p-2 mt-2">
           <div className="text-center">
-            <p className="text-primary">{lotto?.lotto.lotto_type.lotto_type_name}</p>
+            <p className="text-primary">{LOTTO_TYPE.find((e) => e.lotto_type_id === lotto?.lotto?.lotto_type_id)?.lotto_type_name}</p>
             <p className="text-xs text-gray-500">เลขที่รายการแทง {lotto?.member_lotto_id}</p>
           </div>
           <div className="grid grid-cols-12 gap-0">
@@ -113,7 +116,7 @@ const StakeResult = () => {
             <div className="w-full" key={index}>
               <div className={classNames("w-full  h-7 mt-2 rounded-tl-sm rounded-tr-sm px-2", item.bet_pay_result > 0 ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500")}>
                 <span className=" text-xs -mt-[10px]">
-                  ลำดับที่ {index + 1} : {lotto?.lotto.lotto_type.lotto_type_name}
+                  ลำดับที่ {index + 1} : {LOTTO_TYPE.find((e) => e.lotto_type_id === lotto?.lotto?.lotto_type_id)?.lotto_type_name}
                 </span>
               </div>
               <div className="w-full bg-white px-2 rounded-bl-sm rounded-br-sm pb-2">

@@ -23,10 +23,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    const lottoResult = await prisma.lotto_result.findFirst({
+      include: {
+        lotto_result_list: true,
+        lotto: true,
+      },
+      where: {
+        lotto_id: Number(lotto_id),
+      },
+    });
+
     res.status(200).json({
       status: true,
       message: "ดึงข้อมูลหวยสำเร็จ",
-      lottoList,
+      lottoList: lottoList,
+      lottoResult: lottoResult,
     });
   } catch (error: any) {
     console.log("Error ==>", error?.message);

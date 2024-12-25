@@ -14,10 +14,12 @@ const ButtomNavbar = () => {
           </Link>
         </div>
         <div className="col-span-2">
-          <div className="px-2 pt-1 text-center cursor-pointer">
-            <i className="bi bi-trophy text-white"></i>
-            <p className="text-[10px] text-white">ผลรางวัล</p>
-          </div>
+          <Link href="/member/result">
+            <div className="px-2 pt-1 text-center cursor-pointer">
+              <i className="bi bi-trophy text-white"></i>
+              <p className="text-[10px] text-white">ผลรางวัล</p>
+            </div>
+          </Link>
         </div>
         <div className="col-span-4">
           <div className="p-1 text-center cursor-pointer">

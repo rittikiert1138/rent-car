@@ -8,10 +8,15 @@ import { Button } from "@/components/admin/ui/button";
 import { api } from "@/utils/api";
 import { alertError, alertSuccess } from "@/utils/alert";
 import { getThreeNumber } from "@/utils/utils";
+import classNames from "classnames";
 
 const SummaryPage = () => {
   const { lotto_id } = useParams();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const [lottoList, setLottoList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -110,6 +115,8 @@ const SummaryPage = () => {
         }
       }
 
+      console.log("resultList", resultList);
+
       const payload = {
         lotto_id: lotto_id,
         member_lotto_id: lottoList.length ? lottoList[0].member_lotto_id : null,
@@ -137,11 +144,9 @@ const SummaryPage = () => {
         alertError(message);
       }
     } catch (error: any) {
-      console.log(error.message);
+      alertError(error.message);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      setLoading(false);
     }
   };
 
@@ -163,13 +168,57 @@ const SummaryPage = () => {
           <div className="md:col-span-6 col-span-12">
             <div className="w-full">
               <label htmlFor="lotto_number">3 ตัวบน</label>
-              <Input type="text" {...register("lotto_number_3")} className="w-full" />
+              <Input
+                type="text"
+                {...register("lotto_number_3", {
+                  required: {
+                    value: true,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  maxLength: {
+                    value: 3,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  pattern: {
+                    value: /^[0-9]*$/,
+                    message: "Error pattern",
+                  },
+                })}
+                className={classNames("w-full", errors.lotto_number_3 ? "border-adanger focus:border-adanger" : "")}
+              />
+              {errors.lotto_number_3 && <small className="text-adanger">ระบุข้อมูลไม่ถูกต้อง</small>}
             </div>
           </div>
           <div className="md:col-span-6 col-span-12">
             <div className="w-full">
               <label htmlFor="lotto_number">2 ตัวล่าง</label>
-              <Input type="text" {...register("lotto_number_2")} className="w-full" />
+              <Input
+                type="text"
+                {...register("lotto_number_2", {
+                  required: {
+                    value: true,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  minLength: {
+                    value: 2,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  maxLength: {
+                    value: 2,
+                    message: "ข้อมูลไม่ถูกต้อง",
+                  },
+                  pattern: {
+                    value: /^[0-9]*$/,
+                    message: "Error pattern",
+                  },
+                })}
+                className={classNames("w-full", errors.lotto_number_2 ? "border-adanger focus:border-adanger" : "")}
+              />
+              {errors.lotto_number_2 && <small className="text-adanger">ระบุข้อมูลไม่ถูกต้อง</small>}
             </div>
           </div>
           <div className="md:col-span-12 col-span-12 text-right">

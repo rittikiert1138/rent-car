@@ -16,8 +16,6 @@ const AdminLayout = ({ children, title, breadcrumb, loading = false }: { childre
     setToggle(false);
   }, [currentPath]);
 
-  console.log("toggle==>", toggle);
-
   return (
     <div className="w-full h-[100vh] bg-white">
       <TopNav setToggle={setToggle} toggle={toggle} />

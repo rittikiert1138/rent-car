@@ -23,7 +23,6 @@ const UserPage = () => {
       };
       const response = await api.post("/api/member/transaction", payload);
 
-      console.log("response ==>", response.data);
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
@@ -115,23 +114,25 @@ const UserPage = () => {
       selector: (row: any) => dayjs(row.createdAt).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
-      name: "Action",
+      name: "",
       sortable: false,
       center: true,
       width: "20%",
       cell: (row: any) => (
         <div className="w-full text-center">
-          <Link href={`/backend/console/user/edit/${row.user_id}`}>
+          {/* <Link href={`/backend/console/user/edit/${row.user_id}`}>
             <Button className="border h-10">
               <i className="bi bi-pencil"></i>
             </Button>
           </Link>
           <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.user_id)}>
             <i className="bi bi-trash3"></i>
-          </Button>
-          <Button className="border h-10" variant="success" onClick={() => alert(row.user_id)}>
-            <i className="bi bi-search"></i>
-          </Button>
+          </Button> */}
+          <Link href={`/backend/console/transaction/withdraw/view/${row.transaction_id}`}>
+            <Button className="border h-10" variant="success">
+              <i className="bi bi-search"></i>
+            </Button>
+          </Link>
         </div>
       ),
     },
@@ -140,9 +141,7 @@ const UserPage = () => {
   return (
     <AdminLayout title="Transaction" breadcrumb={[{ title: "Transaction", path: "/backend/console/transaction" }]}>
       <div className="grid grid-cols-12 mb-4">
-        <div className="col-span-8">
-          <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." />
-        </div>
+        <div className="col-span-8">{/* <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." /> */}</div>
       </div>
       <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={transactions} pagination />
     </AdminLayout>

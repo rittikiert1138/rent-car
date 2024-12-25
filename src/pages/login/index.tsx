@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMember } from "@/context/MemberContext";
+import LottoResult from "@/components/member/lotto/result/LottoResult";
 
 type FormValues = {
   username: string;
@@ -105,6 +106,14 @@ const LoginPage = () => {
               </Link>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="sm:container mt-4">
+        <div className="w-full bg-[#f5f5f5] rounded px-2">
+          <div className="py-2 border-b mb-2">
+            <h1>ผลรางวัล</h1>
+          </div>
+          <LottoResult />
         </div>
       </div>
       <div className="fixed right-2 bottom-2">1.0.9</div>

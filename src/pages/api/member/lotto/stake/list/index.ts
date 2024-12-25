@@ -15,15 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let conditionSearch: any;
 
-    if (type === "archive") {
-      conditionSearch = {
-        lte: dayjs().add(1, "day").format("YYYY-MM-DD HH:mm"),
-      };
-    } else {
-      conditionSearch = {
-        gte: dayjs().subtract(2, "day").format("YYYY-MM-DD HH:mm"),
-      };
-    }
+    // if (type === "archive") {
+    //   conditionSearch = {
+    //     lte: dayjs().add(1, "day").format("YYYY-MM-DD HH:mm"),
+    //   };
+    // } else {
+    //   conditionSearch = {
+    //     gte: dayjs().subtract(2, "day").format("YYYY-MM-DD HH:mm"),
+    //   };
+    // }
 
     const lottos = await prisma.member_lotto.findMany({
       include: {

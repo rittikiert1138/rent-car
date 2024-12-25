@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
 import DataTable from "react-data-table-component";
 import { Button } from "@/components/admin/ui/button";
@@ -14,7 +14,12 @@ import Swal from "sweetalert2";
 import { api } from "@/utils/api";
 
 const UserPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({
+    all: [],
+    filter: [],
+  });
+
+  const [keyword, setKeyword] = useState<any>("");
 
   const fetchUsers = async () => {
     try {
@@ -23,7 +28,10 @@ const UserPage = () => {
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
-        setUsers(response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+        setUsers({
+          all: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
+          filter: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
+        });
       }
     } catch (error: any) {
       alertError(error.message);
@@ -123,21 +131,49 @@ const UserPage = () => {
     },
   ];
 
+  const handleSearch = () => {
+    if (keyword.length <= 0) {
+      setUsers({ ...users, filter: users.all });
+    } else {
+      let results = users.all.filter((item) => {
+        return item.username.toLowerCase().includes(keyword.toLowerCase()) || item.phone.toLowerCase().includes(keyword.toLowerCase()) || item.role.toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.updatedAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase());
+      });
+      setUsers({ ...users, filter: results });
+    }
+  };
+
   return (
     <AdminLayout title="User" breadcrumb={[{ title: "User", path: "/backend/console/user" }]}>
       <div className="grid grid-cols-12 mb-4">
         <div className="col-span-8">
-          <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." />
+          <div className="flex">
+            <Input
+              type="text"
+              className="w-1/4"
+              id="filter-text-box"
+              placeholder="ค้นหา..."
+              onChange={(e) => {
+                if (e.target.value.length <= 0) {
+                  setUsers({ ...users, filter: users.all });
+                } else {
+                  setKeyword(e.target.value);
+                }
+              }}
+            />
+            <Button className="mt-1 ml-4" onClick={() => handleSearch()}>
+              ค้นหา <i className="bi bi-search"></i>
+            </Button>
+          </div>
         </div>
         <div className="col-span-4 text-right">
           <Link href="/backend/console/user/create">
             <Button>
-              Create <i className="bi bi-plus-lg"></i>
+              เพิ่ม <i className="bi bi-plus-lg"></i>
             </Button>
           </Link>
         </div>
       </div>
-      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={users} pagination />
+      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={users.filter} pagination />
     </AdminLayout>
   );
 };

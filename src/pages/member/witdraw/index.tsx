@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMember } from "@/context/MemberContext";
+import toast, { Toaster } from "react-hot-toast";
+import withProtectedUser from "@/hoc/withProtectedMember";
+import { api } from "@/utils/api";
+import member from "..";
 
 type Inputs = {
   total: string;
@@ -14,7 +18,7 @@ type Inputs = {
 };
 
 const WitdrawPage = () => {
-  const { balance } = useMember();
+  const { balance, member, refresh } = useMember();
   const {
     register,
     handleSubmit,
@@ -23,11 +27,30 @@ const WitdrawPage = () => {
 
   const [section, setSection] = useState<number>(1);
 
-  const onSubmitTotal: SubmitHandler<Inputs> = (params) => {
+  const onSubmitTotal: SubmitHandler<Inputs> = async (params) => {
     try {
-      console.log("params", params);
+      if (parseInt(params.total) > balance) {
+        toast.error("ยอดเงินไม่เพียงพอ");
+      } else if (parseInt(params.total) < 300) {
+        toast.error("ถอนขั้นต่ำ 300");
+      } else {
+        const payload = {
+          balance: params.total,
+          member_id: member.member_id,
+        };
+        const response = await api.post("/api/member/witdraw", payload);
 
-      setSection(2);
+        const { status, message } = response.data;
+
+        if (status) {
+          setSection(2);
+          refresh();
+        } else {
+          toast.error(message);
+        }
+      }
+
+      // setSection(2);
     } catch (error: any) {
       console.log("Error onSubmitTotal ==>", error.message);
     }
@@ -35,6 +58,7 @@ const WitdrawPage = () => {
 
   return (
     <MemberLayout>
+      <Toaster containerStyle={{ zIndex: 99999, top: "70px" }} />
       <div className="sm:container px-2 mt-2">
         <div className="w-full bg-white p-2 rounded-sm">
           {section == 1 && (
@@ -72,7 +96,7 @@ const WitdrawPage = () => {
                     },
                   })}
                 />
-                {errors?.total && <small className="text-destructive">{errors?.total.message}</small>}
+                {errors?.total && <small className="text-danger">{errors?.total.message}</small>}
               </div>
               <div className="mt-2">
                 <Label>หมายเหตุ</Label>
@@ -125,4 +149,4 @@ const WitdrawPage = () => {
   );
 };
 
-export default WitdrawPage;
+export default withProtectedUser(WitdrawPage);

@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     delete checkUser?.password;
 
-    const token = jwt.sign(checkUser, secretKey, { algorithm: "HS256", expiresIn: "30m" });
+    const token = jwt.sign(checkUser, secretKey, { algorithm: "HS256", expiresIn: "1h" });
 
     res.status(200).json({
       status: true,

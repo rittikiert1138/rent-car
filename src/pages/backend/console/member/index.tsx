@@ -10,7 +10,12 @@ import { alertError, alertSuccess } from "@/utils/alert";
 import Swal from "sweetalert2";
 
 const MemberPage = () => {
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState({
+    all: [],
+    filter: [],
+  });
+
+  const [keyword, setKeyword] = useState<any>("");
 
   const columns = [
     {
@@ -84,7 +89,10 @@ const MemberPage = () => {
     try {
       const response = await api.get("/api/member/list");
       console.log("response", response.data);
-      setMembers(response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+      setMembers({
+        all: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
+        filter: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
+      });
     } catch (error: any) {
       alertError(error.message);
     }
@@ -126,21 +134,52 @@ const MemberPage = () => {
     fetchMembers();
   }, []);
 
+  const handleSearch = () => {
+    if (keyword.length <= 0) {
+      console.log("if");
+      setMembers({ ...members, filter: members.all });
+    } else {
+      console.log("else");
+      let results = members.all.filter((item) => {
+        return item.username.toLowerCase().includes(keyword.toLowerCase()) || item.user?.username.toLowerCase().includes(keyword.toLowerCase()) || item.phone.toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.updatedAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase());
+      });
+      console.log("results,", results);
+      setMembers({ ...members, filter: results });
+    }
+  };
+
   return (
     <AdminLayout title="Member" breadcrumb={[{ title: "Member", path: "/backend/console/member" }]}>
       <div className="grid grid-cols-12 mb-4">
         <div className="col-span-8">
-          <Input type="text" className="w-1/4" id="filter-text-box" placeholder="Search..." />
+          <div className="flex">
+            <Input
+              type="text"
+              className="w-1/4"
+              id="filter-text-box"
+              placeholder="ค้นหา..."
+              onChange={(e) => {
+                if (e.target.value.length <= 0) {
+                  setMembers({ ...members, filter: members.all });
+                } else {
+                  setKeyword(e.target.value);
+                }
+              }}
+            />
+            <Button className="mt-1 ml-4" onClick={() => handleSearch()}>
+              ค้นหา <i className="bi bi-search"></i>
+            </Button>
+          </div>
         </div>
         <div className="col-span-4 text-right">
           <Link href="/backend/console/member/create">
             <Button>
-              Create <i className="bi bi-plus-lg"></i>
+              เพิ่ม <i className="bi bi-plus-lg"></i>
             </Button>
           </Link>
         </div>
       </div>
-      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={members} pagination />
+      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={members.filter} pagination />
     </AdminLayout>
   );
 };
