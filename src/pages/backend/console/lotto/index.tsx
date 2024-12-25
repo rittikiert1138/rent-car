@@ -20,10 +20,11 @@ const LottoPage = () => {
   const { admin } = useAdmin();
   const [lottos, setLottos] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const getLottos = async () => {
     try {
       const response = await api.get("/api/backend/lotto/list");
-      console.log("ss", response.data);
       if (response.data.status === true) {
         setLottos(response.data.lottos.map((item: any, index: number) => ({ ...item, index: index + 1 })));
       } else {
@@ -31,6 +32,8 @@ const LottoPage = () => {
       }
     } catch (error: any) {
       alertError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -158,17 +161,23 @@ const LottoPage = () => {
 
   return (
     <AdminLayout title="หวย" breadcrumb={[{ title: "หวย", path: "/backend/console/lotto" }]}>
-      <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-6">{/* <h3 className="text-2xl font-bold">หวยไทย</h3> */}</div>
-        <div className="col-span-6 text-right">
-          <Link href="/backend/console/lotto/create">
-            <Button>
-              สร้าง <i className="bi bi-plus-lg"></i>
-            </Button>
-          </Link>
-        </div>
-      </div>
-      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={lottos} pagination />
+      {loading ? (
+        <>Loading. . .</>
+      ) : (
+        <>
+          <div className="grid grid-cols-12 gap-4 mb-4">
+            <div className="col-span-6"></div>
+            <div className="col-span-6 text-right">
+              <Link href="/backend/console/lotto/create">
+                <Button>
+                  สร้าง <i className="bi bi-plus-lg"></i>
+                </Button>
+              </Link>
+            </div>
+          </div>
+          <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={lottos} pagination />
+        </>
+      )}
     </AdminLayout>
   );
 };

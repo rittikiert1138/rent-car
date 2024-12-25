@@ -17,9 +17,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         },
       },
-      orderBy: {
-        lotto_type_id: "asc",
-      },
+      orderBy: [
+        {
+          status: "desc",
+        },
+        {
+          lotto_type_id: "asc",
+        },
+      ],
     });
 
     res.status(200).json({

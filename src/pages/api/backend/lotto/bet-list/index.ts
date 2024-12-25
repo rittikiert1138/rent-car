@@ -6,6 +6,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { lotto_id } = req.body;
 
+    const lotto = await prisma.lotto.findFirst({
+      where: {
+        lotto_id: Number(lotto_id),
+      },
+    });
+
     const lottoList = await prisma.member_lotto_list.findMany({
       where: {
         lotto_id: Number(lotto_id),
@@ -38,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message: "ดึงข้อมูลหวยสำเร็จ",
       lottoList: lottoList,
       lottoResult: lottoResult,
+      lotto: lotto,
     });
   } catch (error: any) {
     console.log("Error ==>", error?.message);
