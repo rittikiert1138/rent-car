@@ -178,7 +178,7 @@ const LottoPage = () => {
     let _payAll = 0;
     for (let i = 0; i < _result.length; i++) {
       const _list = _result[i];
-      _payAll += _list.bet_amount;
+      _payAll += _list.bet_pay_result;
     }
     return _payAll;
   };
@@ -188,6 +188,8 @@ const LottoPage = () => {
     let _payAll = getPayAll();
     return _buyAll - _payAll;
   };
+
+  console.log("lottoList", lottoList);
 
   return (
     <AdminLayout

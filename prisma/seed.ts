@@ -15,6 +15,18 @@ async function main() {
       updatedBy: 1,
     },
   });
+
+  await prisma.user.create({
+    data: {
+      phone: "0838427291",
+      username: "master",
+      password: hashPassword,
+      role: "MASTER",
+      status: 1,
+      createdBy: 1,
+      updatedBy: 1,
+    },
+  });
 }
 main()
   .then(async () => {

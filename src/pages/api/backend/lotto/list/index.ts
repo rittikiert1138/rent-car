@@ -6,11 +6,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const lottos = await prisma.lotto.findMany({
       include: {
-        lotto_type: {
-          select: {
-            lotto_type_name: true,
-          },
-        },
+        // lotto_type: {
+        //   select: {
+        //     lotto_type_name: true,
+        //   },
+        // },
         lotto_result: {
           include: {
             lotto_result_list: true,

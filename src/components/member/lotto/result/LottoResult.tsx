@@ -24,9 +24,9 @@ const LottoResult = () => {
     <div className="grid grid-cols-12 gap-2 mb-2">
       {results.length > 0 ? (
         results.map((result, indexResult) => (
-          <>
+          <React.Fragment key={indexResult}>
             <ResultCard result={result} />
-          </>
+          </React.Fragment>
         ))
       ) : (
         <></>

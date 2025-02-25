@@ -172,7 +172,9 @@ const BetSection = (props: betSectionProps) => {
         _betCount += _bet.bet_price;
       }
 
-      if (member.balance < _betCount) {
+      console.log("ss", balance, _betCount);
+      if (balance < _betCount) {
+        console.log("คุณมีเครดิตไม่เพียงพอ");
         toast.error("คุณมีเครดิตไม่เพียงพอ");
       } else {
         const payload = {
@@ -193,6 +195,7 @@ const BetSection = (props: betSectionProps) => {
           refresh();
           router.push(`/member/stake/${memberLotto.member_lotto_id}`);
         } else {
+          console.log("message", message);
           toast.error(message);
         }
       }

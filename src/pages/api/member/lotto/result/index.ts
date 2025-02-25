@@ -9,7 +9,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         lotto_result_list: true,
         lotto: true,
       },
+      orderBy: [
+        {
+          lotto: {
+            period: "asc",
+          },
+        },
+      ],
     });
+
+    // const lottos = await prisma.lotto_result.groupBy({
+    //   by: "lotto_type_id",
+    //   include: {
+    //     lotto_result_list: true,
+    //     lotto: true,
+    //   },
+    // });
 
     if (lottos) {
       res.status(200).json({
