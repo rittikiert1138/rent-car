@@ -7,26 +7,25 @@ import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { Toaster } from "react-hot-toast";
 import { alertSuccess, alertError } from "@/utils/alert";
-import router from "next/router";
 import { api } from "@/utils/api";
-// import { useAdmin } from "@/context/AdminContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
 import { LOTTO_TYPE } from "@/constants/lotto_type";
+import { useRouter } from "next/router";
+import { Input } from "@/components/admin/ui/input";
 
 type FormValues = {
   lotto_type_id: number;
   period: Date;
   open_time: Date;
   close_time: Date;
-  // start_time: Date;
-  // close_time: Date;
 };
 
 const CreateLottoType = () => {
-  // const { admin } = useAdmin();
+  const router = useRouter();
+  const { lotto_type } = router.query;
 
   const {
     register,
@@ -38,53 +37,24 @@ const CreateLottoType = () => {
     defaultValues: {
       lotto_type_id: 0,
       period: new Date(),
-      // start_time: dayjs().format("YYYY-MM-DD HH:mm"),
-      // close_time: dayjs().format("YYYY-MM-DD HH:mm"),
     },
   });
 
-  // const [types, setTypes] = useState([]);
-
-  // const fetchTypes = async () => {
-  //   try {
-  //     const response = await api.get("/api/backend/lotto-type/list");
-
-  //     console.log("response.data", response.data);
-
-  //     if (response.data.status === false) {
-  //       alertError(response.data.message);
-  //     } else {
-  //       const { lotto_types } = response.data;
-  //       setTypes(lotto_types.map((item: any, index: number) => ({ ...item, index: index + 1 })));
-  //     }
-  //   } catch (error: any) {
-  //     alertError(error.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchTypes();
-  // }, []);
-
   const onSubmit = async (data: FormValues) => {
     try {
-      console.log("data", data);
-      // console.log("data", dayjs(data.period).format("YYYY-MM-DD"));
-      // console.log("aa", dayjs().format("YYYY-MM-DD HH:mm") > dayjs(data.open_time).format("YYYY-MM-DD HH:mm"));
       const payload = {
-        lotto_type_id: data.lotto_type_id,
+        lotto_type_id: lotto_type,
         period: dayjs(data.period).format("YYYY-MM-DD"),
         open_time: dayjs(data.open_time).format("YYYY-MM-DD HH:mm"),
         close_time: dayjs(data.close_time).format("YYYY-MM-DD HH:mm"),
       };
-      // console.log("payload", payload);
       const response = await api.post("/api/backend/lotto/create", payload);
 
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
         alertSuccess(response.data.message);
-        router.push("/backend/console/lotto");
+        router.push(`/backend/console/lotto/${lotto_type}`);
       }
     } catch (error: any) {
       alertError(error.message);
@@ -103,23 +73,7 @@ const CreateLottoType = () => {
         <div className="grid grid-cols-12 gap-4 justify-center">
           <div className="md:col-span-6 col-span-12">
             <Label>ประเภทหวย</Label>
-            <select
-              className={classNames("w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary", errors?.lotto_type_id ? "border-danger focus:border-danger" : "")}
-              {...register("lotto_type_id", {
-                required: {
-                  value: true,
-                  message: "ข้อมูลไม่ถูกต้อง",
-                },
-              })}
-              defaultValue={""}
-            >
-              {LOTTO_TYPE.map((item: any, index) => (
-                <option key={index} value={item.lotto_type_id}>
-                  {item.lotto_type_name}
-                </option>
-              ))}
-            </select>
-            {errors?.lotto_type_id && <small className="text-danger">{errors.lotto_type_id.message}</small>}
+            <Input className={classNames(errors?.lotto_type_id ? "border-danger focus:border-danger" : "")} disabled defaultValue={LOTTO_TYPE.find((e: any) => e.lotto_type_id === Number(lotto_type))?.lotto_type_name} />
           </div>
           <div className="md:col-span-6 col-span-12">
             <Label>งวดประวันที่</Label>
@@ -144,7 +98,7 @@ const CreateLottoType = () => {
           </div>
         </div>
         <div className="text-right mt-4  pt-4">
-          <Link href="/backend/console/lotto">
+          <Link href={`/backend/console/lotto/${lotto_type}`}>
             <Button variant="danger" className="mr-2">
               ยกเลิก <i className="bi bi-x-circle"></i>
             </Button>

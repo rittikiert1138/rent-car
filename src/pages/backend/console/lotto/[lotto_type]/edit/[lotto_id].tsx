@@ -27,7 +27,7 @@ type FormValues = {
 const EditLotto = () => {
   // const { admin } = useAdmin();
   const router = useRouter();
-  const { lotto_id } = router.query;
+  const { lotto_type, lotto_id } = router.query;
 
   const {
     register,
@@ -81,7 +81,7 @@ const EditLotto = () => {
         alertError(response.data.message);
       } else {
         alertSuccess(response.data.message);
-        router.push("/backend/console/lotto");
+        router.push(`/backend/console/lotto/${lotto_type}`);
       }
     } catch (error: any) {
       alertError(error.message);
@@ -142,7 +142,7 @@ const EditLotto = () => {
             </div>
           </div>
           <div className="text-right mt-4  pt-4">
-            <Link href="/backend/console/lotto">
+            <Link href={`/backend/console/lotto/${lotto_type}`}>
               <Button variant="danger" className="mr-2">
                 ยกเลิก <i className="bi bi-x-circle"></i>
               </Button>

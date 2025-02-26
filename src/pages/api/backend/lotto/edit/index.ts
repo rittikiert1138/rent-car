@@ -8,13 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       where: {
         lotto_id: Number(req.body.lotto_id),
       },
-      include: {
-        lotto_type: {
-          select: {
-            lotto_type_name: true,
-          },
-        },
-      },
+      // include: {
+      //   lotto_type: {
+      //     select: {
+      //       lotto_type_name: true,
+      //     },
+      //   },
+      // },
     });
 
     if (lotto) {

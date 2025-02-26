@@ -4,28 +4,51 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    const { lotto_type_id } = req.body;
+
     const lottos = await prisma.lotto.findMany({
       include: {
-        // lotto_type: {
-        //   select: {
-        //     lotto_type_name: true,
-        //   },
-        // },
         lotto_result: {
           include: {
             lotto_result_list: true,
           },
         },
       },
+      where: {
+        lotto_type_id: Number(lotto_type_id),
+      },
       orderBy: [
+        {
+          period: "desc",
+        },
         {
           status: "desc",
         },
-        {
-          lotto_type_id: "asc",
-        },
       ],
     });
+
+    // const lottos = await prisma.lotto.findMany({
+    //   include: {
+    //     // lotto_type: {
+    //     //   select: {
+    //     //     lotto_type_name: true,
+    //     //   },
+    //     // },
+    // lotto_result: {
+    //   include: {
+    //     lotto_result_list: true,
+    //   },
+    // },
+    //   },
+    // orderBy: [
+    //   {
+    //     status: "desc",
+    //   },
+    //   {
+    //     lotto_type_id: "asc",
+    //   },
+    // ],
+    // });
 
     res.status(200).json({
       status: true,

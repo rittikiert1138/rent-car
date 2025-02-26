@@ -19,15 +19,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           skip: skip,
           take: limit,
         },
-        lotto: {
-          include: {
-            lotto_type: {
-              select: {
-                lotto_type_name: true,
-              },
-            },
-          },
-        },
+        // lotto: {
+        //   include: {
+        //     lotto_type: {
+        //       select: {
+        //         lotto_type_name: true,
+        //       },
+        //     },
+        //   },
+        // },
       },
       where: {
         member_id: Number(member_id),

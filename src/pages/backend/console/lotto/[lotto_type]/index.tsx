@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import DataTable from "react-data-table-component";
 import { Switch } from "@/components/admin/ui/switch";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
+import { useRouter } from "next/router";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import { useAdmin } from "@/context/AdminContext";
@@ -17,14 +18,19 @@ dayjs.extend(buddhistEra);
 dayjs.locale("th");
 
 const LottoPage = () => {
+  const router = useRouter();
+  const { lotto_type } = router.query;
   const { admin } = useAdmin();
   const [lottos, setLottos] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
-  const getLottos = async () => {
+  const getLottos = async (_lotto_type: number) => {
     try {
-      const response = await api.get("/api/backend/lotto/list");
+      const payload = {
+        lotto_type_id: _lotto_type,
+      };
+      const response = await api.post("/api/backend/lotto/list", payload);
       if (response.data.status === true) {
         setLottos(response.data.lottos.map((item: any, index: number) => ({ ...item, index: index + 1 })));
       } else {
@@ -38,8 +44,8 @@ const LottoPage = () => {
   };
 
   useEffect(() => {
-    getLottos();
-  }, []);
+    if (lotto_type) getLottos(Number(lotto_type));
+  }, [lotto_type]);
 
   const handleChangeStatus = async (lotto_id: number, status: number, lotto_type: number) => {
     try {
@@ -50,7 +56,7 @@ const LottoPage = () => {
       };
       const response = await api.post("/api/backend/lotto/change-status", payload);
       if (response.data.status === true) {
-        getLottos();
+        getLottos(Number(lotto_type));
       } else {
         alertError(response.data.message);
       }
@@ -67,7 +73,7 @@ const LottoPage = () => {
       const response = await api.post("/api/backend/lotto/delete", payload);
       if (response.data.status === true) {
         alertSuccess(response.data.message);
-        getLottos();
+        getLottos(Number(lotto_type));
       } else {
         alertError(response.data.message);
       }
@@ -143,7 +149,7 @@ const LottoPage = () => {
                   <i className="bi bi-pencil"></i>
                 </Button>
               ) : (
-                <Link href={`/backend/console/lotto/edit/${row.lotto_id}`}>
+                <Link href={`/backend/console/lotto/${lotto_type}/edit/${row.lotto_id}`}>
                   <Button className="border h-10" variant="warning">
                     <i className="bi bi-pencil"></i>
                   </Button>
@@ -168,7 +174,7 @@ const LottoPage = () => {
           <div className="grid grid-cols-12 gap-4 mb-4">
             <div className="col-span-6"></div>
             <div className="col-span-6 text-right">
-              <Link href="/backend/console/lotto/create">
+              <Link href={`/backend/console/lotto/${lotto_type}/create`}>
                 <Button>
                   สร้าง <i className="bi bi-plus-lg"></i>
                 </Button>

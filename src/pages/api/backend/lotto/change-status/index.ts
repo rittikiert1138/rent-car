@@ -6,12 +6,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { status, lotto_id, lotto_type } = req.body;
 
+    console.log("lotto_type", lotto_type);
+
     await prisma.lotto.updateMany({
       data: {
         status: 0,
       },
       where: {
-        lotto_type: lotto_type,
+        lotto_type_id: lotto_type,
         NOT: {
           lotto_id: lotto_id,
         },
