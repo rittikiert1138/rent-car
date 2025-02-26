@@ -91,7 +91,7 @@ const LottoList = () => {
             <div className="grid grid-cols-12 gap-2 pt-1">
               <div className="col-span-6 px-2 flex">
                 <span className="mt-2 mr-2">
-                  <img src={getFlag(_lotto.lotto_type.lotto_type_id)} className="w-6 h-4" />
+                  <img src={getFlag(_lotto?.lotto_type?.lotto_type_id)} className="w-6 h-4" />
                 </span>
                 <span className="text-white text-sm mt-[6px]">{LOTTO_TYPE.find((e) => e.lotto_type_id == _lotto.lotto_type_id)?.lotto_type_name}</span>
               </div>
@@ -116,7 +116,7 @@ const LottoList = () => {
   const getFlag = (_id: number) => {
     const image = LOTTO_TYPE.find((e) => e.lotto_type_id == _id);
 
-    return image.lotto_type_icon;
+    return image?.lotto_type_icon;
   };
 
   const displayCondition = (_close_time) => {
