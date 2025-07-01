@@ -1,12 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
-  // url      = "mysql://root:@localhost/usecar"
+  // url      = env("DATABASE_URL")
+  url      = "mysql://root:@localhost/lotto?schema=public"
   // url      = "test"
 }
 
