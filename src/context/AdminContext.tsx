@@ -28,15 +28,17 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (params: FormValues) => {
     try {
-      const response = await api.post("/api/backend/auth/login", params);
-      if (response.data.status === false) {
-        alertError(response.data.message);
-      } else {
-        localStorage.setItem("backend_token", response.data.token);
+      const response = await api.post("/users/login", params);
+      console.log("Login response:", response.data.tokens);
+      if (response.status === 200) {
+        localStorage.setItem("backend_token", response.data.tokens);
         router.push("/backend/console/dashboard");
+      } else {
+        alertError(response.data.error);
       }
     } catch (error) {
-      console.log("error", error);
+      alertError(error.response?.data?.error);
+      console.error("Login error:", error);
     }
   };
 
