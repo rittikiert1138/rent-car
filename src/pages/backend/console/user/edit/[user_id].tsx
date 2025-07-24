@@ -12,6 +12,7 @@ import { alertSuccess, alertError } from "@/utils/alert";
 import router from "next/router";
 import { useParams } from "next/navigation";
 import { useAdmin } from "@/context/AdminContext";
+import { apiInternal, api } from "@/utils/api";
 
 type FormValues = {
   username: string;
@@ -39,7 +40,7 @@ const CreateUser = () => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`/api/user/${user_id}`);
+      const response = await api.get(`/users/${user_id}`);
       setUser(response.data);
     } catch (error: any) {
       console.log("Error ==>", error?.message);
@@ -99,7 +100,9 @@ const CreateUser = () => {
             <div className="md:col-span-6 col-span-12">
               <Label>Username</Label>
               <Input
-                className={classNames(errors?.username ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.username ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("username", {
                   required: {
                     value: true,
@@ -121,12 +124,16 @@ const CreateUser = () => {
                 maxLength={50}
                 defaultValue={user?.username}
               />
-              {errors?.username && <small className="text-danger">{errors.username.message}</small>}
+              {errors?.username && (
+                <small className="text-danger">{errors.username.message}</small>
+              )}
             </div>
             <div className="md:col-span-6 col-span-12">
               <Label>Phone</Label>
               <Input
-                className={classNames(errors?.phone ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.phone ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("phone", {
                   required: {
                     value: true,
@@ -145,17 +152,22 @@ const CreateUser = () => {
                     message: "Error pattern",
                   },
                   validate: {
-                    checkDigit: (e) => e.split("")[0] === "0" || "ข้อมูลไม่ถูกต้อง",
+                    checkDigit: (e) =>
+                      e.split("")[0] === "0" || "ข้อมูลไม่ถูกต้อง",
                   },
                 })}
                 defaultValue={user?.phone}
               />
-              {errors?.phone && <small className="text-danger">{errors.phone.message}</small>}
+              {errors?.phone && (
+                <small className="text-danger">{errors.phone.message}</small>
+              )}
             </div>
             <div className="md:col-span-6 col-span-12">
               <Label>Password</Label>
               <Input
-                className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.password ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("password", {
                   minLength: {
                     value: 4,
@@ -167,11 +179,19 @@ const CreateUser = () => {
                   },
                 })}
                 maxLength={50}
-                defaultValue={user?.password}
+                // defaultValue={user?.password}
               />
-              {errors?.password && <small className="text-danger">{errors.password.message}</small>}
+              {errors?.password && (
+                <small className="text-danger">{errors.password.message}</small>
+              )}
               <div>
-                <Button type="button" variant="success" className="mt-2" size="sm" onClick={handleRandomString}>
+                <Button
+                  type="button"
+                  variant="success"
+                  className="mt-2"
+                  size="sm"
+                  onClick={handleRandomString}
+                >
                   Generate
                 </Button>
               </div>
@@ -179,7 +199,11 @@ const CreateUser = () => {
             <div className="md:col-span-6 col-span-12">
               <Label>Confirm Password</Label>
               <Input
-                className={classNames(errors?.confirmPassword ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.confirmPassword
+                    ? "border-danger focus:border-danger"
+                    : ""
+                )}
                 {...register("confirmPassword", {
                   minLength: {
                     value: 4,
@@ -190,18 +214,26 @@ const CreateUser = () => {
                     message: "ข้อมูลไม่ถูกต้อง",
                   },
                   validate: {
-                    checkSame: (e) => e === watch("password") || "รหัสผ่านไม่ตรงกัน",
+                    checkSame: (e) =>
+                      e === watch("password") || "รหัสผ่านไม่ตรงกัน",
                   },
                 })}
                 maxLength={50}
-                defaultValue={user?.password}
+                // defaultValue={user?.password}
               />
-              {errors?.confirmPassword && <small className="text-danger">{errors.confirmPassword.message}</small>}
+              {errors?.confirmPassword && (
+                <small className="text-danger">
+                  {errors.confirmPassword.message}
+                </small>
+              )}
             </div>
             <div className="md:col-span-6 col-span-12">
               <Label>Role {user?.role}</Label>
               <select
-                className={classNames("w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary", errors?.role ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  "w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary",
+                  errors?.role ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("role", {
                   required: {
                     value: true,
@@ -211,14 +243,12 @@ const CreateUser = () => {
                 defaultValue={user?.role}
               >
                 <option value="">Select</option>
-                <option value="ADMIN" selected={user?.role === "ADMIN"}>
-                  ADMIN
-                </option>
-                <option value="AGENT" selected={user?.role === "AGENT"}>
-                  AGENT
-                </option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="AGENT">AGENT</option>
               </select>
-              {errors?.role && <small className="text-danger">{errors.role.message}</small>}
+              {errors?.role && (
+                <small className="text-danger">{errors.role.message}</small>
+              )}
             </div>
           </div>
           <div className="text-right mt-4  pt-4">

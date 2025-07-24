@@ -9,7 +9,7 @@ import axios from "axios";
 // var token = jwt.sign({ foo: "bar" }, "M1R3eff74wX9ghj3qCvLXVh1RfVWG7Lk" as string);
 
 export const apiInternal = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://localhost:3000",
   timeout: 10000, // Optional: Set a timeout in milliseconds
   headers: {
     // Optional: Add default headers

@@ -73,7 +73,9 @@ const CreateUser = () => {
           <div className="md:col-span-6 col-span-12">
             <Label>ชื่อผู้ใช้</Label>
             <Input
-              className={classNames(errors?.username ? "border-danger focus:border-danger" : "")}
+              className={classNames(
+                errors?.username ? "border-danger focus:border-danger" : ""
+              )}
               {...register("username", {
                 required: {
                   value: true,
@@ -94,12 +96,16 @@ const CreateUser = () => {
               })}
               maxLength={50}
             />
-            {errors?.username && <small className="text-danger">{errors.username.message}</small>}
+            {errors?.username && (
+              <small className="text-danger">{errors.username.message}</small>
+            )}
           </div>
           <div className="md:col-span-6 col-span-12">
             <Label>เบอร์โทรศัพท์</Label>
             <Input
-              className={classNames(errors?.phone ? "border-danger focus:border-danger" : "")}
+              className={classNames(
+                errors?.phone ? "border-danger focus:border-danger" : ""
+              )}
               {...register("phone", {
                 required: {
                   value: true,
@@ -118,17 +124,22 @@ const CreateUser = () => {
                   message: "Error pattern",
                 },
                 validate: {
-                  checkDigit: (e) => e.split("")[0] === "0" || "ข้อมูลไม่ถูกต้อง",
+                  checkDigit: (e) =>
+                    e.split("")[0] === "0" || "ข้อมูลไม่ถูกต้อง",
                 },
               })}
             />
-            {errors?.phone && <small className="text-danger">{errors.phone.message}</small>}
+            {errors?.phone && (
+              <small className="text-danger">{errors.phone.message}</small>
+            )}
           </div>
           <div className="md:col-span-6 col-span-12">
             <Label>รหัสผ่าน</Label>
             <div className="relative">
               <Input
-                className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.password ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("password", {
                   required: {
                     value: true,
@@ -146,17 +157,29 @@ const CreateUser = () => {
                 maxLength={50}
               />
               <div className="absolute right-2 top-0">
-                <Button type="button" variant="success" className="mt-2" size="sm" onClick={handleRandomString}>
+                <Button
+                  type="button"
+                  variant="success"
+                  className="mt-2"
+                  size="sm"
+                  onClick={handleRandomString}
+                >
                   Generate
                 </Button>
               </div>
             </div>
-            {errors?.password && <small className="text-danger">{errors.password.message}</small>}
+            {errors?.password && (
+              <small className="text-danger">{errors.password.message}</small>
+            )}
           </div>
           <div className="md:col-span-6 col-span-12">
             <Label>ยืนยันรหัสผ่าน</Label>
             <Input
-              className={classNames(errors?.confirmPassword ? "border-danger focus:border-danger" : "")}
+              className={classNames(
+                errors?.confirmPassword
+                  ? "border-danger focus:border-danger"
+                  : ""
+              )}
               {...register("confirmPassword", {
                 required: {
                   value: true,
@@ -171,12 +194,17 @@ const CreateUser = () => {
                   message: "ข้อมูลไม่ถูกต้อง",
                 },
                 validate: {
-                  checkSame: (e) => e === watch("password") || "รหัสผ่านไม่ตรงกัน",
+                  checkSame: (e) =>
+                    e === watch("password") || "รหัสผ่านไม่ตรงกัน",
                 },
               })}
               maxLength={50}
             />
-            {errors?.confirmPassword && <small className="text-danger">{errors.confirmPassword.message}</small>}
+            {errors?.confirmPassword && (
+              <small className="text-danger">
+                {errors.confirmPassword.message}
+              </small>
+            )}
           </div>
         </div>
         <div className="text-right mt-4  pt-4">

@@ -1,40 +1,6 @@
 export const MENU = [
   {
     id: 1,
-    name: "Home",
-    icon: <i className="bi bi-house mr-2 text-aprimary text-xl"></i>,
-    list: [
-      {
-        id: 1,
-        name: "Banner",
-        path: "/backend/console/banner",
-      },
-      {
-        id: 2,
-        name: "Flash News",
-        path: "/backend/console/flash-news",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "User",
-    icon: <i className="bi bi-people mr-2 text-aprimary text-xl"></i>,
-    list: [
-      {
-        id: 3,
-        name: "User",
-        path: "/backend/console/user",
-      },
-      {
-        id: 4,
-        name: "Member",
-        path: "/backend/console/member",
-      },
-    ],
-  },
-  {
-    id: 3,
     name: "หวย",
     icon: <i className="bi bi-copy mr-2 text-aprimary text-xl"></i>,
     list: [
@@ -86,7 +52,7 @@ export const MENU = [
     ],
   },
   {
-    id: 4,
+    id: 2,
     name: "ธุรกรรม",
     icon: <i className="bi bi-bank mr-2 text-aprimary text-xl"></i>,
     list: [
@@ -105,6 +71,40 @@ export const MENU = [
       //   name: "ธนาคาร",
       //   path: "/backend/console/bank",
       // },
+    ],
+  },
+  {
+    id: 3,
+    name: "User",
+    icon: <i className="bi bi-people mr-2 text-aprimary text-xl"></i>,
+    list: [
+      {
+        id: 3,
+        name: "User",
+        path: "/backend/console/user",
+      },
+      {
+        id: 4,
+        name: "Member",
+        path: "/backend/console/member",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Setting",
+    icon: <i className="bi bi-gear mr-2 text-aprimary text-xl"></i>,
+    list: [
+      {
+        id: 1,
+        name: "Banner",
+        path: "/backend/console/banner",
+      },
+      {
+        id: 2,
+        name: "Flash News",
+        path: "/backend/console/flash-news",
+      },
     ],
   },
   // {

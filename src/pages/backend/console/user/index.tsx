@@ -11,7 +11,7 @@ import axios from "axios";
 import { alertError } from "@/utils/alert";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
-import { api } from "@/utils/api";
+import { apiInternal } from "@/utils/api";
 
 const UserPage = () => {
   const [users, setUsers] = useState({
@@ -23,14 +23,20 @@ const UserPage = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get("/api/user/list");
+      const response = await apiInternal.get("/api/backend/users");
 
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
         setUsers({
-          all: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
-          filter: response.data.map((item: any, index: number) => ({ ...item, index: index + 1 })),
+          all: response.data.map((item: any, index: number) => ({
+            ...item,
+            index: index + 1,
+          })),
+          filter: response.data.map((item: any, index: number) => ({
+            ...item,
+            index: index + 1,
+          })),
         });
       }
     } catch (error: any) {
@@ -92,21 +98,31 @@ const UserPage = () => {
       selector: (row: any) => row.role,
       cell: (row: any) => {
         if (row.role === "ADMIN") {
-          return <span className="badge bg-aprimary/40 uppercase px-2 py-1 text-aprimary font-bold rounded">Admin</span>;
+          return (
+            <span className="badge bg-aprimary/40 uppercase px-2 py-1 text-aprimary font-bold rounded">
+              Admin
+            </span>
+          );
         } else if (row.role === "AGENT") {
-          return <span className="badge bg-adanger/30 uppercase px-2 py-1 text-adanger font-bold rounded">AGENT</span>;
+          return (
+            <span className="badge bg-adanger/30 uppercase px-2 py-1 text-adanger font-bold rounded">
+              AGENT
+            </span>
+          );
         }
       },
     },
     {
       name: "Created At",
       sortable: true,
-      selector: (row: any) => dayjs(row.createdAt).format("DD/MM/YYYY HH:mm:ss"),
+      selector: (row: any) =>
+        dayjs(row.createdAt).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
       name: "Updated At",
       sortable: true,
-      selector: (row: any) => dayjs(row.updatedAt).format("DD/MM/YYYY HH:mm:ss"),
+      selector: (row: any) =>
+        dayjs(row.updatedAt).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
       name: "Action",
@@ -120,10 +136,18 @@ const UserPage = () => {
               <i className="bi bi-pencil"></i>
             </Button>
           </Link>
-          <Button className="border h-10" variant="danger" onClick={() => handleDelete(row.user_id)}>
+          <Button
+            className="border h-10"
+            variant="danger"
+            onClick={() => handleDelete(row.user_id)}
+          >
             <i className="bi bi-trash3"></i>
           </Button>
-          <Button className="border h-10" variant="success" onClick={() => alert(row.user_id)}>
+          <Button
+            className="border h-10"
+            variant="success"
+            onClick={() => alert(row.user_id)}
+          >
             <i className="bi bi-search"></i>
           </Button>
         </div>
@@ -136,14 +160,29 @@ const UserPage = () => {
       setUsers({ ...users, filter: users.all });
     } else {
       let results = users.all.filter((item) => {
-        return item.username.toLowerCase().includes(keyword.toLowerCase()) || item.phone.toLowerCase().includes(keyword.toLowerCase()) || item.role.toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase()) || dayjs(item.updatedAt).format("DD/MM/YYYY HH:mm:ss").toLowerCase().includes(keyword.toLowerCase());
+        return (
+          item.username.toLowerCase().includes(keyword.toLowerCase()) ||
+          item.phone.toLowerCase().includes(keyword.toLowerCase()) ||
+          item.role.toLowerCase().includes(keyword.toLowerCase()) ||
+          dayjs(item.createdAt)
+            .format("DD/MM/YYYY HH:mm:ss")
+            .toLowerCase()
+            .includes(keyword.toLowerCase()) ||
+          dayjs(item.updatedAt)
+            .format("DD/MM/YYYY HH:mm:ss")
+            .toLowerCase()
+            .includes(keyword.toLowerCase())
+        );
       });
       setUsers({ ...users, filter: results });
     }
   };
 
   return (
-    <AdminLayout title="User" breadcrumb={[{ title: "User", path: "/backend/console/user" }]}>
+    <AdminLayout
+      title="User"
+      breadcrumb={[{ title: "User", path: "/backend/console/user" }]}
+    >
       <div className="grid grid-cols-12 mb-4">
         <div className="col-span-8">
           <div className="flex">
@@ -173,7 +212,14 @@ const UserPage = () => {
           </Link>
         </div>
       </div>
-      <DataTable fixedHeader persistTableHead={true} className="border" columns={columns} data={users.filter} pagination />
+      <DataTable
+        fixedHeader
+        persistTableHead={true}
+        className="border"
+        columns={columns}
+        data={users.filter}
+        pagination
+      />
     </AdminLayout>
   );
 };
