@@ -25,6 +25,7 @@ const LoginPage = () => {
 
   const handleLogin = async (params: FormValues) => {
     try {
+      console.log("params", params);
       login(params);
     } catch (error: any) {
       toast.error("Error !");
@@ -67,7 +68,9 @@ const LoginPage = () => {
               <Label>รหัสผ่าน</Label>
               <Input
                 type="password"
-                className={classNames(errors?.password ? "border-danger focus:border-danger" : "")}
+                className={classNames(
+                  errors?.password ? "border-danger focus:border-danger" : ""
+                )}
                 {...register("password", {
                   required: {
                     value: true,

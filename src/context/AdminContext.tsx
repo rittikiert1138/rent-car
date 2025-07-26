@@ -28,6 +28,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (params: FormValues) => {
     try {
+      console.log("params", params);
       const response = await api.post("/api/backend/auth/login", params);
       if (response.data.status === false) {
         alertError(response.data.message);
@@ -40,7 +41,11 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  return <AdminContext.Provider value={{ admin, logout, login, setAdmin }}>{children}</AdminContext.Provider>;
+  return (
+    <AdminContext.Provider value={{ admin, logout, login, setAdmin }}>
+      {children}
+    </AdminContext.Provider>
+  );
 };
 
 export const useAdmin = () => useContext(AdminContext);

@@ -5,9 +5,14 @@ const prisma = new PrismaClient();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const { username, password } = req.body;
+
+    console.log("call login");
 
     const secret: any = process.env.NEXT_PUBLIC_JWT_SECRET_BACKEND;
 
@@ -45,7 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     delete checkUser?.password;
 
-    const token = jwt.sign(checkUser, secretKey, { algorithm: "HS256", expiresIn: "30m" });
+    const token = jwt.sign(checkUser, secretKey, {
+      algorithm: "HS256",
+      expiresIn: "30m",
+    });
 
     res.status(200).json({
       status: true,

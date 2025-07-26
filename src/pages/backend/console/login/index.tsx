@@ -18,6 +18,7 @@ const AdminpageLogin = () => {
 
   const handleLogin = async (params: FormValues) => {
     try {
+      console.log("params123", params);
       login(params);
     } catch (error) {
       console.log("error", error);
@@ -40,7 +41,11 @@ const AdminpageLogin = () => {
           </div>
           <div className="mb-4">
             <Label>Password</Label>
-            <Input type="password" placeholder="Password..." {...register("password")} />
+            <Input
+              type="password"
+              placeholder="Password..."
+              {...register("password")}
+            />
           </div>
           <div className="mb-4">
             <Button className="w-full" type="submit">
@@ -50,7 +55,9 @@ const AdminpageLogin = () => {
           </div>
           <div className="text-right">
             <Link href="/backend/console/forgot-password">
-              <span className="underline text-sm hover text-aprimary cursor-pointer">ลืมรหัสผ่าน</span>
+              <span className="underline text-sm hover text-aprimary cursor-pointer">
+                ลืมรหัสผ่าน
+              </span>
             </Link>
           </div>
         </div>

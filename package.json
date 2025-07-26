@@ -13,10 +13,10 @@
     "postmigrate": "npx @snaplet/seed sync"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "ts-node ./prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.12.0",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
@@ -68,10 +68,10 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.18",
     "postcss": "^8",
-    "prisma": "^5.22.0",
+    "prisma": "^6.12.0",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.3"
   }
 }
