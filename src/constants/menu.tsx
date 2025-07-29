@@ -41,12 +41,42 @@ export const MENU = [
       {
         id: 5,
         name: "หวยไทย",
-        path: "/backend/console/lotto",
+        path: "/backend/console/lotto/1",
       },
       {
         id: 6,
-        name: "Lotto Type",
-        path: "/backend/console/lotto-type",
+        name: "หวยออมสิน",
+        path: "/backend/console/lotto/2",
+      },
+      {
+        id: 7,
+        name: "หวยธกส.",
+        path: "/backend/console/lotto/3",
+      },
+      {
+        id: 8,
+        name: "หวยลาว",
+        path: "/backend/console/lotto/4",
+      },
+      {
+        id: 9,
+        name: "หวยลาวพัฒนา",
+        path: "/backend/console/lotto/5",
+      },
+      {
+        id: 10,
+        name: "หวยฮานอย",
+        path: "/backend/console/lotto/6",
+      },
+      {
+        id: 11,
+        name: "ฮานอยพิเศษ",
+        path: "/backend/console/lotto/7",
+      },
+      {
+        id: 12,
+        name: "ฮานอยวีไอพี",
+        path: "/backend/console/lotto/8",
       },
     ],
   },
@@ -56,17 +86,17 @@ export const MENU = [
     icon: <i className="bi bi-bank mr-2 text-aprimary text-xl"></i>,
     list: [
       {
-        id: 7,
+        id: 13,
         name: "ฝาก",
         path: "/backend/console/transaction/deposit",
       },
       {
-        id: 8,
+        id: 14,
         name: "ถอน",
         path: "/backend/console/transaction/withdraw",
       },
       {
-        id: 9,
+        id: 15,
         name: "ธนาคาร",
         path: "/backend/console/bank",
       },

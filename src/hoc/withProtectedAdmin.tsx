@@ -12,26 +12,26 @@ const withProtectedAdmin = (WrappedComponent: any) => {
     useEffect(() => {
       async function loadUser() {
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("backend_token");
           if (token != null && token.length) {
             const secretKey = Buffer.from(secret, "utf8");
             const { payload } = await jwtVerify(token, secretKey as any);
 
             if (payload.exp && Date.now() >= payload.exp * 1000) {
-              localStorage.removeItem("token");
+              localStorage.removeItem("backend_token");
               setAdmin(null);
               router.push("/backend/console/login");
             }
             setAdmin(payload);
           } else {
             setAdmin(null);
-            localStorage.removeItem("token");
+            localStorage.removeItem("backend_token");
             router.push("/backend/console/login");
           }
         } catch (error: any) {
           console.log("error ==>", error?.message);
           setAdmin(null);
-          localStorage.removeItem("token");
+          localStorage.removeItem("backend_token");
           router.push("/backend/console/login");
         }
       }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import AdminLayout from "@/components/admin/includes/AdminLayout";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
@@ -14,6 +15,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import withProtectedAdmin from "@/hoc/withProtectedAdmin";
+import { LOTTO_TYPE } from "@/constants/lotto_types";
 
 type FormValues = {
   lotto_type_id: number;
@@ -26,7 +28,8 @@ type FormValues = {
 
 const CreateLottoType = () => {
   // const { admin } = useAdmin();
-
+  const router = useRouter();
+  const { lotto_type }: any = router.query;
   const {
     register,
     handleSubmit,
@@ -44,29 +47,29 @@ const CreateLottoType = () => {
 
   const [types, setTypes] = useState([]);
 
-  const fetchTypes = async () => {
-    try {
-      const response = await api.get("/api/backend/lotto-type/list");
+  // const fetchTypes = async () => {
+  //   try {
+  //     const response = await api.get("/api/backend/lotto-type/list");
 
-      if (response.data.status === false) {
-        alertError(response.data.message);
-      } else {
-        const { lotto_types } = response.data;
-        setTypes(
-          lotto_types.map((item: any, index: number) => ({
-            ...item,
-            index: index + 1,
-          }))
-        );
-      }
-    } catch (error: any) {
-      alertError(error.message);
-    }
-  };
+  //     if (response.data.status === false) {
+  //       alertError(response.data.message);
+  //     } else {
+  //       const { lotto_types } = response.data;
+  //       setTypes(
+  //         lotto_types.map((item: any, index: number) => ({
+  //           ...item,
+  //           index: index + 1,
+  //         }))
+  //       );
+  //     }
+  //   } catch (error: any) {
+  //     alertError(error.message);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchTypes();
-  }, []);
+  // useEffect(() => {
+  //   fetchTypes();
+  // }, []);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -82,7 +85,7 @@ const CreateLottoType = () => {
         alertError(response.data.message);
       } else {
         alertSuccess(response.data.message);
-        router.push("/backend/console/lotto");
+        router.push(`/backend/console/lotto/${lotto_type}`);
       }
     } catch (error: any) {
       alertError(error.message);
@@ -103,7 +106,7 @@ const CreateLottoType = () => {
             <Label>ประเภทหวย</Label>
             <select
               className={classNames(
-                "w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary",
+                "w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary disabled:bg-gray-200",
                 errors?.lotto_type_id ? "border-danger focus:border-danger" : ""
               )}
               {...register("lotto_type_id", {
@@ -112,11 +115,13 @@ const CreateLottoType = () => {
                   message: "ข้อมูลไม่ถูกต้อง",
                 },
               })}
+              value={lotto_type ?? ""}
+              disabled
             >
               <option value="">ตัวเลือก</option>
-              {types.map((item: any, index) => (
-                <option key={index} value={item.lotto_type_id}>
-                  {item.lotto_type_name}
+              {LOTTO_TYPE.map((type: any, index) => (
+                <option key={index} value={type.lotto_type_id}>
+                  {type.lotto_type_name}
                 </option>
               ))}
             </select>

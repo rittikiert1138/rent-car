@@ -2,21 +2,26 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const lottos = await prisma.lotto.findMany({
       include: {
-        lotto_type: {
-          select: {
-            lotto_type_name: true,
+        lotto_result: {
+          include: {
+            lotto_result_list: true,
           },
         },
       },
     });
 
+    console.log("lottos", lottos);
+
     res.status(200).json({
       status: true,
-      message: "ดึงข้อมูลหวยสำเร็จ",
+      message: "Success",
       lottos,
     });
   } catch (error: any) {

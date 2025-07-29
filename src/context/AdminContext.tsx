@@ -22,7 +22,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   const [admin, setAdmin] = useState();
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("backend_token");
     router.push("/backend/console/login");
   };
 
@@ -33,7 +33,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("backend_token", response.data.token);
         router.push("/backend/console/dashboard");
       }
     } catch (error) {

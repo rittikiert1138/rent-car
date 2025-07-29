@@ -108,23 +108,23 @@ model otp_system {
   expired DateTime
 }
 
-model lotto_type {
-  lotto_type_id     Int      @id @default(autoincrement())
-  lotto_type_name   String   @unique
-  lotto_type_status Int
-  lotto_type_icon   String?
-  lotto_type_color  String?
-  order_seq         Int?
-  lotto_type_width  String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  lotto             lotto[]
-}
+// model lotto_type {
+//   lotto_type_id     Int      @id @default(autoincrement())
+//   lotto_type_name   String   @unique
+//   lotto_type_status Int
+//   lotto_type_icon   String?
+//   lotto_type_color  String?
+//   order_seq         Int?
+//   lotto_type_width  String
+//   createdAt         DateTime @default(now())
+//   updatedAt         DateTime @updatedAt
+//   lotto             lotto[]
+// }
 
 model lotto {
   lotto_id      Int            @id @default(autoincrement())
   lotto_type_id Int
-  lotto_type    lotto_type     @relation(fields: [lotto_type_id], references: [lotto_type_id])
+  // lotto_type    lotto_type     @relation(fields: [lotto_type_id], references: [lotto_type_id])
   period        String
   open_time     String
   close_time    String
