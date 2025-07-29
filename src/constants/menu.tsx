@@ -35,12 +35,12 @@ export const MENU = [
   },
   {
     id: 3,
-    name: "Lotto",
+    name: "หวย",
     icon: <i className="bi bi-copy mr-2 text-aprimary text-xl"></i>,
     list: [
       {
         id: 5,
-        name: "Lotto",
+        name: "หวยไทย",
         path: "/backend/console/lotto",
       },
       {

@@ -15,6 +15,13 @@ async function main() {
       updatedBy: 1,
     },
   });
+
+  await prisma.lotto_type.create({
+    data: {
+      lotto_type_name: "หวยไทย",
+      lotto_type_status: 0,
+    },
+  });
 }
 main()
   .then(async () => {

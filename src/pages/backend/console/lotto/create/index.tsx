@@ -48,13 +48,16 @@ const CreateLottoType = () => {
     try {
       const response = await api.get("/api/backend/lotto-type/list");
 
-      console.log("response.data", response.data);
-
       if (response.data.status === false) {
         alertError(response.data.message);
       } else {
         const { lotto_types } = response.data;
-        setTypes(lotto_types.map((item: any, index: number) => ({ ...item, index: index + 1 })));
+        setTypes(
+          lotto_types.map((item: any, index: number) => ({
+            ...item,
+            index: index + 1,
+          }))
+        );
       }
     } catch (error: any) {
       alertError(error.message);
@@ -67,16 +70,12 @@ const CreateLottoType = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      console.log("data", data);
-      // console.log("data", dayjs(data.period).format("YYYY-MM-DD"));
-      // console.log("aa", dayjs().format("YYYY-MM-DD HH:mm") > dayjs(data.open_time).format("YYYY-MM-DD HH:mm"));
       const payload = {
         lotto_type_id: data.lotto_type_id,
         period: dayjs(data.period).format("YYYY-MM-DD"),
         open_time: dayjs(data.open_time).format("YYYY-MM-DD HH:mm"),
         close_time: dayjs(data.close_time).format("YYYY-MM-DD HH:mm"),
       };
-      // console.log("payload", payload);
       const response = await api.post("/api/backend/lotto/create", payload);
 
       if (response.data.status === false) {
@@ -103,7 +102,10 @@ const CreateLottoType = () => {
           <div className="col-span-6">
             <Label>ประเภทหวย</Label>
             <select
-              className={classNames("w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary", errors?.lotto_type_id ? "border-danger focus:border-danger" : "")}
+              className={classNames(
+                "w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary",
+                errors?.lotto_type_id ? "border-danger focus:border-danger" : ""
+              )}
               {...register("lotto_type_id", {
                 required: {
                   value: true,
@@ -118,28 +120,56 @@ const CreateLottoType = () => {
                 </option>
               ))}
             </select>
-            {errors?.lotto_type_id && <small className="text-danger">{errors.lotto_type_id.message}</small>}
+            {errors?.lotto_type_id && (
+              <small className="text-danger">
+                {errors.lotto_type_id.message}
+              </small>
+            )}
           </div>
           <div className="col-span-6">
             <Label>งวดประวันที่</Label>
             <div className="w-full">
-              <DatePicker selected={watch("period")} onChange={(date: any) => setValue("period", new Date(date))} className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />
+              <DatePicker
+                selected={watch("period")}
+                onChange={(date: any) => setValue("period", new Date(date))}
+                className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary"
+              />
             </div>
-            {errors?.period && <small className="text-danger">{errors.period.message}</small>}
+            {errors?.period && (
+              <small className="text-danger">{errors.period.message}</small>
+            )}
           </div>
           <div className="col-span-6">
             <Label>วันที่เปิดแทง</Label>
             <div className="w-full">
-              <DatePicker selected={watch("open_time")} onChange={(date: any) => setValue("open_time", new Date(date))} timeInputLabel="Time:" dateFormat="MM/dd/yyyy h:mm aa" showTimeInput className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />
+              <DatePicker
+                selected={watch("open_time")}
+                onChange={(date: any) => setValue("open_time", new Date(date))}
+                timeInputLabel="Time:"
+                dateFormat="MM/dd/yyyy h:mm aa"
+                showTimeInput
+                className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary"
+              />
             </div>
-            {errors?.open_time && <small className="text-danger">{errors.open_time.message}</small>}
+            {errors?.open_time && (
+              <small className="text-danger">{errors.open_time.message}</small>
+            )}
           </div>
           <div className="col-span-6">
             <Label>วันที่ปิดแทง</Label>
             <div className="w-full">
-              <DatePicker selected={watch("close_time")} onChange={(date: any) => setValue("close_time", new Date(date))} timeInputLabel="Time:" dateFormat="MM/dd/yyyy h:mm aa" showTimeInput className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary" />
+              <DatePicker
+                selected={watch("close_time")}
+                onChange={(date: any) => setValue("close_time", new Date(date))}
+                timeInputLabel="Time:"
+                dateFormat="MM/dd/yyyy h:mm aa"
+                showTimeInput
+                className="w-full h-12 border rounded-lg px-2 focus:outline-none focus:border-aprimary"
+              />
             </div>
-            {errors?.close_time && <small className="text-danger">{errors.close_time.message}</small>}
+            {errors?.close_time && (
+              <small className="text-danger">{errors.close_time.message}</small>
+            )}
           </div>
         </div>
         <div className="text-right mt-4  pt-4">
